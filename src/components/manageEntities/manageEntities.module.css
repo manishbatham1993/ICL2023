@@ -1,0 +1,91 @@
+.form {
+  text-align: center;
+}
+
+.form button {
+  font: inherit;
+  cursor: pointer;
+  background-color: #8a2b06;
+  border: 1px solid #8a2b06;
+  color: white;
+  padding: 0.25rem 2rem;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.form button:hover,
+.form button:active {
+  background-color: #641e03;
+  border-color: #641e03;
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 4rem;
+}
+
+.input label {
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+
+.input input {
+  width: 15rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font: inherit;
+  padding-left: 0.5rem;
+}
+
+.input select {
+  width: 15.7rem;
+  border: 1px solid #ccc;
+  font: inherit;
+  padding-left: 0.5rem;
+}
+
+.input input[type=file] {
+  border: none;
+}
+
+.view-panel {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.view-panel ul {
+  margin: 0;
+  padding: 0;
+}
+
+.view-panel ul li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 4rem;
+}
+
+.key {
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.value {
+  width: 15rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font: inherit;
+  padding-left: 0.5rem;
+  line-break: anywhere;
+}
+
+.image-panel {
+  text-align: center;
+}
+
+.image-panel img {
+  width: 50%;
+}
