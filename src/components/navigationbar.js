@@ -114,15 +114,7 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {/* {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))} */}
+           
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/accountlist">Accounts</Button>
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/playerslist">playerslist</Button>
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/teamlist">Teamslist</Button>
@@ -141,28 +133,6 @@ function ResponsiveAppBar() {
               </IconButton>
             </Tooltip>
 
-            {/* <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography href="/signin" textAlign="center">Logout</Typography>
-                </MenuItem>
-              ))}
-            </Menu> */}
           </Box>
         </Toolbar>
       </Container>

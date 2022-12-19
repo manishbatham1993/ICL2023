@@ -7,7 +7,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
@@ -22,33 +21,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import axios from 'axios';
-
-// function createData(name, count, pcount) {
-//   return {
-//     name,
-//     count,
-//     pcount,
-
-//   };
-// }
-
-// const rows = [
-//   createData('Cupcake', 305, 3.7),
-//   createData('Donut', 452, 25.0),
-//   createData('Eclair', 262, 16.0),
-//   createData('Frozen yoghurt', 159, 6.0),
-//   createData('Gingerbread', 356, 16.0),
-//   createData('Honeycomb', 408, 3.2),
-//   createData('Ice cream sandwich', 237, 9.0),
-//   createData('Jelly Bean', 375, 0.0),
-//   createData('KitKat', 518, 26.0),
-//   createData('Lollipop', 392, 0.2),
-//   createData('Marshmallow', 318, 0),
-//   createData('Nougat', 360, 19.0),
-//   createData('Oreo', 437, 18.0),
-// ];
-// const newSelected = rows.map((n) => n.name);
-
 
 
 function descendingComparator(a, b, orderBy) {
@@ -89,12 +61,7 @@ const headCells = [
     disablePadding: true,
     label: 'Account Name',
   },
-  // {
-  //   id: 'accountid',
-  //   numeric: false,
-  //   disablePadding: true,
-  //   label: 'Account Id',
-  // },
+  
   {
     id: 'emp_count',
     numeric: true,
@@ -107,18 +74,7 @@ const headCells = [
     disablePadding: false,
     label: 'Participant Count',
   },
-  // {
-  //   id: 'skills',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'Skiils',
-  // },
-  // {
-  //   id: 'availability',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'Availability',
-  // },
+  
 ];
 
 function AccountListHead(props) {
@@ -361,11 +317,9 @@ React.useEffect(()=>{
                       >
                         {row.name}
                       </TableCell>
-                      {/* <TableCell align="center" hidden>{row._id}</TableCell> */}
                       <TableCell align="right">{row.totalCount}</TableCell>
                       <TableCell align="right">{row.pcount}</TableCell>
-                      {/* <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell> */}
+
                     </TableRow>
                   );
                 })}
@@ -381,20 +335,9 @@ React.useEffect(()=>{
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
+      
     </Box>
   );
 }
