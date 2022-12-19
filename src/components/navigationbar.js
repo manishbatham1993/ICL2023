@@ -127,7 +127,7 @@ function ResponsiveAppBar() {
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/playerslist">playerslist</Button>
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/teamlist">Teamslist</Button>
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/manage">Add entities</Button>
-            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/auction">Auction</Button>
+            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/auction3">Auction</Button>
 
             
           </Box>
