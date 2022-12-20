@@ -226,6 +226,9 @@ export default function ManageEntities() {
             >
               Set team owner
             </Button>
+            <br></br>
+            <br></br>
+
             <Button variant="contained" onClick={startAuction}>
               start auction
             </Button>

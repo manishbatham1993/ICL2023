@@ -118,21 +118,14 @@ function ResponsiveAppBar() {
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/accountlist">Accounts</Button>
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/playerslist">playerslist</Button>
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/teamlist">Teamslist</Button>
-            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/manage">Add entities</Button>
+            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/manage">Manage</Button>
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/auction3">Auction</Button>
-
-            
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="../assets/img/Srikant.jpg" />
             <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/signin">Logout</Button>
-
               </IconButton>
-            </Tooltip>
-
           </Box>
         </Toolbar>
       </Container>
