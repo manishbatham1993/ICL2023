@@ -10,10 +10,12 @@ const TeamForm = (props) => {
   // initialize refrences
   const nameRef = useRef()
   const imageRef = useRef()
+  const accountIdRef = useRef()
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
     const teamFormData = new FormData()
+    teamFormData.append('accountId', accountIdRef.current.value)
     teamFormData.append('name', nameRef.current.value)
     teamFormData.append('image', imageRef.current.files[0])
     if (props.isEdit) teamFormData.append('teamId', props.data._id)
@@ -38,6 +40,23 @@ const TeamForm = (props) => {
           <span>{props.data._id}</span>
         </div>
       )}
+      <div className={classes.input}>
+        <label htmlFor="accountId">Account</label>
+        <select id="accountId" ref={accountIdRef}>
+          {props.accounts.map((account) => (
+            <option
+              value={account._id}
+              selected={
+                props.isEdit &&
+                props.data.accountId &&
+                account._id === props.data.accountId
+              }
+            >
+              {account.name}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className={classes.input}>
         <label htmlFor="name">Name</label>
         <input

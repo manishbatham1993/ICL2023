@@ -13,7 +13,7 @@ import TeamOwnerForm from './TeamOwnerForm'
 import AccountForm from './AccountForm'
 import TeamForm from './TeamForm'
 import PlayerForm from './PlayerForm'
-import startAuction from './startAuction'
+import { startAuction, pauseAuction, resetAuction } from './utils'
 
 // constants
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
@@ -140,6 +140,7 @@ export default function ManageEntities() {
           <TeamForm
             isEdit={isEdit}
             data={data}
+            accounts={accounts}
             onCloseOverlay={closeModalHandler}
             onRefresh={refreshTeams}
           />
@@ -152,7 +153,7 @@ export default function ManageEntities() {
             data={data}
             accounts={accounts}
             skills={['Batsman', 'Bowler', 'All Rounder', 'Spinner']}
-            gender={['Male', 'Female', 'Other']}
+            gender={['Male', 'Female']}
             onCloseOverlay={closeModalHandler}
             onRefresh={refreshPlayers}
           />
@@ -226,11 +227,19 @@ export default function ManageEntities() {
             >
               Set team owner
             </Button>
-            <br></br>
-            <br></br>
-
-            <Button variant="contained" onClick={startAuction}>
-              start auction
+            {accounts.map((account) => (
+              <Button
+                variant="contained"
+                onClick={startAuction.bind(null, account._id)}
+              >
+                {account.name}-auction
+              </Button>
+            ))}
+            <Button variant="contained" onClick={pauseAuction}>
+              pause auction
+            </Button>
+            <Button variant="contained" onClick={resetAuction}>
+              reset auction
             </Button>
           </CardContent>
         </Card>
