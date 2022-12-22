@@ -22,7 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import { visuallyHidden } from '@mui/utils'
 import axios from 'axios'
-
+import Avatar from '@mui/material/Avatar';
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1
@@ -103,15 +103,6 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          {/* <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          /> */}
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -303,14 +294,10 @@ export default function EnhancedTable() {
                       key={row.name}
                       // selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        {/* <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        /> */}
+                      <TableCell >
+                      
+                      <Avatar alt={row.name} src="/static/images/avatar/1.jpg" />
+  
                       </TableCell>
                       <TableCell
                         component="th"
@@ -318,6 +305,7 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
+                        
                         {row.name}
                       </TableCell>
                       <TableCell align="right">{row.email}</TableCell>

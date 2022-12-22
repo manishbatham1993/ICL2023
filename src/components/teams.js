@@ -1,78 +1,79 @@
-import * as React from 'react'
-import PropTypes from 'prop-types'
-import { alpha } from '@mui/material/styles'
-import Box from '@mui/material/Box'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import TableSortLabel from '@mui/material/TableSortLabel'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import Paper from '@mui/material/Paper'
-import Checkbox from '@mui/material/Checkbox'
-import { visuallyHidden } from '@mui/utils'
-import axios from 'axios'
+import * as React from "react";
+import PropTypes from "prop-types";
+import { alpha } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
+import { visuallyHidden } from "@mui/utils";
+import axios from "axios";
+import Avatar from "@mui/material/Avatar";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
-    return -1
+    return -1;
   }
   if (b[orderBy] > a[orderBy]) {
-    return 1
+    return 1;
   }
-  return 0
+  return 0;
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index])
+  const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0])
+    const order = comparator(a[0], b[0]);
     if (order !== 0) {
-      return order
+      return order;
     }
-    return a[1] - b[1]
-  })
-  return stabilizedThis.map((el) => el[0])
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
   {
-    id: 'name',
+    id: "name",
     numeric: false,
     disablePadding: true,
-    label: 'Team Name',
+    label: "Team Name",
   },
   {
-    id: 'accountid',
+    id: "accountid",
     numeric: false,
     disablePadding: true,
-    label: 'Account',
+    label: "Account",
   },
   {
-    id: 'budget',
+    id: "budget",
     numeric: false,
     disablePadding: true,
-    label: 'Budget',
+    label: "Budget",
   },
 
   {
-  id: 'teamowner',
-  numeric: false,
-  disablePadding: true,
-  label: 'Team Owner',
-}
-]
+    id: "teamowner",
+    numeric: false,
+    disablePadding: true,
+    label: "Team Owner",
+  },
+];
 
 function TeamownersHead(props) {
   const {
@@ -82,41 +83,31 @@ function TeamownersHead(props) {
     numSelected,
     rowCount,
     onRequestSort,
-  } = props
+  } = props;
   const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property)
-  }
+    onRequestSort(event, property);
+  };
 
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          {/* <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          /> */}
-        </TableCell>
+        <TableCell padding="checkbox"></TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            align={headCell.numeric ? "right" : "left"}
+            padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
+              direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -124,20 +115,20 @@ function TeamownersHead(props) {
         ))}
       </TableRow>
     </TableHead>
-  )
+  );
 }
 
 TeamownersHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
-}
+};
 
 function TeamownersToolbar(props) {
-  const { numSelected } = props
+  const { numSelected } = props;
 
   return (
     <Toolbar
@@ -155,7 +146,7 @@ function TeamownersToolbar(props) {
     >
       {numSelected > 0 ? (
         <Typography
-          sx={{ flex: '1 1 100%' }}
+          sx={{ flex: "1 1 100%" }}
           color="inherit"
           variant="subtitle1"
           component="div"
@@ -164,7 +155,7 @@ function TeamownersToolbar(props) {
         </Typography>
       ) : (
         <Typography
-          sx={{ flex: '1 1 100%' }}
+          sx={{ flex: "1 1 100%" }}
           variant="h6"
           id="tableTitle"
           component="div"
@@ -172,98 +163,96 @@ function TeamownersToolbar(props) {
           Team Lists
         </Typography>
       )}
-
-      
     </Toolbar>
-  )
+  );
 }
 
 TeamownersToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
-}
+};
 
 export default function Teamowners() {
-  const [order, setOrder] = React.useState('asc')
-  const [orderBy, setOrderBy] = React.useState('calories')
-  const [selected, setSelected] = React.useState([])
-  const [page, setPage] = React.useState(0)
-  const [dense, setDense] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
-  const [rows, setRows] = React.useState([])
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("calories");
+  const [selected, setSelected] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [dense, setDense] = React.useState(false);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rows, setRows] = React.useState([]);
 
   function get_data() {
-    const api = 'https://icl.up.railway.app/api/v1/team'
+    const api = "https://icl.up.railway.app/api/v1/team";
     axios.get(api, {}).then((res) => {
-      console.log('data', res.data)
-      setRows(res.data.teams)
-    })
+      console.log("data", res.data);
+      setRows(res.data.teams);
+    });
   }
   React.useEffect(() => {
-    get_data()
-  }, [])
+    get_data();
+  }, []);
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc'
-    setOrder(isAsc ? 'desc' : 'asc')
-    setOrderBy(property)
-  }
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name)
-      setSelected(newSelected)
-      return
+      const newSelected = rows.map((n) => n.name);
+      setSelected(newSelected);
+      return;
     }
-    setSelected([])
-  }
+    setSelected([]);
+  };
 
   const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name)
-    let newSelected = []
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
+      newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
+      newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
-      )
+      );
     }
 
-    setSelected(newSelected)
-  }
+    setSelected(newSelected);
+  };
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage)
-  }
+    setPage(newPage);
+  };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const handleChangeDense = (event) => {
-    setDense(event.target.checked)
-  }
+    setDense(event.target.checked);
+  };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1
+  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <Box sx={{ width: "100%" }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
         <TeamownersToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={dense ? "small" : "medium"}
           >
             <TeamownersHead
               numSelected={selected.length}
@@ -279,8 +268,8 @@ export default function Teamowners() {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name)
-                  const labelId = `enhanced-table-checkbox-${index}`
+                  const isItemSelected = isSelected(row.name);
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
@@ -288,18 +277,15 @@ export default function Teamowners() {
                       // onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
                       // aria-checked={isItemSelected}
-                      // tabIndex={-1}
-                      // key={row.name}
+                      tabIndex={-1}
+                      key={row.name}
                       // selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        {/* <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        /> */}
+                        <Avatar
+                          alt={row.name}
+                          src="/static/images/avatar/1.jpg"
+                        />
                       </TableCell>
                       <TableCell
                         component="th"
@@ -311,15 +297,16 @@ export default function Teamowners() {
                       </TableCell>
                       <TableCell align="left">{row.accountId.name}</TableCell>
                       <TableCell align="left">{row.teamOwner.budget}</TableCell>
-                      <TableCell align="left">{row.teamOwner.playerId.name}</TableCell>
+                      <TableCell align="left">
+                        {row.teamOwner.playerId.name}
+                      </TableCell>
                     </TableRow>
-                  )
+                  );
                 })}
-              
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
     </Box>
-  )
+  );
 }

@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 const renderTime = ({ remainingTime }) => {
-  if (remainingTime === 0) {
-    return <div className="timer">Too lale...</div>;
-  }
+  // if (remainingTime === 0) {
+  //   return <div className="timer">Too lale...</div>;
+  // }
 
   return (
     <div className="timer">
@@ -25,7 +25,7 @@ function CircleTimer(props) {
           //colors={[["#004777", 0.33], ["#F7B801", 0.33], ["#A30000"]]}
           colors={['#60d74d', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[25, 15, 5, 0]}
-          onComplete={() => [true, 1000]}
+          // onComplete={() => [true, 1000]}
           size={80}
           strokeWidth={6}
           // onComplete={() => {
