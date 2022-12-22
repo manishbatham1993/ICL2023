@@ -7,12 +7,19 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
+import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Checkbox from '@mui/material/Checkbox'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Switch from '@mui/material/Switch'
+import DeleteIcon from '@mui/icons-material/Delete'
+import FilterListIcon from '@mui/icons-material/FilterList'
 import { visuallyHidden } from '@mui/utils'
 import axios from 'axios'
 
@@ -51,24 +58,35 @@ const headCells = [
     id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'Account Name',
-  },
-
-  {
-    id: 'emp_count',
-    numeric: true,
-    disablePadding: false,
-    label: 'Count',
+    label: 'Player Name',
   },
   {
-    id: 'participant_count',
+    id: 'email',
     numeric: true,
     disablePadding: false,
-    label: 'Participant Count',
+    label: 'Email',
   },
+  {
+    id: 'account',
+    numeric: true,
+    disablePadding: false,
+    label: 'Account',
+  },
+  {
+    id: 'empid',
+    numeric: true,
+    disablePadding: false,
+    label: 'Emp Id',
+  },
+  {
+    id: 'skills',
+    numeric: true,
+    disablePadding: false,
+    label: 'Skiils',
+  }
 ]
 
-function AccountListHead(props) {
+function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
     order,
@@ -85,7 +103,7 @@ function AccountListHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          {/* <Checkbox
+          <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -93,7 +111,7 @@ function AccountListHead(props) {
             inputProps={{
               'aria-label': 'select all desserts',
             }}
-          /> */}
+          />
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -121,7 +139,7 @@ function AccountListHead(props) {
   )
 }
 
-AccountListHead.propTypes = {
+EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -130,7 +148,7 @@ AccountListHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 }
 
-function AccountListToolbar(props) {
+function EnhancedTableToolbar(props) {
   const { numSelected } = props
 
   return (
@@ -163,20 +181,32 @@ function AccountListToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Account Lists
+          Player Lists
         </Typography>
       )}
 
-    
+      {numSelected > 0 ? (
+        <Tooltip title="Delete">
+          <IconButton>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Filter list">
+          <IconButton>
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
+      )}
     </Toolbar>
   )
 }
 
-AccountListToolbar.propTypes = {
+EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 }
 
-export default function AccountList() {
+export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('calories')
   const [selected, setSelected] = React.useState([])
@@ -186,10 +216,10 @@ export default function AccountList() {
   const [rows, setRows] = React.useState([])
 
   function get_data() {
-    const api = 'https://icl.up.railway.app/api/v1/account'
+    const api = 'https://icl.up.railway.app/api/v1/player'
     axios.get(api, {}).then((res) => {
-      console.log('data', res.data)
-      setRows(res.data.accounts)
+      console.log('data', res.data.players)
+      setRows(res.data.players)
     })
   }
   React.useEffect(() => {
@@ -229,6 +259,20 @@ export default function AccountList() {
 
     setSelected(newSelected)
   }
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
+
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked)
+  }
+
   const isSelected = (name) => selected.indexOf(name) !== -1
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -238,14 +282,14 @@ export default function AccountList() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <AccountListToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
-            <AccountListHead
+            <EnhancedTableHead
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
@@ -265,21 +309,21 @@ export default function AccountList() {
                   return (
                     <TableRow
                       hover
-                      // onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
-                      // aria-checked={isItemSelected}
+                      aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
-                      // selected={isItemSelected}
+                      selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        {/* <Checkbox
+                        <Checkbox
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
                             'aria-labelledby': labelId,
                           }}
-                        /> */}
+                        />
                       </TableCell>
                       <TableCell
                         component="th"
@@ -289,8 +333,12 @@ export default function AccountList() {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.totalCount}</TableCell>
-                      <TableCell align="right">{row.participantsCount}</TableCell>
+                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align="right">{row.accountId.name}</TableCell>
+                      <TableCell align="right">{row.employeeId}</TableCell>
+                      <TableCell align="right">{row.skill}</TableCell>
+
+                      <TableCell align="right">{row.skills}</TableCell>
                     </TableRow>
                   )
                 })}

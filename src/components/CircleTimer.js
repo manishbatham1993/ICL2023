@@ -28,14 +28,14 @@ function CircleTimer(props) {
           onComplete={() => [true, 1000]}
           size={80}
           strokeWidth={6}
-          onComplete={() => {
-                // do your stuff here
-                var msg = "Player Unsold";
-                if(props.bidHistory.length > 0) {
-                    msg = " Player sold to " + props.bidHistory[0].team  + " for " + props.bidHistory[0].bid ;
-                }
-                return alert(msg);//{ shouldRepeat: true, delay: 1.5 } // repeat animation in 1.5 seconds
-            }}
+          // onComplete={() => {
+          //       // do your stuff here
+          //       var msg = "Player Unsold";
+          //       if(props.bidHistory.length > 0) {
+          //           msg = " Player sold to " + props.bidHistory[0].team  + " for " + props.bidHistory[0].bid ;
+          //       }
+          //       return alert(msg);//{ shouldRepeat: true, delay: 1.5 } // repeat animation in 1.5 seconds
+          //   }}
         >
           {renderTime}
         </CountdownCircleTimer>

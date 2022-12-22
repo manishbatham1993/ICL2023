@@ -220,24 +220,33 @@ export default function ManageEntities() {
             overflowY: 'auto',
           }}
         >
-          <CardContent sx={{ mt: '2rem' }}>
-            <Button
+          <CardContent  sx={{ mt: '2rem' }}>
+            <Button 
               variant="contained"
               onClick={openModalHandler.bind(null, 'teamOwner')}
             >
               Set team owner
             </Button>
+            <br></br>
+            <br></br>
             {accounts.map((account) => (
+              <>
               <Button
                 variant="contained"
                 onClick={startAuction.bind(null, account._id)}
               >
                 {account.name}-auction
               </Button>
+              <br></br>
+              <br></br>
+              </>
             ))}
+            
             <Button variant="contained" onClick={pauseAuction}>
               pause auction
             </Button>
+            <br></br>
+            <br></br>
             <Button variant="contained" onClick={resetAuction}>
               reset auction
             </Button>
