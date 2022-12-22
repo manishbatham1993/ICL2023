@@ -1,39 +1,39 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import * as React from 'react'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import Menu from '@mui/material/Menu'
+import MenuIcon from '@mui/icons-material/Menu'
+import Container from '@mui/material/Container'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
+import MenuItem from '@mui/material/MenuItem'
+import AdbIcon from '@mui/icons-material/Adb'
 
-const pages = ['Accounts','Team Owners','Player List'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Accounts', 'Team Owners', 'Player List']
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = React.useState(null)
+  const [anchorElUser, setAnchorElUser] = React.useState(null)
 
   const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
+    setAnchorElNav(event.currentTarget)
+  }
   const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
+    setAnchorElUser(event.currentTarget)
+  }
 
   const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+    setAnchorElNav(null)
+  }
 
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+    setAnchorElUser(null)
+  }
 
   return (
     <AppBar position="static">
@@ -114,22 +114,51 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-           
-            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/accountlist">Accounts</Button>
-            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/playerslist">playerslist</Button>
-            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/teamlist">Teamslist</Button>
-            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/manage">Manage</Button>
-            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/auction3">Auction</Button>
+            <Button
+              sx={{ my: 2, color: 'white', display: 'block' }}
+              href="/accountlist"
+            >
+              Accounts
+            </Button>
+            <Button
+              sx={{ my: 2, color: 'white', display: 'block' }}
+              href="/playerslist"
+            >
+              playerslist
+            </Button>
+            <Button
+              sx={{ my: 2, color: 'white', display: 'block' }}
+              href="/teamlist"
+            >
+              Teamslist
+            </Button>
+            <Button
+              sx={{ my: 2, color: 'white', display: 'block' }}
+              href="/manage"
+            >
+              Manage
+            </Button>
+            <Button
+              sx={{ my: 2, color: 'white', display: 'block' }}
+              href="/auction3"
+            >
+              Auction
+            </Button>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="../assets/img/Srikant.jpg" />
-            <Button sx={{ my: 2, color: 'white', display: 'block' }} href="/signin">Logout</Button>
-              </IconButton>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar alt="Remy Sharp" src="../assets/img/Srikant.jpg" />
+              <Button
+                sx={{ my: 2, color: 'white', display: 'block' }}
+                href="/signin"
+              >
+                Logout
+              </Button>
+            </IconButton>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
-  );
+  )
 }
-export default ResponsiveAppBar;
+export default ResponsiveAppBar

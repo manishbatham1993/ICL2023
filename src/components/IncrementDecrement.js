@@ -1,54 +1,79 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 function ButtonIncrement(props) {
-
-   return (
-     <button className="btn-round" style={{ marginLeft: '.5rem'}} onClick={props.onClickFunc}>
-     +
-     </button>
-   )
+  return (
+    <button
+      className="btn-round"
+      style={{ marginLeft: '.5rem' }}
+      onClick={props.onClickFunc}
+    >
+      +
+    </button>
+  )
 }
 function ButtonDecrement(props) {
-
   return (
-    <button className="btn-round" style={{ marginLeft: '.5rem'}} onClick={props.onClickFunc}>
-    -
+    <button
+      className="btn-round"
+      style={{ marginLeft: '.5rem' }}
+      onClick={props.onClickFunc}
+    >
+      -
     </button>
   )
 }
 function Display(props) {
   return (
-    <label style={{ marginLeft: '.5rem',
-    border: "2px solid white",
-    borderRadius: "20px",
-    height: "30px",
-    width: "70px",
-    textAlign: "center",
-    fontSize: "15px",
-    fontWeight: "bold",
-    lineHeight: "25px"}}  >{props.message}</label>
-  );
+    <label
+      style={{
+        marginLeft: '.5rem',
+        border: '2px solid white',
+        borderRadius: '20px',
+        height: '30px',
+        width: '70px',
+        textAlign: 'center',
+        fontSize: '15px',
+        fontWeight: 'bold',
+        lineHeight: '25px',
+      }}
+    >
+      {props.message}
+    </label>
+  )
 }
 function IncrementDecrement(props) {
-  const [counter, setCounter] = useState(props.currentBid);
-  const incrementCounter = () => setCounter(counter + 100);
-  let decrementCounter = () => setCounter(counter - 100);
-  if(counter<=props.currentBid) {
-    decrementCounter = () => setCounter(props.currentBid);
+  const [counter, setCounter] = useState(props.defaultVal)
+
+  const incrementCounter = () => {
+    if (counter + props.defaultChange <= props.maxVal) {
+      setCounter(counter + props.defaultChange)
+    }
+  }
+  let decrementCounter = () => {
+    if (counter - props.defaultChange >= props.defaultVal) {
+      setCounter(counter - props.defaultChange)
+    }
   }
 
-  useEffect( () => {
-    props.updateNextBid(counter);
-  }, [counter]);
-  return (
-    <div style={{
-    margin: "auto",
-  width: "50%",
-  padding: "10px"}}>
-      <ButtonDecrement onClickFunc={decrementCounter}/>
-      <Display message={counter}/>
-      <ButtonIncrement onClickFunc={incrementCounter}/>
+  useEffect(() => {
+    props.onChange(counter)
+  }, [counter])
 
+  useEffect(() => {
+    setCounter(props.defaultVal)
+  }, [props.defaultVal])
+
+  return (
+    <div
+      style={{
+        margin: 'auto',
+        width: '50%',
+        padding: '10px',
+      }}
+    >
+      <ButtonDecrement onClickFunc={decrementCounter} />
+      <Display message={counter} />
+      <ButtonIncrement onClickFunc={incrementCounter} />
     </div>
-  );
+  )
 }
-export default IncrementDecrement;
+export default IncrementDecrement
