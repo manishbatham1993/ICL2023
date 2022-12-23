@@ -7,16 +7,12 @@ import AccountList from './components/accountslist'
 import Footer from './components/footer'
 import Teamowners from './components/teams'
 import Auction from './components/auction'
-<<<<<<< HEAD
 import Overview from './components/overview'
 import ManageEntities from './components/manageEntities/ManageEntities'
 import Countdown from './components/countdown'
 import Accountdetail from './components/accountdetails'
 import Squaddetail from './components/squaddetails'
-=======
-import ManageEntities from './components/manageEntities/ManageEntities'
-import Countdown from './components/countdown'
->>>>>>> 139814c27808fa184584f50280025c3bdce0d3cd
+
 function App() {
   return (
     <div className="App">

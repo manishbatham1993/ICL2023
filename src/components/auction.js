@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import io from 'socket.io-client'
-import './Timer.css'
 import IncrementDecrement from './IncrementDecrement'
 import CircleTimer from './CircleTimer'
 import Avatar from '@mui/material/Avatar'
@@ -28,26 +27,7 @@ import {
   Progress,
 } from 'reactstrap'
 
-// reactstrap components
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Label,
-  FormGroup,
-  Input,
-  Table,
-  Row,
-  Col,
-  UncontrolledTooltip,
-  CardText,
-  CardFooter,
-  Badge,
-  Progress,
-} from "reactstrap";
+
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || "";
 const socket = io(BASE_URL);
@@ -76,10 +56,6 @@ const TEAM_ID = "639d4a67ddfe568981cf801d";
 //   ]
 // }
 
-// constants
-const DEFAULT_BID_INCREASE = 100
-const BASE_PRICE = 1000
-const TEAM_ID = '639d4a67ddfe568981cf801d'
 
 // AUCTION_SCHEMA : {
 //   state: (null/'ready'/'progress'/'completed'/)
@@ -347,10 +323,10 @@ const Auction = () => {
                     currentVal={nextBidAmount}
                     onChange={setNextBidAmount}
                   />
-                  {/* {console.log('test', mappedData.clock)} */}
-                  <p>Clock: {mappedData.clock}</p>
+                 
                   
-                  {/* <CircleTimer duration={mappedData.clock} bidHistory={[]} /> */}
+                  
+                  <CircleTimer duration={mappedData.clock} bidHistory={[]} />
                   <div
                     className="timer"
                     style={{ duration: `${mappedData.clock}`, size: '100' }}
