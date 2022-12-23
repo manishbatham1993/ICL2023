@@ -6,6 +6,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/roboto": "^4.5.8",
+    "@fortawesome/fontawesome-free": "6.1.1",
     "@mui/icons-material": "^5.10.16",
     "@mui/material": "^5.10.17",
     "@mui/styled-engine-sc": "^5.10.16",
@@ -14,6 +15,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.1",
+    "bootstrap": "4.5.3",
+    "jquery": "^3.6.3",
     "react": "^18.2.0",
     "react-countdown-circle-timer": "^3.1.0",
     "react-dom": "^18.2.0",
@@ -23,9 +26,7 @@
     "sass": "^1.57.0",
     "socket.io-client": "^4.5.4",
     "styled-components": "^5.3.6",
-    "web-vitals": "^2.1.4",
-    "@fortawesome/fontawesome-free": "6.1.1",
-    "bootstrap": "4.5.3"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

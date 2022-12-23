@@ -60,7 +60,8 @@ const Auction = () => {
   const [teams, setTeams] = useState([])
   const [players, setPlayers] = useState([])
   const [nextBidAmount, setNextBidAmount] = useState()
-  console.log('mappedData', mappedData)
+  // const[timer,setTimer]=useState(mappedData.clock?mappedData.clock:"")
+  // console.log('timer',timer)
 
   // set default amount for upcoming bid
   const defaultNextBidAmount =
@@ -226,21 +227,21 @@ const Auction = () => {
         {mappedData.currentPlayer && (
           <Row>
             <Col md="4">
-              <Card className="card-user">
-                <CardBody>
+              <Card className="card-user card-tasks">
+                <CardBody style={{ marginTop: '10%' }}>
                   <CardText />
                   <div className="author">
                     <div className="block block-one" />
                     <div className="block block-two" />
                     <div className="block block-three" />
                     <div className="block block-four" />
-                    <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                    <a href="#" onClick={(e) => e.preventDefault()}>
                       <img
                         alt="..."
                         className="avatar"
                         src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
                       />
-                      <h5 className="title">CURRENT BID FOR</h5>
+                      <h3 className="title">CURRENT BID FOR</h3>
                     </a>
                     <p className="description text-info">
                       {mappedData.currentPlayer.name}
@@ -269,15 +270,15 @@ const Auction = () => {
               </Card>
             </Col>
             <Col lg="4">
-              <Card className="card-chart">
+              <Card className="card-chart card-tasks">
                 <CardHeader>
-                  <CardTitle tag="h1" className="text-center">
+                  <CardTitle tag="h3" className="text-center">
                     <i className="tim-icons icon-money-coins text-primary" />{' '}
                     {mappedData.lastBid
                       ? mappedData.lastBid.amount
-                      : 'handle_no_last_bid'}
+                      : 'Handle No Last Bid'}
                   </CardTitle>
-                  <p className="text-center"> CURRENT BID </p>
+                  <h4 className="text-center"> CURRENT BID </h4>
                 </CardHeader>
                 <CardBody>
                   <p className="text-center">
@@ -293,13 +294,15 @@ const Auction = () => {
                     currentVal={nextBidAmount}
                     onChange={setNextBidAmount}
                   />
+                  {console.log('test', mappedData.clock)}
                   <p>clock: {mappedData.clock}</p>
-                  <CircleTimer duration={10} bidHistory={[]} />
+                  <CircleTimer duration={mappedData.clock} bidHistory={[]} />
 
                   <div className="pad10 mar10">
                     {teams.map((team) => (
                       <Button
-                        color="info"
+                        size="lg"
+                        color="success"
                         className="animation-on-hover btn-block"
                         onClick={makeBid.bind(null, team._id)}
                         disabled={mappedData.remBudget <= nextBidAmount}
@@ -312,9 +315,9 @@ const Auction = () => {
               </Card>
             </Col>
             <Col lg="4">
-              <Card className="card-chart">
+              <Card className="card-chart card-tasks">
                 <CardHeader>
-                  <CardTitle tag="h4" className="text-center">
+                  <CardTitle tag="h3" className="text-center">
                     Bid history
                   </CardTitle>
                 </CardHeader>
@@ -342,54 +345,101 @@ const Auction = () => {
           <Col lg="4" md="12">
             <Card className="card-tasks">
               <CardHeader>
-                <CardTitle tag="h4">Previously Auctioned</CardTitle>
+                <CardTitle tag="h3">Previously Auctioned</CardTitle>
               </CardHeader>
-              <CardBody>
-                <div className="table-full-width table-responsive">
+              <CardBody className="center">
+                {/* <div className="table-full-width table-responsive">
                   <Table>
                     <tbody>
                       {mappedData.previousAuctions.map((data) => (
                         <tr>
                           <tr>
                             <td>
-                              {data.playerName}
-                              <p>SOLD TO {data.teamName}</p>
+                              <h4>{data.playerName}</h4>
+                              <h5>Sold To {data.teamName}</h5>
                             </td>
                             <td>
-                              SOLD FOR
-                              <p>{data.amount}</p>
+                              <h4>Price</h4>
+                              <h5>{data.amount}</h5>
                             </td>
                           </tr>
                         </tr>
                       ))}
                     </tbody>
                   </Table>
-                </div>
+                </div> */}
+                <Row>
+                  {Object.values(mappedData.previousAuctions).map((data) => (
+                    <Col lg="6" md="12">
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>Player Details</th>
+                            <th>Bid Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              {data.playerName}
+                              <br></br>
+                              Sold To :{data.teamName}
+                            </td>
+                            <td>{data.amount}</td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </Col>
+                  ))}
+                </Row>
               </CardBody>
             </Card>
           </Col>
           <Col lg="8" md="12">
-            <Card>
+            <Card className="card-tasks">
               <CardHeader>
-                <CardTitle tag="h4" className="text-center">
+                <CardTitle tag="h3" className="text-center">
                   Team Overview
                 </CardTitle>
               </CardHeader>
               <CardBody>
                 <Row>
+                  {console.log(mappedData.teamStats)}
                   {Object.values(mappedData.teamStats).map((data) => (
                     <Col lg="6" md="12">
                       <CardTitle tag="h3" className="text-center">
                         {data.teamName}
                       </CardTitle>
-                      <p className="text-info text-center">Fund Remaining</p>
+                      {/* <p className="text-info text-center">Fund Remaining</p>
                       <Button color="info" className="animation-on-hover">
                         {data.budget}
                       </Button>
                       <p className="text-primary text-center">Total Players</p>
                       <Button color="primary" className="animation-on-hover">
                         {data.total}/set_total
-                      </Button>
+                      </Button> */}
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>Skills</th>
+                            <th>Count</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Batsman</td>
+                            <td>{data.batsman}</td>
+                          </tr>
+                          <tr>
+                            <td>Bowler</td>
+                            <td>{data.bowlers}</td>
+                          </tr>
+                          <tr>
+                            <td>All Rounder</td>
+                            <td>{data.allRounders}</td>
+                          </tr>
+                        </tbody>
+                      </Table>
                     </Col>
                   ))}
                 </Row>

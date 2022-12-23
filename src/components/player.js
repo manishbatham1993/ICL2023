@@ -21,6 +21,7 @@ import Switch from '@mui/material/Switch'
 import DeleteIcon from '@mui/icons-material/Delete'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import { visuallyHidden } from '@mui/utils'
+import axios from 'axios'
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -66,22 +67,22 @@ const headCells = [
     label: 'Email',
   },
   {
-    id: 'contact',
+    id: 'account',
     numeric: true,
     disablePadding: false,
-    label: 'Contact',
+    label: 'Account',
+  },
+  {
+    id: 'empid',
+    numeric: true,
+    disablePadding: false,
+    label: 'Emp Id',
   },
   {
     id: 'skills',
     numeric: true,
     disablePadding: false,
     label: 'Skiils',
-  },
-  {
-    id: 'availability',
-    numeric: true,
-    disablePadding: false,
-    label: 'Availability',
   },
 ]
 
@@ -212,7 +213,18 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0)
   const [dense, setDense] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const [rows, setRows] = React.useState([])
 
+  function get_data() {
+    const api = 'https://icl.up.railway.app/api/v1/player'
+    axios.get(api, {}).then((res) => {
+      console.log('data', res.data.players)
+      setRows(res.data.players)
+    })
+  }
+  React.useEffect(() => {
+    get_data()
+  }, [])
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
@@ -321,10 +333,12 @@ export default function EnhancedTable() {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align="right">{row.accountId.name}</TableCell>
+                      <TableCell align="right">{row.employeeId}</TableCell>
+                      <TableCell align="right">{row.skill}</TableCell>
+
+                      <TableCell align="right">{row.skills}</TableCell>
                     </TableRow>
                   )
                 })}
@@ -340,20 +354,7 @@ export default function EnhancedTable() {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   )
 }
