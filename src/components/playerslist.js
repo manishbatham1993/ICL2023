@@ -22,7 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import { visuallyHidden } from '@mui/utils'
 import axios from 'axios'
-import Avatar from '@mui/material/Avatar';
+import Avatar from '@mui/material/Avatar'
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1
@@ -83,7 +83,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Skiils',
-  }
+  },
 ]
 
 function EnhancedTableHead(props) {
@@ -102,8 +102,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-        </TableCell>
+        <TableCell padding="checkbox"></TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -175,7 +174,6 @@ function EnhancedTableToolbar(props) {
           Player Lists
         </Typography>
       )}
-
     </Toolbar>
   )
 }
@@ -192,7 +190,7 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [rows, setRows] = React.useState([])
-
+  const BASE_URL = process.env.REACT_APP_BASE_URL || ''
   function get_data() {
     const api = 'https://icl.up.railway.app/api/v1/player'
     axios.get(api, {}).then((res) => {
@@ -294,10 +292,11 @@ export default function EnhancedTable() {
                       key={row.name}
                       // selected={isItemSelected}
                     >
-                      <TableCell >
-                      
-                      <Avatar alt={row.name} src="/static/images/avatar/1.jpg" />
-  
+                      <TableCell>
+                        <Avatar
+                          alt={row.name}
+                          src={`${BASE_URL}/${row.imageUrl}`}
+                        />
                       </TableCell>
                       <TableCell
                         component="th"

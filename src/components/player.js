@@ -83,7 +83,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Skiils',
-  }
+  },
 ]
 
 function EnhancedTableHead(props) {

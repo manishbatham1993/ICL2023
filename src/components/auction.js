@@ -1,9 +1,32 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import io from "socket.io-client";
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import io from 'socket.io-client'
+import './Timer.css'
+import IncrementDecrement from './IncrementDecrement'
+import CircleTimer from './CircleTimer'
+import Avatar from '@mui/material/Avatar'
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
-import IncrementDecrement from "./IncrementDecrement";
-import CircleTimer from "./CircleTimer";
+// reactstrap components
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Label,
+  FormGroup,
+  Input,
+  Table,
+  Row,
+  Col,
+  UncontrolledTooltip,
+  CardText,
+  CardFooter,
+  Badge,
+  Progress,
+} from 'reactstrap'
 
 // reactstrap components
 import {
@@ -53,13 +76,37 @@ const TEAM_ID = "639d4a67ddfe568981cf801d";
 //   ]
 // }
 
+// constants
+const DEFAULT_BID_INCREASE = 100
+const BASE_PRICE = 1000
+const TEAM_ID = '639d4a67ddfe568981cf801d'
+
+// AUCTION_SCHEMA : {
+//   state: (null/'ready'/'progress'/'completed'/)
+//   teams: [<teamId>],
+//   budget: {teamId: <budget>}
+//   remainingPlayers : [<playerId>]
+//   unsoldPlayers: [<playerId>]
+//   soldPlayers: [<playerId>],
+//   playerLastBid: {playerId: <bidindex>},
+//   currentPlayer: {
+//     id : <playerId>
+//     bidAmount: <currentAmount>
+//     bids : [<teamId>]
+//     clock: <clock>
+//   }
+//   bids : [
+//     {playerId : <playerId>, teamId: <teamId>, amount: <amount> }
+//   ]
+// }
+
 const Auction = () => {
-  console.log("---------auction--------");
-  const [auctionData, setAuctionData] = useState();
-  const [mappedData, setMappedData] = useState();
-  const [teams, setTeams] = useState([]);
-  const [players, setPlayers] = useState([]);
-  const [nextBidAmount, setNextBidAmount] = useState();
+  console.log('---------auction--------')
+  const [auctionData, setAuctionData] = useState()
+  const [mappedData, setMappedData] = useState()
+  const [teams, setTeams] = useState([])
+  const [players, setPlayers] = useState([])
+  const [nextBidAmount, setNextBidAmount] = useState()
   // const[timer,setTimer]=useState(mappedData.clock?mappedData.clock:"")
   // console.log('timer',timer)
 
@@ -67,17 +114,17 @@ const Auction = () => {
   const defaultNextBidAmount =
     auctionData && auctionData.currentPlayer
       ? auctionData.currentPlayer.bidAmount
-      : null;
+      : null
 
   useEffect(() => {
-    setNextBidAmount(defaultNextBidAmount);
-  }, [defaultNextBidAmount]);
+    setNextBidAmount(defaultNextBidAmount)
+  }, [defaultNextBidAmount])
 
   const updateMappedData = () => {
     const clock = auctionData.currentPlayer
       ? auctionData.currentPlayer.clock
-      : null;
-    const remBudget = auctionData.budget[TEAM_ID];
+      : null
+    const remBudget = auctionData.budget[TEAM_ID]
     const playerObj = auctionData.currentPlayer
       ? players.find((player) => player._id === auctionData.currentPlayer.id)
       : null;
@@ -120,9 +167,9 @@ const Auction = () => {
           allRounders: 0,
           total: 0,
           budget: auctionData.budget[team._id],
-        };
-      });
-    const previousAuctions = [];
+        }
+      })
+    const previousAuctions = []
     auctionData.soldPlayers.forEach((playerId) => {
       const bidId = auctionData.playerLastBid[playerId];
       const bid = auctionData.bids[bidId];
@@ -138,15 +185,15 @@ const Auction = () => {
       });
       if (player.skill) {
         switch (player.skill.toLowerCase()) {
-          case "batsman":
-            teamStats[teamId].batsman += 1;
-            break;
-          case "bowler":
-            teamStats[teamId].bowlers += 1;
-            break;
-          case "all rounder":
-            teamStats[teamId].allRounders += 1;
-            break;
+          case 'batsman':
+            teamStats[teamId].batsman += 1
+            break
+          case 'bowler':
+            teamStats[teamId].bowlers += 1
+            break
+          case 'all rounder':
+            teamStats[teamId].allRounders += 1
+            break
           default:
             console.log("skill", player.skill, "not present");
         }
@@ -192,9 +239,9 @@ const Auction = () => {
         amount: nextBidAmount,
       })
       .then((res) => {
-        console.log("posting-bid", res);
-      });
-  };
+        console.log('posting-bid', res)
+      })
+  }
 
   // update data and initialize socket functions
   useEffect(() => {
@@ -219,7 +266,7 @@ const Auction = () => {
 
   useEffect(() => {
     if (teams.length > 0 && players.length > 0 && auctionData) {
-      updateMappedData();
+      updateMappedData()
     }
   }, [teams, players, auctionData]);
 
@@ -229,32 +276,37 @@ const Auction = () => {
         {mappedData.currentPlayer && (
           <Row>
             <Col md="4">
-              <Card className="card-user card-tasks" >
-                <CardBody style={{marginTop:"10%"}}>
+              <Card className="card-user card-tasks">
+                <CardBody style={{ marginTop: '10%' }}>
                   <CardText />
                   <div className="author">
                     <div className="block block-one" />
                     <div className="block block-two" />
                     <div className="block block-three" />
                     <div className="block block-four" />
-                    <a href="#" onClick={(e) => e.preventDefault()}>
-                      <img
+                    {/* <a href="#" onClick={(e) => e.preventDefault()}> */}
+                    {console.log(mappedData.currentPlayer.image, 'abcd')}
+                    {/* <img
                         alt="..."
                         className="avatar"
                         src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
-                      />
-                      <h3 className="title">CURRENT BID FOR</h3>
-                    </a>
-                    <p className="description text-info">
-                      {mappedData.currentPlayer.name}
-                    </p>
+                      /> */}
+                    <Avatar
+                      className="center"
+                      alt={mappedData.currentPlayer.name}
+                      src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
+                      sx={{ width: 100, height: 100 }}
+                    />
+                    <br></br>
+                    <h4 className="title">CURRENT BID FOR</h4>
+                    <h3>{mappedData.currentPlayer.name}</h3>
                   </div>
                   <div
                     className="card-description"
                     style={{
-                      margin: "auto",
-                      width: "80%",
-                      padding: "10px",
+                      margin: 'auto',
+                      width: '80%',
+                      padding: '10px',
                     }}
                   >
                     <Button color="primary" className="animation-on-hover">
@@ -275,18 +327,17 @@ const Auction = () => {
               <Card className="card-chart card-tasks">
                 <CardHeader>
                   <CardTitle tag="h3" className="text-center">
-                    <i className="tim-icons icon-money-coins text-primary" />{" "}
-                    {mappedData.lastBid
-                      ? mappedData.lastBid.amount
-                      : "Handle No Last Bid"}
+                    <i className="tim-icons icon-money-coins text-primary" />{' '}
+                    {mappedData.lastBid ? mappedData.lastBid.amount : 'No Bids'}
                   </CardTitle>
                   <h4 className="text-center"> CURRENT BID </h4>
+                  
                 </CardHeader>
                 <CardBody>
                   <p className="text-center">
                     {mappedData.lastBid
-                      ? `${mappedData.lastBid.teamName} Raised for ${mappedData.lastBid.amount}`
-                      : ""}
+                      ? `Team ${mappedData.lastBid.teamName} Raised for ${mappedData.lastBid.amount}`
+                      : ''}
                   </p>
 
                   <IncrementDecrement
@@ -296,15 +347,20 @@ const Auction = () => {
                     currentVal={nextBidAmount}
                     onChange={setNextBidAmount}
                   />
-                  {console.log("test", mappedData.clock)}
-                  <p>clock: {mappedData.clock}</p>
-                  <CircleTimer duration={mappedData.clock} bidHistory={[]} />
-
+                  {/* {console.log('test', mappedData.clock)} */}
+                  <p>Clock: {mappedData.clock}</p>
+                  
+                  {/* <CircleTimer duration={mappedData.clock} bidHistory={[]} /> */}
+                  <div
+                    className="timer"
+                    style={{ duration: `${mappedData.clock}`, size: '100' }}
+                  >
+                    <div className="mask"></div>
+                  </div>
                   <div className="pad10 mar10">
                     {teams.map((team) => (
                       <Button
-                      
-                      size="lg"
+                        size="lg"
                         color="success"
                         className="animation-on-hover btn-block"
                         onClick={makeBid.bind(null, team._id)}
@@ -318,7 +374,7 @@ const Auction = () => {
               </Card>
             </Col>
             <Col lg="4">
-              <Card className="card-chart card-tasks">
+              <Card className="card-chart card-tasks overflow" >
                 <CardHeader>
                   <CardTitle tag="h3" className="text-center">
                     Bid history
@@ -331,11 +387,17 @@ const Auction = () => {
                         return (
                           <tr>
                             <td>
-                              <span className="">{history.teamName}</span>-
-                              raised for {history.amount}
+                              {console.log(history,"testmanish")}
+                            <Avatar
+                      className="center"
+                      alt={history.teamName}
+                      src={`${BASE_URL}/${history.teamImage}`}
+                      sx={{ width: 100, height: 100 }}
+                    /> <span className="">Team {history.teamName}</span>
+                              Raised For {history.amount}
                             </td>
                           </tr>
-                        );
+                        )
                       })}
                     </tbody>
                   </Table>
@@ -346,62 +408,53 @@ const Auction = () => {
         )}
         <Row>
           <Col lg="4" md="12">
-            <Card className="card-tasks">
+            <Card className="card-tasks overflow">
               <CardHeader>
                 <CardTitle tag="h3">Previously Auctioned</CardTitle>
               </CardHeader>
-              <CardBody className="center">
-                {/* <div className="table-full-width table-responsive">
-                  <Table>
-                    <tbody>
-                      {mappedData.previousAuctions.map((data) => (
+              <CardBody className="">
+                <Row>
+                  <Col lg="6" md="12">
+                    <Table>
+                      <thead>
                         <tr>
-                          <tr>
-                            <td>
-                              <h4>{data.playerName}</h4>
-                              <h5>Sold To {data.teamName}</h5>
-                            </td>
-                            <td>
-                              <h4>Price</h4>
-                              <h5>{data.amount}</h5>
-                            </td>
-                          </tr>
+                          <th></th>
+                          <th>Player Details</th>
+                          <th>Bid Price</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div> */}
-                 <Row>
-                  {Object.values(mappedData.previousAuctions).map((data) => (
-                    <Col lg="6" md="12">
-                      <Table>
-                        <thead>
-                          <tr>
-                            <th>Player Details</th>
-                            <th>Bid Price</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>{data.playerName}<br></br>
-                            Sold To :{data.teamName}
-                            </td>
-                            <td>{data.amount}</td>
-                          </tr>
-                          
-                        </tbody>
-                      </Table>
-                    </Col>
-                  ))}
+                      </thead>
+                      <tbody>
+                        {Object.values(mappedData.previousAuctions).map(
+                          (data) => (
+                            <tr>
+                              <td>
+                                <Avatar
+                                  className="center"
+                                  alt={data.playerName}
+                                  src={`${BASE_URL}/${data.playerImage}`}
+                                />
+                              </td>
+                              <td>
+                                {data.playerName}
+                                <br></br>
+                                Sold To :{data.teamName}
+                              </td>
+                              <td>{data.amount}</td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </Table>
+                  </Col>
                 </Row>
               </CardBody>
             </Card>
           </Col>
           <Col lg="8" md="12">
-            <Card className="card-tasks">
+            <Card className="card-tasks overflow">
               <CardHeader>
                 <CardTitle tag="h3" className="text-center">
-                  Team Overview
+                  ICL Team Stats
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -410,7 +463,7 @@ const Auction = () => {
                   {Object.values(mappedData.teamStats).map((data) => (
                     <Col lg="6" md="12">
                       <CardTitle tag="h3" className="text-center">
-                        {data.teamName}
+                        {data.teamName}:{data.budget}
                       </CardTitle>
                       {/* <p className="text-info text-center">Fund Remaining</p>
                       <Button color="info" className="animation-on-hover">

@@ -231,17 +231,17 @@ export default function ManageEntities() {
             <br></br>
             {accounts.map((account) => (
               <>
-              <Button
-                variant="contained"
-                onClick={startAuction.bind(null, account._id)}
-              >
-                {account.name}-auction
-              </Button>
-              <br></br>
-              <br></br>
+                <Button
+                  variant="contained"
+                  onClick={startAuction.bind(null, account._id)}
+                >
+                  {account.name}-auction
+                </Button>
+                <br></br>
+                <br></br>
               </>
             ))}
-            
+
             <Button variant="contained" onClick={pauseAuction}>
               pause auction
             </Button>
