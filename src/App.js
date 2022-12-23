@@ -7,8 +7,11 @@ import AccountList from './components/accountslist'
 import Footer from './components/footer'
 import Teamowners from './components/teams'
 import Auction from './components/auction'
+import Overview from './components/overview'
 import ManageEntities from './components/manageEntities/ManageEntities'
 import Countdown from './components/countdown'
+import Accountdetail from './components/accountdetails'
+import Squaddetail from './components/squaddetails'
 function App() {
   return (
     <div className="App">
@@ -22,6 +25,9 @@ function App() {
           <Route path="/teamlist" element={<Teamowners />} />
           <Route path="/auction" element={<Auction />} />
           <Route path="/manage" element={<ManageEntities />} />
+          <Route path="/overview" element={<Overview />} />
+          <Route path="/accountdetail" element={<Accountdetail />} />
+          <Route path="/squaddetail" element={<Squaddetail />} />
         </Routes>
         <Footer />
       </Router>
