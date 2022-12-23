@@ -1,4 +1,8 @@
-import * as React from 'react'
+import React, { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+
+import AuthContext from '../store/auth-context'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -13,15 +17,27 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const theme = createTheme()
 
 export default function SignIn() {
+  const authCtx = useContext(AuthContext)
+  const navigate = useNavigate()
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    const data = new FormData(event.currentTarget)
+    const formBody = new FormData(event.currentTarget)
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      email: formBody.get('email'),
+      password: formBody.get('password'),
+    })
+    const api = BASE_URL + '/api/v1/auth/login'
+    axios.post(api, formBody).then((res) => {
+      console.log('res', res)
+      if (res.data.status === 'ok') {
+        authCtx.login(res.data.token)
+        navigate('/', { replace: true })
+      }
     })
   }
 
