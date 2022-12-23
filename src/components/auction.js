@@ -28,8 +28,53 @@ import {
   Progress,
 } from 'reactstrap'
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || ''
-const socket = io(BASE_URL)
+// reactstrap components
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Label,
+  FormGroup,
+  Input,
+  Table,
+  Row,
+  Col,
+  UncontrolledTooltip,
+  CardText,
+  CardFooter,
+  Badge,
+  Progress,
+} from "reactstrap";
+
+const BASE_URL = process.env.REACT_APP_BASE_URL || "";
+const socket = io(BASE_URL);
+
+// constants
+const DEFAULT_BID_INCREASE = 100;
+const BASE_PRICE = 1000;
+const TEAM_ID = "639d4a67ddfe568981cf801d";
+
+// AUCTION_SCHEMA : {
+//   state: (null/'ready'/'progress'/'completed'/)
+//   teams: [<teamId>],
+//   budget: {teamId: <budget>}
+//   remainingPlayers : [<playerId>]
+//   unsoldPlayers: [<playerId>]
+//   soldPlayers: [<playerId>],
+//   playerLastBid: {playerId: <bidindex>},
+//   currentPlayer: {
+//     id : <playerId>
+//     bidAmount: <currentAmount>
+//     bids : [<teamId>]
+//     clock: <clock>
+//   }
+//   bids : [
+//     {playerId : <playerId>, teamId: <teamId>, amount: <amount> }
+//   ]
+// }
 
 // constants
 const DEFAULT_BID_INCREASE = 100
@@ -82,7 +127,7 @@ const Auction = () => {
     const remBudget = auctionData.budget[TEAM_ID]
     const playerObj = auctionData.currentPlayer
       ? players.find((player) => player._id === auctionData.currentPlayer.id)
-      : null
+      : null;
     const currentPlayer = playerObj
       ? {
           name: playerObj.name,
@@ -90,26 +135,28 @@ const Auction = () => {
           skill: playerObj.skill,
           image: playerObj.imageUrl,
         }
-      : null
+      : null;
     const bidAmount = auctionData.currentPlayer
       ? auctionData.currentPlayer.bidAmount
-      : null
+      : null;
     const bidHistory = auctionData.currentPlayer
       ? auctionData.currentPlayer.bids //[0,1,2]
           .map((bidId) => auctionData.bids[bidId]) //[{playerId, teamId, amount}]
           .map((bid) => {
-            const player = players.find((player) => player._id === bid.playerId)
-            const team = teams.find((team) => team._id === bid.teamId)
+            const player = players.find(
+              (player) => player._id === bid.playerId
+            );
+            const team = teams.find((team) => team._id === bid.teamId);
             return {
               teamName: team.name,
               teamImage: team.imageUrl,
               amount: bid.amount,
-            }
+            };
           })
-      : []
-    bidHistory.reverse()
-    const lastBid = bidHistory.length > 0 ? bidHistory[0] : null
-    const teamStats = {}
+      : [];
+    bidHistory.reverse();
+    const lastBid = bidHistory.length > 0 ? bidHistory[0] : null;
+    const teamStats = {};
     auctionData.teams
       .map((teamId) => teams.find((team) => team._id === teamId))
       .forEach((team) => {
@@ -124,18 +171,18 @@ const Auction = () => {
       })
     const previousAuctions = []
     auctionData.soldPlayers.forEach((playerId) => {
-      const bidId = auctionData.playerLastBid[playerId]
-      const bid = auctionData.bids[bidId]
-      const teamId = bid.teamId
-      const team = teams.find((team) => team._id === bid.teamId)
-      const player = players.find((player) => player._id === playerId)
+      const bidId = auctionData.playerLastBid[playerId];
+      const bid = auctionData.bids[bidId];
+      const teamId = bid.teamId;
+      const team = teams.find((team) => team._id === bid.teamId);
+      const player = players.find((player) => player._id === playerId);
       previousAuctions.push({
         playerName: player.name,
         playerImage: player.imageUrl,
         teamName: team.name,
         teamImage: team.imageUrl,
         amount: bid.amount,
-      })
+      });
       if (player.skill) {
         switch (player.skill.toLowerCase()) {
           case 'batsman':
@@ -148,11 +195,11 @@ const Auction = () => {
             teamStats[teamId].allRounders += 1
             break
           default:
-            console.log('skill', player.skill, 'not present')
+            console.log("skill", player.skill, "not present");
         }
       }
-      teamStats[bid.teamId].total += 1
-    })
+      teamStats[bid.teamId].total += 1;
+    });
     setMappedData({
       clock,
       remBudget,
@@ -162,31 +209,31 @@ const Auction = () => {
       bidHistory,
       teamStats,
       previousAuctions,
-    })
-  }
+    });
+  };
 
   const updateData = () => {
     axios
-      .get(BASE_URL + '/api/v1/auction/data')
+      .get(BASE_URL + "/api/v1/auction/data")
       .then((res) => {
-        if (res.data.status === 'ok') {
-          setAuctionData(res.data.data)
+        if (res.data.status === "ok") {
+          setAuctionData(res.data.data);
         }
       })
       .catch((err) => {
-        console.log('err', err)
-      })
-    axios.get(BASE_URL + '/api/v1/team').then((res) => {
-      setTeams(res.data.teams)
-    })
-    axios.get(BASE_URL + '/api/v1/player').then((res) => {
-      setPlayers(res.data.players)
-    })
-  }
+        console.log("err", err);
+      });
+    axios.get(BASE_URL + "/api/v1/team").then((res) => {
+      setTeams(res.data.teams);
+    });
+    axios.get(BASE_URL + "/api/v1/player").then((res) => {
+      setPlayers(res.data.players);
+    });
+  };
 
   const makeBid = (teamId) => {
     axios
-      .post(BASE_URL + '/api/v1/auction/bid', {
+      .post(BASE_URL + "/api/v1/auction/bid", {
         playerId: auctionData.currentPlayer.id,
         teamId: teamId,
         amount: nextBidAmount,
@@ -198,30 +245,30 @@ const Auction = () => {
 
   // update data and initialize socket functions
   useEffect(() => {
-    console.log('--------use-effect---------')
-    updateData()
-    socket.on('connect', () => {
-      console.log('socket connected')
-    })
-    socket.on('disconnect', () => {
-      console.log('socket disconnected')
-    })
-    socket.on('event', (payload) => {
-      console.log('event:', payload)
-      setAuctionData(payload.data)
-    })
+    console.log("--------use-effect---------");
+    updateData();
+    socket.on("connect", () => {
+      console.log("socket connected");
+    });
+    socket.on("disconnect", () => {
+      console.log("socket disconnected");
+    });
+    socket.on("event", (payload) => {
+      console.log("event:", payload);
+      setAuctionData(payload.data);
+    });
     return () => {
-      socket.off('connect')
-      socket.off('disconnect')
-      socket.off('event')
-    }
-  }, [])
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("event");
+    };
+  }, []);
 
   useEffect(() => {
     if (teams.length > 0 && players.length > 0 && auctionData) {
       updateMappedData()
     }
-  }, [teams, players, auctionData])
+  }, [teams, players, auctionData]);
 
   return (
     mappedData && (
@@ -457,7 +504,7 @@ const Auction = () => {
         </Row>
       </div>
     )
-  )
-}
+  );
+};
 
-export default Auction
+export default Auction;

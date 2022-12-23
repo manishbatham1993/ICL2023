@@ -1,0 +1,28 @@
+.accountTitle {
+  font-size: 18px;
+  font-weight: 700;
+  padding: 10px;
+  font-family: 'source sans pro', sans-serif;
+}
+
+.playerCount{
+  font-size: 25px;
+    font-weight: 700;
+}
+
+.playerSummary h4 span {
+  font-weight: 900;
+}
+
+.playerSummary h4 {
+  font-size: 12px;
+  margin: 0;
+}
+
+.accountImage{
+  padding-top: 15px;
+}
+
+.mainContent{
+  margin: 10px;
+}

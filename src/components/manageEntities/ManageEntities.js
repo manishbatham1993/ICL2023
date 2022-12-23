@@ -211,7 +211,7 @@ export default function ManageEntities() {
           onClickDelete={deleteHandler.bind(null, 'team')}
           additionalColums={['teamOwnerName']}
         />
-        <Card
+        <Card 
           sx={{
             m: 2,
             borderRadius: 2,
@@ -220,8 +220,8 @@ export default function ManageEntities() {
             overflowY: 'auto',
           }}
         >
-          <CardContent sx={{ mt: '2rem' }}>
-            <Button
+          <CardContent  sx={{ mt: '2rem' }}>
+            <Button 
               variant="contained"
               onClick={openModalHandler.bind(null, 'teamOwner')}
             >

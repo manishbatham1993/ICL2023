@@ -304,6 +304,7 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
+                        
                         {row.name}
                       </TableCell>
                       <TableCell align="right">{row.email}</TableCell>
