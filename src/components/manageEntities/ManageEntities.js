@@ -211,7 +211,7 @@ export default function ManageEntities() {
           onClickDelete={deleteHandler.bind(null, 'team')}
           additionalColums={['teamOwnerName']}
         />
-        <Card
+        <Card 
           sx={{
             m: 2,
             borderRadius: 2,

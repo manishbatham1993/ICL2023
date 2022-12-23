@@ -24,11 +24,11 @@ function timeLeft(endtime){
     };
     
     $("#header").hover(function() {
-      $(this).toggleClass('bluelight');
+      $(this).toggleclassName('bluelight');
     });
     
     $(".clock").hover(function() {
-      $(this).toggleClass('bluelight');
+      $(this).toggleclassName('bluelight');
     });
     
     var setClock = function(newyear){
@@ -64,53 +64,53 @@ function timeLeft(endtime){
 
     return(
         <>
-        <div class="wrapper">
-        {/* <div class="col-md-12"> */}
-      <h1 id="header" class="">ICL 2023 Auction Starts</h1>
+        <div className="wrapper" style={{marginTop:"20%"}}>
+        {/* <div className="col-md-12"> */}
+      <h1 id="header" style={{fontSize:"100px"}}>ICL 2023 Auction Starts</h1>
     {/* </div> */}
-  <div class="container " style={{display:'flex'}}>
+  <div className="container " style={{display:'flex'}}>
     
-    <div class="col-md-3 col-xs-6">
-      <div class="clock">
-        <div class="well top-pane">
-          <div id="days" class="num">00</div>
+    <div className="col-md-3 col-xs-6">
+      <div className="clock">
+        <div className="well top-pane">
+          <div id="days" className="num">00</div>
         </div>
-        <div class="well bottom-pane">
-          <div id="days-text" class="text">Days</div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 col-xs-6">
-      <div class="clock">
-        <div class="well top-pane">
-          <div id="hours" class="num">00</div>
-        </div>
-        <div class="well bottom-pane">
-          <div id="hours-text" class="text">Hours</div>
+        <div className="well bottom-pane">
+          <div id="days-text" className="text">Days</div>
         </div>
       </div>
     </div>
-    <div class="col-md-3 col-xs-6">
-      <div class="clock">
-        <div class="well top-pane">
-          <div id="mins" class="num">00</div>
+    <div className="col-md-3 col-xs-6">
+      <div className="clock">
+        <div className="well top-pane">
+          <div id="hours" className="num">00</div>
         </div>
-        <div class="well bottom-pane">
-          <div id="mins-text" class="text">Minutes</div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 col-xs-6">
-      <div class="clock">
-        <div class="well top-pane">
-          <div id="secs" class="num">00</div>
-        </div>
-        <div class="well bottom-pane">
-          <div id="secs-text" class="text">Seconds</div>
+        <div className="well bottom-pane">
+          <div id="hours-text" className="text">Hours</div>
         </div>
       </div>
     </div>
-    <div id="info" class="small"></div>
+    <div className="col-md-3 col-xs-6">
+      <div className="clock">
+        <div className="well top-pane">
+          <div id="mins" className="num">00</div>
+        </div>
+        <div className="well bottom-pane">
+          <div id="mins-text" className="text">Minutes</div>
+        </div>
+      </div>
+    </div>
+    <div className="col-md-3 col-xs-6">
+      <div className="clock">
+        <div className="well top-pane">
+          <div id="secs" className="num">00</div>
+        </div>
+        <div className="well bottom-pane">
+          <div id="secs-text" className="text">Seconds</div>
+        </div>
+      </div>
+    </div>
+    <div id="info" className="small"></div>
   </div>
   </div>
 
