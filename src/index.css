@@ -27,3 +27,6 @@ code {
 .MuiAppBar-root{
   background: #006a56 !important;
 }
+.overflow{
+overflow: scroll !important;
+}

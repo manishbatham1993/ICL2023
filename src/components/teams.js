@@ -179,6 +179,8 @@ export default function Teamowners() {
   const [dense, setDense] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [rows, setRows] = React.useState([])
+  const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+
 
   function get_data() {
     const api = 'https://icl.up.railway.app/api/v1/team'
@@ -282,9 +284,9 @@ export default function Teamowners() {
                       // selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Avatar
+                      <Avatar
                           alt={row.name}
-                          src="/static/images/avatar/1.jpg"
+                          src={`${BASE_URL}/${row.imageUrl}`}
                         />
                       </TableCell>
                       <TableCell
