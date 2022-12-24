@@ -223,79 +223,161 @@ const Accountdetail = () => {
 
         
         <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-        <Row>
-          <Nav fill variant="pills" className="" style={{ flex: 'auto', marginBottom: '40px' }}>
-            <Nav.Item>
-              <Nav.Link eventKey="first">TO BE AUCTIONED</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="second">TEAMS</Nav.Link>
-            </Nav.Item>
-          </Nav>
-        </Row>
-        <Row>
-          <Tab.Content style={{width: '100%'}}>
-            <Tab.Pane eventKey="first">
-              <Table striped hover variant="dark" style={{ border: '0.1rem solid #e3e3e3' }}>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Player Name</th>
-                    <th>Account</th>
-                    <th>Skill</th>
-                    <th>Base Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><Image
-                      rounded="true"
-                      roundedCircle="true"
-                      alt="Sample"
-                      src="https://picsum.photos/50/50"
-                    /></td>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>10000</td>
-                  </tr>
-                  <tr>
-                    <td><Image
-                      rounded="true"
-                      roundedCircle="true"
-                      alt="Sample"
-                      src="https://picsum.photos/50/50"
-                    /></td>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>10000</td>
-                  </tr>
-                  <tr>
-                    <td><Image
-                      rounded="true"
-                      roundedCircle="true"
-                      alt="Sample"
-                      src="https://picsum.photos/50/50"
-                    /></td>
-                    <td>Larry</td>
-                    <td>Thornton</td>
-                    <td>@twitter</td>
-                    <td>10000</td>
-                  </tr>
-                </tbody>
-              </Table>
-            </Tab.Pane>
-            <Tab.Pane eventKey="second">
-            <Table striped hover variant="dark" style={{border: '0.1rem solid #e3e3e3'}}>
+          <Row>
+            <Nav fill variant="pills" className="" style={{ flex: 'auto', marginBottom: '40px' }}>
+              <Nav.Item>
+                <Nav.Link eventKey="first">TEAMS</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="second">TO BE AUCTIONED</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="third">SOLD PLAYERS</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="forth">TOP BUYS</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="fifth">UNSOLD</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Row>
+          <Row>
+            <Col>
+              <Tab.Content>
+                <Tab.Pane eventKey="first">
+                  <Row md="12">
+                    <Col md="4">
+                      <Card
+                        style={{
+                          width: '18rem'
+                        }}
+                      >
+                        <div className="accountImage"><Image
+                          rounded="true"
+                          roundedCircle="true"
+                          alt="Sample"
+                          src="https://picsum.photos/100/100"
+                        /></div>
+
+                        <CardBody>
+                          <CardTitle tag="h5" className="accountTitle">
+                            Fortra
+                          </CardTitle>
+                          <CardSubtitle
+                            className="mb-2 text-muted"
+                            tag="h6"
+                          >
+                            Player Count
+                          </CardSubtitle>
+                          <CardText className="playerCount">
+                            100
+                          </CardText>
+                          <div className="playerSummary">
+                            <h4>Batsman <span>50</span></h4>
+                            <h4>Bowlers <span>25</span></h4>
+                            <h4>All Rounders <span>25</span></h4>
+
+                          </div>
+                          <a href="/squaddetail">
+                          <Button>
+                              Get Details                        
+                          </Button>
+                          </a>
+                        </CardBody>
+                      </Card>
+                    </Col>
+
+                    <Col md="4">
+                      <Card
+                        style={{
+                          width: '18rem'
+                        }}
+                      >
+                        <div className="accountImage"><Image
+                          rounded="true"
+                          roundedCircle="true"
+                          alt="Sample"
+                          src="https://picsum.photos/100/100"
+                        /></div>
+
+                        <CardBody>
+                          <CardTitle tag="h5" className="accountTitle">
+                            Prosoft
+                          </CardTitle>
+                          <CardSubtitle
+                            className="mb-2 text-muted"
+                            tag="h6"
+                          >
+                            Player Count
+                          </CardSubtitle>
+                          <CardText className="playerCount">
+                            100
+                          </CardText>
+                          <div className="playerSummary">
+                            <h4>Batsman <span>50</span></h4>
+                            <h4>Bowlers <span>25</span></h4>
+                            <h4>All Rounders <span>25</span></h4>
+
+                          </div>
+                          <a href="/accountdetail"><Button>
+                            Get Details
+                          </Button></a>
+                        </CardBody>
+                      </Card>
+                    </Col>
+
+
+                    <Col md="4">
+                      <Card
+                        style={{
+                          width: '18rem'
+                        }}
+                      >
+                        <div className="accountImage"><Image
+                          rounded="true"
+                          roundedCircle="true"
+                          alt="Sample"
+                          src="https://picsum.photos/100/100"
+                        /></div>
+
+                        <CardBody>
+                          <CardTitle tag="h5" className="accountTitle">
+                            A10
+                          </CardTitle>
+                          <CardSubtitle
+                            className="mb-2 text-muted"
+                            tag="h6"
+                          >
+                            Player Count
+                          </CardSubtitle>
+                          <CardText className="playerCount">
+                            100
+                          </CardText>
+                          <div className="playerSummary">
+                            <h4>Batsman <span>50</span></h4>
+                            <h4>Bowlers <span>25</span></h4>
+                            <h4>All Rounders <span>25</span></h4>
+
+                          </div>
+                          <Button>
+                            Get Details
+                          </Button>
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  </Row>
+
+                </Tab.Pane>
+                <Tab.Pane eventKey="second">
+                  <Table striped hover variant="dark" style={{border: '0.1rem solid #e3e3e3'}}>
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>Team Name</th>
+                        <th>Player Name</th>
                         <th>Account</th>
-                        <th>Owner</th>
-                        <th>Budget</th>
-                        <th>#</th>
+                        <th>Skill</th>
+                        <th>Base Price</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -310,7 +392,6 @@ const Accountdetail = () => {
                         <td>Otto</td>
                         <td>@mdo</td>
                         <td>10000</td>
-                        <td><a href="/squaddetail"><Button>SQUAD</Button></a></td>
                       </tr>
                       <tr>
                       <td><Image
@@ -323,7 +404,6 @@ const Accountdetail = () => {
                         <td>Thornton</td>
                         <td>@fat</td>
                         <td>10000</td>
-                        <td><Button>SQUAD</Button></td>
                       </tr>
                       <tr>
                       <td><Image
@@ -336,14 +416,125 @@ const Accountdetail = () => {
                         <td>Thornton</td>
                         <td>@twitter</td>
                         <td>10000</td>
-                        <td><Button>SQUAD</Button></td>
                       </tr>
                     </tbody>
                   </Table>
-            </Tab.Pane>
-          </Tab.Content>
-        </Row>
+                </Tab.Pane>
+                <Tab.Pane eventKey="third">
+                  <Table striped hover variant="dark" style={{border: '0.1rem solid #e3e3e3'}}>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Player Name</th>
+                        <th>Account</th>
+                        <th>Skill</th>
+                        <th>Base Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>                    
+                        <td>1</td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>10000</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                        <td>10000</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Larry</td>
+                        <td>Thornton</td>
+                        <td>@twitter</td>
+                        <td>10000</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Tab.Pane>
+                <Tab.Pane eventKey="forth">
+                  <Table striped hover variant="dark" style={{border: '0.1rem solid #e3e3e3'}}>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Player Name</th>
+                        <th>Account</th>
+                        <th>Skill</th>
+                        <th>Base Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>10000</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                        <td>10000</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Larry</td>
+                        <td>Thornton</td>
+                        <td>@twitter</td>
+                        <td>10000</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Tab.Pane>
+                <Tab.Pane eventKey="fifth">
+                  <Table striped hover variant="dark" style={{border: '0.1rem solid #e3e3e3'}}>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Player Name</th>
+                        <th>Account</th>
+                        <th>Skill</th>
+                        <th>Base Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>10000</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                        <td>10000</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Larry</td>
+                        <td>Thornton</td>
+                        <td>@twitter</td>
+                        <td>10000</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Tab.Pane>
+              </Tab.Content>
+            </Col>
+          </Row>
         </Tab.Container>
+
+
+
       </div>
     )
   );

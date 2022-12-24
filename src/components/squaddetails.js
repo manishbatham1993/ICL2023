@@ -242,29 +242,15 @@ const Squaddetail = () => {
                 tag="h6"
               >
                 Team Navic
-              </CardSubtitle>
-              <CardText className="playerCount">
-                ALL ROUNDER
-              </CardText>
-              <div className="pointSection">
-                <div>
-                  <div className="pointText">BAT</div>
-                  <div className="pointCircle">
+              </CardSubtitle>              
+              {/* <div className="pointSection" style={{float:'left'}}> */}
+                <div style={{marginTop:'10px'}}>
+                  <Button>BATTING</Button>
+                  <Button>5</Button>
+                  {/* <div className="pointCircle" style={{float:'right'}}>
                     5
-                  </div>
-                </div>
-                <div>
-                  <div className="pointText">BOWL</div>
-                  <div className="pointCircle">
-                    5
-                  </div>
-                </div>
-                <div>
-                  <div className="pointText">OVERALL</div>
-                  <div className="pointCircle">
-                    5
-                  </div>
-                </div>
+                  </div> */}
+                {/* </div>                 */}
               </div>
             </CardBody>
           </Card>
@@ -352,19 +338,7 @@ const Squaddetail = () => {
                   <div className="pointCircle">
                     5
                   </div>
-                </div>
-                <div>
-                  <div className="pointText">BOWL</div>
-                  <div className="pointCircle">
-                    5
-                  </div>
-                </div>
-                <div>
-                  <div className="pointText">OVERALL</div>
-                  <div className="pointCircle">
-                    5
-                  </div>
-                </div>
+                </div>               
               </div>
             </CardBody>
           </Card>
