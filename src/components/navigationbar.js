@@ -12,19 +12,51 @@ import AdbIcon from '@mui/icons-material/Adb'
 function ResponsiveAppBar() {
 
   const handleOpenUserMenu = (event) => {}
+  
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
+          <Typography 
+           sx={{
+            display: { xs: 'none', md: 'flex' }
+           }}>
+            
+            <img src={require("../assets/img/incedo-logo.png")} alt="Incedo" className='' />
+           
+          </Typography>
           <Typography
-            variant="h6"
+            variant="h5"
             noWrap
             component="a"
             href="/"
             sx={{
-              mr: 2,
+              mr: {xs : 'none', md:20,},
+              ml: 2,
+              mt: 1,
               display: { xs: 'none', md: 'flex' },
+              // fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+              justifyContent: 'center'
+            }}
+        
+          >
+          CRICKET LEAGUE E-AUCTION 2023
+          </Typography>
+
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
@@ -32,60 +64,25 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            ICL2023
+            <img src={require("../assets/img/incedo-logo.png")} alt="Incedo" className='' />
+           
           </Typography>
-
-
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button
-              sx={{ my: 2, color: 'white', display: 'block' }}
-              href="/accountlist"
-            >
-              Accounts
-            </Button>
-            <Button
-              sx={{ my: 2, color: 'white', display: 'block' }}
-              href="/playerslist"
-            >
-              playerslist
-            </Button>
-            <Button
-              sx={{ my: 2, color: 'white', display: 'block' }}
-              href="/teamlist"
-            >
-              Teamslist
-            </Button>
-            <Button
-              sx={{ my: 2, color: 'white', display: 'block' }}
-              href="/manage"
-            >
-              Manage
-            </Button>
-            <Button
-              sx={{ my: 2, color: 'white', display: 'block' }}
-              href="/auction"
-            >
-              Auction
-            </Button>
-            <Button
-              sx={{ my: 2, color: 'white', display: 'block' }}
-              href="/overview"
-            >
-              Overview
-            </Button>
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+          <Typography
+          sx={{display: { xs: 'flex', md: 'none' }}}>
+          CRICKET LEAGUE E-AUCTION 2023
+          </Typography>
+          
+          <Box sx={{flexGrow:2 }}>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, align: 'right' }}>
               <Avatar alt="Remy Sharp" src="../assets/img/Srikant.jpg" />
+            </IconButton>
               <Button
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ mx: 2, color: 'white', align: 'right' }}
                 href="/signin"
               >
                 Logout
               </Button>
-            </IconButton>
+            
           </Box>
         </Toolbar>
       </Container>
