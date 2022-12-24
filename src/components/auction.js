@@ -29,12 +29,14 @@ import {
   Progress,
 } from 'reactstrap'
 
+
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
 
 // constants
 const DEFAULT_BID_INCREASE = 100
 const BASE_PRICE = 1000
+
 
 // AUCTION_SCHEMA : {
 //   state: (null/'ready'/'progress'/'completed'/)
@@ -371,8 +373,6 @@ const Auction = () => {
                 <CardTitle tag="h3">Previously Auctioned</CardTitle>
               </CardHeader>
               <CardBody className="">
-                <Row>
-                  <Col lg="6" md="12">
                     <Table>
                       <thead>
                         <tr>
@@ -395,7 +395,7 @@ const Auction = () => {
                               <td>
                                 {data.playerName}
                                 <br></br>
-                                Sold To :{data.teamName}
+                                Sold To {data.teamName}
                               </td>
                               <td>{data.amount}</td>
                             </tr>
@@ -403,8 +403,6 @@ const Auction = () => {
                         )}
                       </tbody>
                     </Table>
-                  </Col>
-                </Row>
               </CardBody>
             </Card>
           </Col>
@@ -420,14 +418,18 @@ const Auction = () => {
                   {console.log(mappedData.teamStats)}
                   {Object.values(mappedData.teamStats).map((data) => (
                     <Col lg="6" md="12">
-                      <CardTitle tag="h3" className="text-center">
-                        {data.teamName}:{data.budget}
-                      </CardTitle>
-                      {/* <p className="text-info text-center">Fund Remaining</p>
-                      <Button color="info" className="animation-on-hover">
+                      <CardTitle tag="h3">
+                        <span style={{float:"left"}}><p style={{justifyContent:"center"}}> {data.teamName}</p>
+                        </span>
+                        <span style={{float:"right"}}>
+                      <Button color="info" className="animation-on-hover" alt="Remaining Fund">
+                        
                         {data.budget}
                       </Button>
-                      <p className="text-primary text-center">Total Players</p>
+                      </span>
+                      </CardTitle>
+                       
+                      {/*<p className="text-primary text-center">Total Players</p>
                       <Button color="primary" className="animation-on-hover">
                         {data.total}/set_total
                       </Button> */}

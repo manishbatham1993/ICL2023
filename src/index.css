@@ -14,7 +14,7 @@ code {
 .footer {
   flex-shrink: 0;
   text-align: center;
-  background-color:#006a56;
+  /* background-color:#006a56; */
   color: white;
   padding: 24px 0px !important;
   bottom: 0;
@@ -24,9 +24,18 @@ code {
 .content {
   margin-top: 10px;
 }
-.MuiAppBar-root{
+
+.overflow{
+  overflow: scroll !important;
+  }
+
+  
+/* .MuiAppBar-root{
   background: #006a56 !important;
 }
-.overflow{
-overflow: scroll !important;
-}
+} */
+
+/* .MuiTypography-root{
+  font-size: 14px !important;
+  font-weight: 300 !important;
+} */

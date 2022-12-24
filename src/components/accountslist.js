@@ -13,9 +13,14 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Checkbox from '@mui/material/Checkbox'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Switch from '@mui/material/Switch'
+import DeleteIcon from '@mui/icons-material/Delete'
+import FilterListIcon from '@mui/icons-material/FilterList'
 import { visuallyHidden } from '@mui/utils'
 import axios from 'axios'
-import Avatar from '@mui/material/Avatar'
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -28,7 +33,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === "desc"
+  return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy)
 }
@@ -49,23 +54,23 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: 'name',
     numeric: false,
     disablePadding: true,
-    label: "Account Name",
+    label: 'Account Name',
   },
 
   {
-    id: "emp_count",
+    id: 'emp_count',
     numeric: true,
     disablePadding: false,
-    label: "Count",
+    label: 'Count',
   },
   {
-    id: "participant_count",
+    id: 'participant_count',
     numeric: true,
     disablePadding: false,
-    label: "Participant Count",
+    label: 'Participant Count',
   },
 ]
 
@@ -85,23 +90,33 @@ function AccountListHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox"></TableCell>
+        <TableCell padding="checkbox">
+          <Checkbox
+            color="primary"
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{
+              'aria-label': 'select all desserts',
+            }}
+          />
+        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            align={headCell.numeric ? 'right' : 'left'}
+            padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
+              direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -116,7 +131,7 @@ AccountListHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 }
@@ -140,7 +155,7 @@ function AccountListToolbar(props) {
     >
       {numSelected > 0 ? (
         <Typography
-          sx={{ flex: "1 1 100%" }}
+          sx={{ flex: '1 1 100%' }}
           color="inherit"
           variant="subtitle1"
           component="div"
@@ -149,13 +164,27 @@ function AccountListToolbar(props) {
         </Typography>
       ) : (
         <Typography
-          sx={{ flex: "1 1 100%" }}
+          sx={{ flex: '1 1 100%' }}
           variant="h6"
           id="tableTitle"
           component="div"
         >
           Account Lists
         </Typography>
+      )}
+
+      {numSelected > 0 ? (
+        <Tooltip title="Delete">
+          <IconButton>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Filter list">
+          <IconButton>
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
       )}
     </Toolbar>
   )
@@ -173,12 +202,11 @@ export default function AccountList() {
   const [dense, setDense] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [rows, setRows] = React.useState([])
-  const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
   function get_data() {
     const api = 'https://icl.up.railway.app/api/v1/account'
     axios.get(api, {}).then((res) => {
-      console.log('data', res.data)
+      console.log('data', res.data.accounts)
       setRows(res.data.accounts)
     })
   }
@@ -219,6 +247,20 @@ export default function AccountList() {
 
     setSelected(newSelected)
   }
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
+
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked)
+  }
+
   const isSelected = (name) => selected.indexOf(name) !== -1
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -226,14 +268,14 @@ export default function AccountList() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+    <Box sx={{ width: '100%', mt:2 }}>
+      <Paper sx={{ width: '100%', mb: 2 }}>
         <AccountListToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
+            size={dense ? 'small' : 'medium'}
           >
             <AccountListHead
               numSelected={selected.length}
@@ -255,17 +297,20 @@ export default function AccountList() {
                   return (
                     <TableRow
                       hover
-                      // onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
-                      // aria-checked={isItemSelected}
+                      aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
-                      // selected={isItemSelected}
+                      selected={isItemSelected}
                     >
-                      <TableCell>
-                        <Avatar
-                          alt={row.name}
-                          src={`${BASE_URL}/${row.imageUrl}`}
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            'aria-labelledby': labelId,
+                          }}
                         />
                       </TableCell>
                       <TableCell
@@ -277,12 +322,19 @@ export default function AccountList() {
                         {row.name}
                       </TableCell>
                       <TableCell align="right">{row.totalCount}</TableCell>
-                      <TableCell align="right">
-                        {row.participantsCount}
-                      </TableCell>
+                      <TableCell align="right">{row.pcount}</TableCell>
                     </TableRow>
                   )
                 })}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: (dense ? 33 : 53) * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
