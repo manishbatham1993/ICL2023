@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import io from 'socket.io-client'
 
-import IncrementDecrement from './IncrementDecrement'
+import EntityContext from '../store/entity-context'
 import CircleTimer from './CircleTimer'
 import Image from 'react-bootstrap/Image'
 import './overview.css'
@@ -36,283 +36,42 @@ import {
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
 
-// constants
-const DEFAULT_BID_INCREASE = 100
-const BASE_PRICE = 1000
-const TEAM_ID = '639d4a67ddfe568981cf801d'
-
-// AUCTION_SCHEMA : {
-//   state: (null/'ready'/'progress'/'completed'/)
-//   teams: [<teamId>],
-//   budget: {teamId: <budget>}
-//   remainingPlayers : [<playerId>]
-//   unsoldPlayers: [<playerId>]
-//   soldPlayers: [<playerId>],
-//   playerLastBid: {playerId: <bidindex>},
-//   currentPlayer: {
-//     id : <playerId>
-//     bidAmount: <currentAmount>
-//     bids : [<teamId>]
-//     clock: <clock>
-//   }
-//   bids : [
-//     {playerId : <playerId>, teamId: <teamId>, amount: <amount> }
-//   ]
-// }
-
 const Overview = () => {
-  console.log('---------auction--------')
-  const [auctionData, setAuctionData] = useState()
-  const [mappedData, setMappedData] = useState()
-  const [teams, setTeams] = useState([])
-  const [players, setPlayers] = useState([])
-  const [nextBidAmount, setNextBidAmount] = useState()
-  // const[timer,setTimer]=useState(mappedData.clock?mappedData.clock:"")
-  // console.log('timer',timer)
-
-  // set default amount for upcoming bid
-  const defaultNextBidAmount =
-    auctionData && auctionData.currentPlayer
-      ? auctionData.currentPlayer.bidAmount
-      : null
-
-  useEffect(() => {
-    setNextBidAmount(defaultNextBidAmount)
-  }, [defaultNextBidAmount])
-
-  const updateMappedData = () => {
-    const clock = auctionData.currentPlayer
-      ? auctionData.currentPlayer.clock
-      : null
-    const remBudget = auctionData.budget[TEAM_ID]
-    const playerObj = auctionData.currentPlayer
-      ? players.find((player) => player._id === auctionData.currentPlayer.id)
-      : null
-    const currentPlayer = playerObj
-      ? {
-          name: playerObj.name,
-          rating: playerObj.rating,
-          skill: playerObj.skill,
-          image: playerObj.imageUrl,
-        }
-      : null
-    const bidAmount = auctionData.currentPlayer
-      ? auctionData.currentPlayer.bidAmount
-      : null
-    const bidHistory = auctionData.currentPlayer
-      ? auctionData.currentPlayer.bids //[0,1,2]
-          .map((bidId) => auctionData.bids[bidId]) //[{playerId, teamId, amount}]
-          .map((bid) => {
-            const player = players.find((player) => player._id === bid.playerId)
-            const team = teams.find((team) => team._id === bid.teamId)
-            return {
-              teamName: team.name,
-              teamImage: team.imageUrl,
-              amount: bid.amount,
-            }
-          })
-      : []
-    bidHistory.reverse()
-    const lastBid = bidHistory.length > 0 ? bidHistory[0] : null
-    const teamStats = {}
-    auctionData.teams
-      .map((teamId) => teams.find((team) => team._id === teamId))
-      .forEach((team) => {
-        teamStats[team._id] = {
-          teamName: team.name,
-          batsman: 0,
-          bowlers: 0,
-          allRounders: 0,
-          total: 0,
-          budget: auctionData.budget[team._id],
-        }
-      })
-    const previousAuctions = []
-    auctionData.soldPlayers.forEach((playerId) => {
-      const bidId = auctionData.playerLastBid[playerId]
-      const bid = auctionData.bids[bidId]
-      const teamId = bid.teamId
-      const team = teams.find((team) => team._id === bid.teamId)
-      const player = players.find((player) => player._id === playerId)
-      previousAuctions.push({
-        playerName: player.name,
-        playerImage: player.imageUrl,
-        teamName: team.name,
-        teamImage: team.imageUrl,
-        amount: bid.amount,
-      })
-      if (player.skill) {
-        switch (player.skill.toLowerCase()) {
-          case 'batsman':
-            teamStats[teamId].batsman += 1
-            break
-          case 'bowler':
-            teamStats[teamId].bowlers += 1
-            break
-          case 'all rounder':
-            teamStats[teamId].allRounders += 1
-            break
-          default:
-            console.log('skill', player.skill, 'not present')
-        }
-      }
-      teamStats[bid.teamId].total += 1
-    })
-    setMappedData({
-      clock,
-      remBudget,
-      currentPlayer,
-      bidAmount,
-      lastBid,
-      bidHistory,
-      teamStats,
-      previousAuctions,
-    })
-  }
-
-  const updateData = () => {
-    axios
-      .get(BASE_URL + '/api/v1/auction/data')
-      .then((res) => {
-        if (res.data.status === 'ok') {
-          setAuctionData(res.data.data)
-        }
-      })
-      .catch((err) => {
-        console.log('err', err)
-      })
-    axios.get(BASE_URL + '/api/v1/team').then((res) => {
-      setTeams(res.data.teams)
-    })
-    axios.get(BASE_URL + '/api/v1/player').then((res) => {
-      setPlayers(res.data.players)
-    })
-  }
-
-  const makeBid = (teamId) => {
-    axios
-      .post(BASE_URL + '/api/v1/auction/bid', {
-        playerId: auctionData.currentPlayer.id,
-        teamId: teamId,
-        amount: nextBidAmount,
-      })
-      .then((res) => {
-        console.log('posting-bid', res)
-      })
-  }
-
-  // update data and initialize socket functions
-  useEffect(() => {
-    console.log('--------use-effect---------')
-    updateData()
-    socket.on('connect', () => {
-      console.log('socket connected')
-    })
-    socket.on('disconnect', () => {
-      console.log('socket disconnected')
-    })
-    socket.on('event', (payload) => {
-      console.log('event:', payload)
-      setAuctionData(payload.data)
-    })
-    return () => {
-      socket.off('connect')
-      socket.off('disconnect')
-      socket.off('event')
-    }
-  }, [])
-
-  useEffect(() => {
-    if (teams.length > 0 && players.length > 0 && auctionData) {
-      updateMappedData()
-    }
-  }, [teams, players, auctionData])
+  const entityCtx = useContext(EntityContext)
+  const teams = entityCtx.teams
+  const players = entityCtx.players
+  const accounts = entityCtx.accounts
 
   return (
-    mappedData && (
-      <div
-        className="content mainContent container"
-        style={{ minHeight: '100vh' }}
-      >
-        <div className="accounts-section">
+    <div
+      className="content mainContent container"
+      style={{ minHeight: '100vh' }}
+    >
+      <div className="accounts-section">
+        {accounts.map((account) => (
           <Card
             style={{
               width: '18rem',
             }}
           >
-            <div className="accountImage">
-              <Image
-                rounded="true"
-                roundedCircle="true"
-                alt="Sample"
-                src="https://picsum.photos/100/100"
-              />
-            </div>
-
             <CardBody>
               <CardTitle tag="h5" className="accountTitle">
-                Prosoft
+                {account.name}
               </CardTitle>
               <CardSubtitle className="mb-2 text-muted" tag="h6">
-                Player Count
+                Participants
               </CardSubtitle>
-              <CardText className="playerCount">100</CardText>
-              <a href="/accountdetail">
-                <Button>Get Details</Button>
+              <CardText className="playerCount">
+                {account.participantsCount}
+              </CardText>
+              <a href={`/accountdetail/${account._id}`}>
+                <Button>Account Details</Button>
               </a>
             </CardBody>
           </Card>
-
-          <Card
-            style={{
-              width: '18rem',
-            }}
-          >
-            <div className="accountImage">
-              <Image
-                rounded="true"
-                roundedCircle="true"
-                alt="Sample"
-                src="https://picsum.photos/100/100"
-              />
-            </div>
-
-            <CardBody>
-              <CardTitle tag="h5" className="accountTitle">
-                Prosoft
-              </CardTitle>
-              <a href="/accountdetail">
-                <Button>Get Details</Button>
-              </a>
-            </CardBody>
-          </Card>
-
-          <Card
-            style={{
-              width: '18rem',
-            }}
-          >
-            <div className="accountImage">
-              <Image
-                rounded="true"
-                roundedCircle="true"
-                alt="Sample"
-                src="https://picsum.photos/100/100"
-              />
-            </div>
-
-            <CardBody>
-              <CardTitle tag="h5" className="accountTitle">
-                Prosoft
-              </CardTitle>
-              <a href="/accountdetail">
-                <Button>Get Details</Button>
-              </a>
-            </CardBody>
-          </Card>
-        </div>
+        ))}
       </div>
-    )
+    </div>
   )
 }
 

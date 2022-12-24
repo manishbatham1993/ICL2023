@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import io from "socket.io-client";
+import React, { useState, useEffect, useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import io from 'socket.io-client'
 
-import IncrementDecrement from "./IncrementDecrement";
-import CircleTimer from "./CircleTimer";
+import EntityContext from '../store/entity-context'
+import IncrementDecrement from './IncrementDecrement'
+import CircleTimer from './CircleTimer'
 import Image from 'react-bootstrap/Image'
 import './overview.css'
 
-import Nav from 'react-bootstrap/Nav';
-import Table from 'react-bootstrap/Table';
-import Tab from 'react-bootstrap/Tab';
+import Nav from 'react-bootstrap/Nav'
+import Table from 'react-bootstrap/Table'
+import Tab from 'react-bootstrap/Tab'
 
 // reactstrap components
 import {
@@ -30,501 +32,335 @@ import {
   Badge,
   Progress,
   CardSubtitle,
-  image
-} from "reactstrap";
+  image,
+} from 'reactstrap'
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || "";
-const socket = io(BASE_URL);
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+const socket = io(BASE_URL)
 
 // constants
-const DEFAULT_BID_INCREASE = 100;
-const BASE_PRICE = 1000;
-const TEAM_ID = "639d4a67ddfe568981cf801d";
+const BASE_PRICE = 1000
 
+const Accountdetail = (props) => {
+  const { id } = useParams()
+  const entityCtx = useContext(EntityContext)
+  const accounts = entityCtx.accounts
+  const teams = entityCtx.teams
+  const players = entityCtx.players
 
-const Accountdetail = () => {
-  console.log("---------auction--------");
-  const [auctionData, setAuctionData] = useState();
-  const [mappedData, setMappedData] = useState();
-  const [teams, setTeams] = useState([]);
-  const [players, setPlayers] = useState([]);
-  const [nextBidAmount, setNextBidAmount] = useState();
-  // const[timer,setTimer]=useState(mappedData.clock?mappedData.clock:"")
-  // console.log('timer',timer)
+  console.log('entities', entityCtx)
 
-  // set default amount for upcoming bid
-  const defaultNextBidAmount =
-    auctionData && auctionData.currentPlayer
-      ? auctionData.currentPlayer.bidAmount
-      : null;
+  const account = accounts.find((account) => account._id === id)
+  const accountTeams = teams
+    ? teams.filter((team) => team.accountId._id === id)
+    : []
+  const accountPlayers = players
+    ? players.filter((player) => player.accountId._id === id)
+    : []
 
-  useEffect(() => {
-    setNextBidAmount(defaultNextBidAmount);
-  }, [defaultNextBidAmount]);
+  const teamOwners = teams
+    .filter((team) => team.teamOwner)
+    .map((team) => team.teamOwner.playerId)
 
-  const updateMappedData = () => {
-    const clock = auctionData.currentPlayer
-      ? auctionData.currentPlayer.clock
-      : null;
-    const remBudget = auctionData.budget[TEAM_ID];
-    const playerObj = auctionData.currentPlayer
-      ? players.find((player) => player._id === auctionData.currentPlayer.id)
-      : null;
-    const currentPlayer = playerObj
-      ? {
-        name: playerObj.name,
-        rating: playerObj.rating,
-        skill: playerObj.skill,
-        image: playerObj.imageUrl,
+  const teamOwnerIds = teamOwners.map((to) => to._id)
+
+  const soldPlayers = accountPlayers.filter(
+    (player) => player.teamId && !teamOwnerIds.includes(player._id)
+  )
+  const unsoldPlayers = accountPlayers.filter(
+    (player) => !player.teamId && !teamOwnerIds.includes(player._id)
+  )
+
+  const topBuys = [...soldPlayers]
+    .sort(
+      (a, b) => a.lastBid && b.lastBid && a.lastBid.amount > b.lastBid.amount
+    )
+    .slice(0, 2)
+
+  const teamStats = []
+  for (let team of accountTeams) {
+    const teamId = team._id
+    const teamPlayers = accountPlayers.filter(
+      (player) => player.teamId && player.teamId._id === teamId
+    )
+    const totalCount = teamPlayers.length
+    let batsmanCount = 0
+    let bowlerCount = 0
+    let allrounderCount = 0
+    teamPlayers.forEach((player) => {
+      if (!player.skill) return
+      switch (player.skill.toLowerCase()) {
+        case 'batsman':
+          batsmanCount++
+          break
+        case 'bowler':
+          batsmanCount++
+          break
+        case 'all rounder':
+          allrounderCount++
+          break
       }
-      : null;
-    const bidAmount = auctionData.currentPlayer
-      ? auctionData.currentPlayer.bidAmount
-      : null;
-    const bidHistory = auctionData.currentPlayer
-      ? auctionData.currentPlayer.bids //[0,1,2]
-        .map((bidId) => auctionData.bids[bidId]) //[{playerId, teamId, amount}]
-        .map((bid) => {
-          const player = players.find(
-            (player) => player._id === bid.playerId
-          );
-          const team = teams.find((team) => team._id === bid.teamId);
-          return {
-            teamName: team.name,
-            teamImage: team.imageUrl,
-            amount: bid.amount,
-          };
-        })
-      : [];
-    bidHistory.reverse();
-    const lastBid = bidHistory.length > 0 ? bidHistory[0] : null;
-    const teamStats = {};
-    auctionData.teams
-      .map((teamId) => teams.find((team) => team._id === teamId))
-      .forEach((team) => {
-        teamStats[team._id] = {
-          teamName: team.name,
-          batsman: 0,
-          bowlers: 0,
-          allRounders: 0,
-          total: 0,
-          budget: auctionData.budget[team._id],
-        };
-      });
-    const previousAuctions = [];
-    auctionData.soldPlayers.forEach((playerId) => {
-      const bidId = auctionData.playerLastBid[playerId];
-      const bid = auctionData.bids[bidId];
-      const teamId = bid.teamId;
-      const team = teams.find((team) => team._id === bid.teamId);
-      const player = players.find((player) => player._id === playerId);
-      previousAuctions.push({
-        playerName: player.name,
-        playerImage: player.imageUrl,
-        teamName: team.name,
-        teamImage: team.imageUrl,
-        amount: bid.amount,
-      });
-      if (player.skill) {
-        switch (player.skill.toLowerCase()) {
-          case "batsman":
-            teamStats[teamId].batsman += 1;
-            break;
-          case "bowler":
-            teamStats[teamId].bowlers += 1;
-            break;
-          case "all rounder":
-            teamStats[teamId].allRounders += 1;
-            break;
-          default:
-            console.log("skill", player.skill, "not present");
-        }
-      }
-      teamStats[bid.teamId].total += 1;
-    });
-    setMappedData({
-      clock,
-      remBudget,
-      currentPlayer,
-      bidAmount,
-      lastBid,
-      bidHistory,
-      teamStats,
-      previousAuctions,
-    });
-  };
-
-  const updateData = () => {
-    axios
-      .get(BASE_URL + "/api/v1/auction/data")
-      .then((res) => {
-        if (res.data.status === "ok") {
-          setAuctionData(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-    axios.get(BASE_URL + "/api/v1/team").then((res) => {
-      setTeams(res.data.teams);
-    });
-    axios.get(BASE_URL + "/api/v1/player").then((res) => {
-      setPlayers(res.data.players);
-    });
-  };
-
-  const makeBid = (teamId) => {
-    axios
-      .post(BASE_URL + "/api/v1/auction/bid", {
-        playerId: auctionData.currentPlayer.id,
-        teamId: teamId,
-        amount: nextBidAmount,
-      })
-      .then((res) => {
-        console.log("posting-bid", res);
-      });
-  };
-
-  // update data and initialize socket functions
-  useEffect(() => {
-    console.log("--------use-effect---------");
-    updateData();
-    socket.on("connect", () => {
-      console.log("socket connected");
-    });
-    socket.on("disconnect", () => {
-      console.log("socket disconnected");
-    });
-    socket.on("event", (payload) => {
-      console.log("event:", payload);
-      setAuctionData(payload.data);
-    });
-    return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("event");
-    };
-  }, []);
-
-  useEffect(() => {
-    if (teams.length > 0 && players.length > 0 && auctionData) {
-      updateMappedData();
-    }
-  }, [teams, players, auctionData]);
+    })
+    teamStats.push({
+      id: teamId,
+      name: team.name,
+      imageUrl: team.imageUrl,
+      totalCount,
+      batsmanCount,
+      bowlerCount,
+      allrounderCount,
+    })
+  }
+  console.log('teamstats', teamStats)
 
   return (
-    mappedData && (
-      <div className="content mainContent container" style={{ minHeight: '200vh' }}>
+    account && (
+      <div
+        className="content mainContent container"
+        style={{ minHeight: '200vh' }}
+      >
         <div>
-          <h1>Fortra</h1>
-          <h3>Total Players 100</h3>
+          <h1>{account.name}</h1>
         </div>
-          
 
-        
-        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+        <Tab.Container id="left-tabs-example" defaultActiveKey="tab1">
           <Row>
-            <Nav fill variant="pills" className="" style={{ flex: 'auto', marginBottom: '40px' }}>
+            <Nav
+              fill
+              variant="pills"
+              className=""
+              style={{ flex: 'auto', marginBottom: '40px' }}
+            >
               <Nav.Item>
-                <Nav.Link eventKey="first">TEAMS</Nav.Link>
+                <Nav.Link eventKey="tab1">TEAMS</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="second">TO BE AUCTIONED</Nav.Link>
+                <Nav.Link eventKey="tab2">All players</Nav.Link>
               </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="third">SOLD PLAYERS</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="forth">TOP BUYS</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="fifth">UNSOLD</Nav.Link>
-              </Nav.Item>
+              {account.isAuctioned && (
+                <React.Fragment>
+                  <Nav.Item>
+                    <Nav.Link eventKey="tab3">SOLD PLAYERS</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="tab4">UNSOLD</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="tab5">TOP BUYS</Nav.Link>
+                  </Nav.Item>
+                </React.Fragment>
+              )}
             </Nav>
           </Row>
           <Row>
             <Col>
               <Tab.Content>
-                <Tab.Pane eventKey="first">
+                <Tab.Pane eventKey="tab1">
                   <Row md="12">
-                    <Col md="4">
-                      <Card
-                        style={{
-                          width: '18rem'
-                        }}
-                      >
-                        <div className="accountImage"><Image
-                          rounded="true"
-                          roundedCircle="true"
-                          alt="Sample"
-                          src="https://picsum.photos/100/100"
-                        /></div>
-
-                        <CardBody>
-                          <CardTitle tag="h5" className="accountTitle">
-                            Fortra
-                          </CardTitle>
-                          <CardSubtitle
-                            className="mb-2 text-muted"
-                            tag="h6"
-                          >
-                            Player Count
-                          </CardSubtitle>
-                          <CardText className="playerCount">
-                            100
-                          </CardText>
-                          <div className="playerSummary">
-                            <h4>Batsman <span>50</span></h4>
-                            <h4>Bowlers <span>25</span></h4>
-                            <h4>All Rounders <span>25</span></h4>
-
+                    {teamStats.map((team) => (
+                      <Col md="4">
+                        <Card
+                          style={{
+                            width: '18rem',
+                          }}
+                        >
+                          <div className="accountImage">
+                            <Image
+                              rounded="true"
+                              roundedCircle="true"
+                              alt="Sample"
+                              src={`${BASE_URL}/${team.imageUrl}`}
+                              style={{ width: '14rem', height: '14rem' }}
+                            />
                           </div>
-                          <a href="/squaddetail">
-                          <Button>
-                              Get Details                        
-                          </Button>
-                          </a>
-                        </CardBody>
-                      </Card>
-                    </Col>
-
-                    <Col md="4">
-                      <Card
-                        style={{
-                          width: '18rem'
-                        }}
-                      >
-                        <div className="accountImage"><Image
-                          rounded="true"
-                          roundedCircle="true"
-                          alt="Sample"
-                          src="https://picsum.photos/100/100"
-                        /></div>
-
-                        <CardBody>
-                          <CardTitle tag="h5" className="accountTitle">
-                            Prosoft
-                          </CardTitle>
-                          <CardSubtitle
-                            className="mb-2 text-muted"
-                            tag="h6"
-                          >
-                            Player Count
-                          </CardSubtitle>
-                          <CardText className="playerCount">
-                            100
-                          </CardText>
-                          <div className="playerSummary">
-                            <h4>Batsman <span>50</span></h4>
-                            <h4>Bowlers <span>25</span></h4>
-                            <h4>All Rounders <span>25</span></h4>
-
-                          </div>
-                          <a href="/accountdetail"><Button>
-                            Get Details
-                          </Button></a>
-                        </CardBody>
-                      </Card>
-                    </Col>
-
-
-                    <Col md="4">
-                      <Card
-                        style={{
-                          width: '18rem'
-                        }}
-                      >
-                        <div className="accountImage"><Image
-                          rounded="true"
-                          roundedCircle="true"
-                          alt="Sample"
-                          src="https://picsum.photos/100/100"
-                        /></div>
-
-                        <CardBody>
-                          <CardTitle tag="h5" className="accountTitle">
-                            A10
-                          </CardTitle>
-                          <CardSubtitle
-                            className="mb-2 text-muted"
-                            tag="h6"
-                          >
-                            Player Count
-                          </CardSubtitle>
-                          <CardText className="playerCount">
-                            100
-                          </CardText>
-                          <div className="playerSummary">
-                            <h4>Batsman <span>50</span></h4>
-                            <h4>Bowlers <span>25</span></h4>
-                            <h4>All Rounders <span>25</span></h4>
-
-                          </div>
-                          <Button>
-                            Get Details
-                          </Button>
-                        </CardBody>
-                      </Card>
-                    </Col>
+                          <CardBody>
+                            <CardTitle tag="h5" className="accountTitle">
+                              {team.name}
+                            </CardTitle>
+                            <CardSubtitle className="mb-2 text-muted" tag="h6">
+                              Player Count
+                            </CardSubtitle>
+                            <CardText className="playerCount">
+                              {team.totalCount}
+                            </CardText>
+                            <div
+                              className="playerSummary"
+                              style={{ alignContent: 'left' }}
+                            >
+                              <h4>
+                                Batsman <span>{team.batsmanCount}</span>
+                              </h4>
+                              <h4>
+                                Bowlers <span>{team.bowlerCount}</span>
+                              </h4>
+                              <h4>
+                                All Rounders <span>{team.allrounderCount}</span>
+                              </h4>
+                            </div>
+                            <a href={`/squaddetail/${team.id}`}>
+                              <Button>Team Details</Button>
+                            </a>
+                          </CardBody>
+                        </Card>
+                      </Col>
+                    ))}
                   </Row>
-
                 </Tab.Pane>
-                <Tab.Pane eventKey="second">
-                  <Table striped hover variant="dark" style={{border: '0.1rem solid #e3e3e3'}}>
+                {/* players to be auctioned */}
+                <Tab.Pane eventKey="tab2">
+                  <Table
+                    striped
+                    hover
+                    variant="dark"
+                    style={{ border: '0.1rem solid #e3e3e3' }}
+                  >
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th></th>
                         <th>Player Name</th>
-                        <th>Account</th>
+                        <th>Team</th>
                         <th>Skill</th>
+                        <th>Rating</th>
                         <th>Base Price</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td><Image
-                          rounded="true"
-                          roundedCircle="true"
-                          alt="Sample"
-                          src="https://picsum.photos/50/50"
-                        /></td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>10000</td>
-                      </tr>
-                      <tr>
-                      <td><Image
-                          rounded="true"
-                          roundedCircle="true"
-                          alt="Sample"
-                          src="https://picsum.photos/50/50"
-                        /></td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>10000</td>
-                      </tr>
-                      <tr>
-                      <td><Image
-                          rounded="true"
-                          roundedCircle="true"
-                          alt="Sample"
-                          src="https://picsum.photos/50/50"
-                        /></td>
-                        <td>Larry</td>
-                        <td>Thornton</td>
-                        <td>@twitter</td>
-                        <td>10000</td>
-                      </tr>
+                      {accountPlayers.map((player) => (
+                        <tr>
+                          <td>
+                            <Image
+                              rounded="true"
+                              roundedCircle="true"
+                              alt="Sample"
+                              src={`${BASE_URL}/${player.imageUrl}`}
+                              style={{ width: '4rem', height: '4rem' }}
+                            />
+                          </td>
+                          <td>{player.name}</td>
+                          <td>{player.teamId && player.teamId.name}</td>
+                          <td>{player.skill}</td>
+                          <td>{player.rating}</td>
+                          <td>{BASE_PRICE}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
                 </Tab.Pane>
-                <Tab.Pane eventKey="third">
-                  <Table striped hover variant="dark" style={{border: '0.1rem solid #e3e3e3'}}>
+                {/* sold players */}
+                <Tab.Pane eventKey="tab3">
+                  <Table
+                    striped
+                    hover
+                    variant="dark"
+                    style={{ border: '0.1rem solid #e3e3e3' }}
+                  >
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th></th>
                         <th>Player Name</th>
-                        <th>Account</th>
+                        <th>Team</th>
                         <th>Skill</th>
-                        <th>Base Price</th>
+                        <th>Rating</th>
+                        <th>Sold at</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>                    
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>10000</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>10000</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Larry</td>
-                        <td>Thornton</td>
-                        <td>@twitter</td>
-                        <td>10000</td>
-                      </tr>
+                      {soldPlayers.map((player) => (
+                        <tr>
+                          <td>
+                            <Image
+                              rounded="true"
+                              roundedCircle="true"
+                              alt="Sample"
+                              src={`${BASE_URL}/${player.imageUrl}`}
+                              style={{ width: '4rem', height: '4rem' }}
+                            />
+                          </td>
+                          <td>{player.name}</td>
+                          <td>{player.teamId && player.teamId.name}</td>
+                          <td>{player.skill}</td>
+                          <td>{player.rating}</td>
+                          <td>
+                            {player.lastBid ? player.lastBid.amount : null}
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
                 </Tab.Pane>
-                <Tab.Pane eventKey="forth">
-                  <Table striped hover variant="dark" style={{border: '0.1rem solid #e3e3e3'}}>
+                {/* unsold players */}
+                <Tab.Pane eventKey="tab4">
+                  <Table
+                    striped
+                    hover
+                    variant="dark"
+                    style={{ border: '0.1rem solid #e3e3e3' }}
+                  >
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th></th>
                         <th>Player Name</th>
-                        <th>Account</th>
                         <th>Skill</th>
-                        <th>Base Price</th>
+                        <th>Rating</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>10000</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>10000</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Larry</td>
-                        <td>Thornton</td>
-                        <td>@twitter</td>
-                        <td>10000</td>
-                      </tr>
+                      {unsoldPlayers.map((player) => (
+                        <tr>
+                          <td>
+                            <Image
+                              rounded="true"
+                              roundedCircle="true"
+                              alt="Sample"
+                              src={`${BASE_URL}/${player.imageUrl}`}
+                              style={{ width: '4rem', height: '4rem' }}
+                            />
+                          </td>
+                          <td>{player.name}</td>
+                          <td>{player.skill}</td>
+                          <td>{player.rating}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
                 </Tab.Pane>
-                <Tab.Pane eventKey="fifth">
-                  <Table striped hover variant="dark" style={{border: '0.1rem solid #e3e3e3'}}>
+                {/*  Top buys */}
+                <Tab.Pane eventKey="tab5">
+                  <Table
+                    striped
+                    hover
+                    variant="dark"
+                    style={{ border: '0.1rem solid #e3e3e3' }}
+                  >
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th></th>
                         <th>Player Name</th>
-                        <th>Account</th>
+                        <th>Team</th>
                         <th>Skill</th>
-                        <th>Base Price</th>
+                        <th>Rating</th>
+                        <th>Sold At</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>10000</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>10000</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Larry</td>
-                        <td>Thornton</td>
-                        <td>@twitter</td>
-                        <td>10000</td>
-                      </tr>
+                      {topBuys.map((player) => (
+                        <tr>
+                          <td>
+                            <Image
+                              rounded="true"
+                              roundedCircle="true"
+                              alt="Sample"
+                              src={`${BASE_URL}/${player.imageUrl}`}
+                              style={{ width: '4rem', height: '4rem' }}
+                            />
+                          </td>
+                          <td>{player.name}</td>
+                          <td>{player.teamId && player.teamId.name}</td>
+                          <td>{player.skill}</td>
+                          <td>{player.rating}</td>
+                          <td>{player.lastBid && player.lastBid.amount}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
                 </Tab.Pane>
@@ -532,12 +368,9 @@ const Accountdetail = () => {
             </Col>
           </Row>
         </Tab.Container>
-
-
-
       </div>
     )
-  );
-};
+  )
+}
 
-export default Accountdetail;
+export default Accountdetail

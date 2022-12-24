@@ -64,11 +64,11 @@ function App() {
             element={authCtx.isLoggedIn ? <Overview /> : <SignIn />}
           />
           <Route
-            path="/accountdetail"
+            path="/accountdetail/:id"
             element={authCtx.isLoggedIn ? <Accountdetail /> : <SignIn />}
           />
           <Route
-            path="/squaddetail"
+            path="/squaddetail/:id"
             element={authCtx.isLoggedIn ? <Squaddetail /> : <SignIn />}
           />
           <Route path="/auction" element={auctionElement} />

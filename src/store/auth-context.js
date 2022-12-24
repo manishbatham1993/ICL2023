@@ -19,10 +19,10 @@ export const AuthContextProvider = (props) => {
 
   const isLoggedIn = !!token
   const role = user && user.role ? user.role : null
-  console.log('auth-context-provider, token', token)
+  // console.log('auth-context-provider, token', token)
 
   useEffect(() => {
-    console.log('auth-context-use-effect')
+    // console.log('auth-context-use-effect')
     if (token) {
       const api = BASE_URL + '/api/v1/auth/user'
       axios
@@ -32,7 +32,7 @@ export const AuthContextProvider = (props) => {
           },
         })
         .then((res) => {
-          console.log('auth-get-user-res', res)
+          // console.log('auth-get-user-res', res)
           if (res.data.status === 'ok') {
             setUser(res.data.user)
           }

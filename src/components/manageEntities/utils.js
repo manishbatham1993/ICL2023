@@ -3,10 +3,17 @@ import axios from 'axios'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const startAuction = (accountId) => {
-  axios.post(BASE_URL + '/api/v1/auction/start', { accountId }).then((res) => {
-    console.log('------auction-started----------')
-    console.log('store', res.data.data)
-  })
+  axios
+    .post(BASE_URL + '/api/v1/auction/start', { accountId })
+    .then((res) => {
+      console.log('------auction-started----------')
+      console.log('store', res.data.data)
+    })
+    .catch((err) => {
+      if (err.response && err.response.data && err.response.data.msg) {
+        alert(err.response.data.msg)
+      }
+    })
 }
 
 const pauseAuction = () => {

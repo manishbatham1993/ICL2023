@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import io from "socket.io-client";
+import React, { useState, useEffect, useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import io from 'socket.io-client'
 
-import IncrementDecrement from "./IncrementDecrement";
-import CircleTimer from "./CircleTimer";
+import EntityContext from '../store/entity-context'
+import IncrementDecrement from './IncrementDecrement'
+import CircleTimer from './CircleTimer'
 import Image from 'react-bootstrap/Image'
 import './overview.css'
 import './squaddetails.css'
 
-import Nav from 'react-bootstrap/Nav';
-import Table from 'react-bootstrap/Table';
-import Tab from 'react-bootstrap/Tab';
+import Nav from 'react-bootstrap/Nav'
+import Table from 'react-bootstrap/Table'
+import Tab from 'react-bootstrap/Tab'
 
 // reactstrap components
 import {
@@ -31,321 +33,81 @@ import {
   Badge,
   Progress,
   CardSubtitle,
-  image
-} from "reactstrap";
-import { fontWeight } from "@mui/system";
+  image,
+} from 'reactstrap'
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || "";
-const socket = io(BASE_URL);
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+const socket = io(BASE_URL)
 
 // constants
-const DEFAULT_BID_INCREASE = 100;
-const BASE_PRICE = 1000;
-const TEAM_ID = "639d4a67ddfe568981cf801d";
-
+const DEFAULT_BID_INCREASE = 100
+const BASE_PRICE = 1000
+const TEAM_ID = '639d4a67ddfe568981cf801d'
 
 const Squaddetail = () => {
-  console.log("---------auction--------");
-  const [auctionData, setAuctionData] = useState();
-  const [mappedData, setMappedData] = useState();
-  const [teams, setTeams] = useState([]);
-  const [players, setPlayers] = useState([]);
-  const [nextBidAmount, setNextBidAmount] = useState();
-  // const[timer,setTimer]=useState(mappedData.clock?mappedData.clock:"")
-  // console.log('timer',timer)
+  const { id } = useParams()
+  const entityCtx = useContext(EntityContext)
+  const accounts = entityCtx.accounts
+  const teams = entityCtx.teams
+  const players = entityCtx.players
 
-  // set default amount for upcoming bid
-  const defaultNextBidAmount =
-    auctionData && auctionData.currentPlayer
-      ? auctionData.currentPlayer.bidAmount
-      : null;
-
-  useEffect(() => {
-    setNextBidAmount(defaultNextBidAmount);
-  }, [defaultNextBidAmount]);
-
-  const updateMappedData = () => {
-    const clock = auctionData.currentPlayer
-      ? auctionData.currentPlayer.clock
-      : null;
-    const remBudget = auctionData.budget[TEAM_ID];
-    const playerObj = auctionData.currentPlayer
-      ? players.find((player) => player._id === auctionData.currentPlayer.id)
-      : null;
-    const currentPlayer = playerObj
-      ? {
-        name: playerObj.name,
-        rating: playerObj.rating,
-        skill: playerObj.skill,
-        image: playerObj.imageUrl,
-      }
-      : null;
-    const bidAmount = auctionData.currentPlayer
-      ? auctionData.currentPlayer.bidAmount
-      : null;
-    const bidHistory = auctionData.currentPlayer
-      ? auctionData.currentPlayer.bids //[0,1,2]
-        .map((bidId) => auctionData.bids[bidId]) //[{playerId, teamId, amount}]
-        .map((bid) => {
-          const player = players.find(
-            (player) => player._id === bid.playerId
-          );
-          const team = teams.find((team) => team._id === bid.teamId);
-          return {
-            teamName: team.name,
-            teamImage: team.imageUrl,
-            amount: bid.amount,
-          };
-        })
-      : [];
-    bidHistory.reverse();
-    const lastBid = bidHistory.length > 0 ? bidHistory[0] : null;
-    const teamStats = {};
-    auctionData.teams
-      .map((teamId) => teams.find((team) => team._id === teamId))
-      .forEach((team) => {
-        teamStats[team._id] = {
-          teamName: team.name,
-          batsman: 0,
-          bowlers: 0,
-          allRounders: 0,
-          total: 0,
-          budget: auctionData.budget[team._id],
-        };
-      });
-    const previousAuctions = [];
-    auctionData.soldPlayers.forEach((playerId) => {
-      const bidId = auctionData.playerLastBid[playerId];
-      const bid = auctionData.bids[bidId];
-      const teamId = bid.teamId;
-      const team = teams.find((team) => team._id === bid.teamId);
-      const player = players.find((player) => player._id === playerId);
-      previousAuctions.push({
-        playerName: player.name,
-        playerImage: player.imageUrl,
-        teamName: team.name,
-        teamImage: team.imageUrl,
-        amount: bid.amount,
-      });
-      if (player.skill) {
-        switch (player.skill.toLowerCase()) {
-          case "batsman":
-            teamStats[teamId].batsman += 1;
-            break;
-          case "bowler":
-            teamStats[teamId].bowlers += 1;
-            break;
-          case "all rounder":
-            teamStats[teamId].allRounders += 1;
-            break;
-          default:
-            console.log("skill", player.skill, "not present");
-        }
-      }
-      teamStats[bid.teamId].total += 1;
-    });
-    setMappedData({
-      clock,
-      remBudget,
-      currentPlayer,
-      bidAmount,
-      lastBid,
-      bidHistory,
-      teamStats,
-      previousAuctions,
-    });
-  };
-
-  const updateData = () => {
-    axios
-      .get(BASE_URL + "/api/v1/auction/data")
-      .then((res) => {
-        if (res.data.status === "ok") {
-          setAuctionData(res.data.data);
-        }
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-    axios.get(BASE_URL + "/api/v1/team").then((res) => {
-      setTeams(res.data.teams);
-    });
-    axios.get(BASE_URL + "/api/v1/player").then((res) => {
-      setPlayers(res.data.players);
-    });
-  };
-
-  const makeBid = (teamId) => {
-    axios
-      .post(BASE_URL + "/api/v1/auction/bid", {
-        playerId: auctionData.currentPlayer.id,
-        teamId: teamId,
-        amount: nextBidAmount,
-      })
-      .then((res) => {
-        console.log("posting-bid", res);
-      });
-  };
-
-  // update data and initialize socket functions
-  useEffect(() => {
-    console.log("--------use-effect---------");
-    updateData();
-    socket.on("connect", () => {
-      console.log("socket connected");
-    });
-    socket.on("disconnect", () => {
-      console.log("socket disconnected");
-    });
-    socket.on("event", (payload) => {
-      console.log("event:", payload);
-      setAuctionData(payload.data);
-    });
-    return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("event");
-    };
-  }, []);
-
-  useEffect(() => {
-    if (teams.length > 0 && players.length > 0 && auctionData) {
-      updateMappedData();
-    }
-  }, [teams, players, auctionData]);
+  const teamPlayers = players.filter(
+    (player) => player.teamId && player.teamId._id === id
+  )
 
   return (
-    mappedData && (
-      <div className="content mainContent container" style={{ minHeight: '200vh' }}>
-        <h1>ICL SQUAD</h1>
-        <div className="squadSection">
+    <div
+      className="content mainContent container"
+      style={{ minHeight: '200vh' }}
+    >
+      <h1>ICL SQUAD</h1>
+      <div
+        className="squadSection"
+        style={{
+          display: 'grid',
+          columnGap: '1rem',
+          gridTemplateColumns: '1fr 1fr 1fr',
+        }}
+      >
+        {teamPlayers.map((player) => (
           <Card
             style={{
               width: '21rem',
               paddingTop: '20px',
-              paddingBottom: '20px'
+              paddingBottom: '20px',
             }}
           >
-            <div className="accountImage"><Image
-              rounded="true"
-              roundedCircle="true"
-              alt="Sample"
-              src="https://picsum.photos/100/100"
-            /></div>
+            <div className="accountImage">
+              <Image
+                rounded="true"
+                roundedCircle="true"
+                alt="Sample"
+                src={`${BASE_URL}/${player.imageUrl}`}
+                style={{ width: '8rem', height: '8rem' }}
+              />
+            </div>
 
             <CardBody>
-              <CardTitle tag="h5" className="playerName" style={{ fontWeight: 'bold' }}>
-                AVINASH KALAMBE
-              </CardTitle>
-              <CardSubtitle
-                className="mb-2 text-muted"
-                tag="h6"
+              <CardTitle
+                tag="h5"
+                className="playerName"
+                style={{ fontWeight: 'bold' }}
               >
-                Team Navic
-              </CardSubtitle>              
-              {/* <div className="pointSection" style={{float:'left'}}> */}
-                <div style={{marginTop:'10px'}}>
-                  <Button>BATTING</Button>
-                  <Button>5</Button>
-                  {/* <div className="pointCircle" style={{float:'right'}}>
-                    5
-                  </div> */}
-                {/* </div>                 */}
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card
-            style={{
-              width: '21rem',
-              paddingTop: '20px',
-              paddingBottom: '20px'
-            }}
-          >
-            <div className="accountImage"><Image
-              rounded="true"
-              roundedCircle="true"
-              alt="Sample"
-              src="https://picsum.photos/100/100"
-            /></div>
-
-            <CardBody>
-              <CardTitle tag="h5" className="playerName" style={{ fontWeight: 'bold' }}>
-                TOUFIQ ZARI
+                {player.name}
               </CardTitle>
-              <CardSubtitle
-                className="mb-2 text-muted"
-                tag="h6"
-              >
-                Team Navic
+              <CardSubtitle className="mb-2 text-muted" tag="h6">
+                {player.teamId && player.teamId.name}
               </CardSubtitle>
-              <CardText className="playerCount">
-                ALL ROUNDER
-              </CardText>
-              <div className="pointSection">
-                <div>
-                  <div className="pointText">BAT</div>
-                  <div className="pointCircle">
-                    5
-                  </div>
-                </div>
-                <div>
-                  <div className="pointText">BOWL</div>
-                  <div className="pointCircle">
-                    5
-                  </div>
-                </div>
-                <div>
-                  <div className="pointText">OVERALL</div>
-                  <div className="pointCircle">
-                    5
-                  </div>
-                </div>
+              <div style={{ marginTop: '10px' }}>
+                <Button>{player.skill}</Button>
+                <Button>{player.rating}</Button>
               </div>
             </CardBody>
           </Card>
-
-          <Card
-            style={{
-              width: '21rem',
-              paddingTop: '20px',
-              paddingBottom: '20px'
-            }}
-          >
-            <div className="accountImage"><Image
-              rounded="true"
-              roundedCircle="true"
-              alt="Sample"
-              src="https://picsum.photos/100/100"
-            /></div>
-
-            <CardBody>
-              <CardTitle tag="h5" className="playerName" style={{ fontWeight: 'bold' }}>
-                MANISH BATHAM
-              </CardTitle>
-              <CardSubtitle
-                className="mb-2 text-muted"
-                tag="h6"
-              >
-                Team Navic
-              </CardSubtitle>
-              <CardText className="playerCount">
-                ALL ROUNDER
-              </CardText>
-              <div className="pointSection">
-                <div>
-                  <div className="pointText">BAT</div>
-                  <div className="pointCircle">
-                    5
-                  </div>
-                </div>               
-              </div>
-            </CardBody>
-          </Card>
-        </div>
+        ))}
       </div>
-    )
-  );
-};
+    </div>
+  )
+}
 
-export default Squaddetail;
+export default Squaddetail
