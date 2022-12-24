@@ -65,6 +65,11 @@ const Auction = () => {
   const [teams, setTeams] = useState([])
   const [players, setPlayers] = useState([])
   const [nextBidAmount, setNextBidAmount] = useState()
+  const canBid =
+    TEAM_ID &&
+    mappedData &&
+    mappedData.remBudget >= nextBidAmount &&
+    (!mappedData.lastBid || mappedData.lastBid.teamId !== TEAM_ID)
   // const[timer,setTimer]=useState(mappedData.clock?mappedData.clock:"")
   // console.log('timer',timer)
 
@@ -104,6 +109,7 @@ const Auction = () => {
             const player = players.find((player) => player._id === bid.playerId)
             const team = teams.find((team) => team._id === bid.teamId)
             return {
+              teamId: team._id,
               teamName: team.name,
               teamImage: team.imageUrl,
               amount: bid.amount,
@@ -316,7 +322,7 @@ const Auction = () => {
                       color="success"
                       className="animation-on-hover btn-block"
                       onClick={makeBid}
-                      disabled={mappedData.remBudget <= nextBidAmount}
+                      disabled={!canBid}
                     >
                       BID
                     </Button>
