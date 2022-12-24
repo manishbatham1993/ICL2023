@@ -26,3 +26,8 @@
 .mainContent{
   margin: 10px;
 }
+
+.accounts-section{
+  display: flex;
+  justify-content: space-evenly;
+}

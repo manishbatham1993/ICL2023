@@ -15,7 +15,6 @@ import ManageEntities from './components/manageEntities/ManageEntities'
 import Countdown from './components/countdown'
 import Accountdetail from './components/accountdetails'
 import Squaddetail from './components/squaddetails'
-
 function App() {
   const authCtx = useContext(AuthContext)
 

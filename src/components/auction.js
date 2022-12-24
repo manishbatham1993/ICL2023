@@ -29,12 +29,34 @@ import {
   Progress,
 } from 'reactstrap'
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || ''
-const socket = io(BASE_URL)
+
+const BASE_URL = process.env.REACT_APP_BASE_URL || "";
+const socket = io(BASE_URL);
 
 // constants
-const DEFAULT_BID_INCREASE = 100
-const BASE_PRICE = 1000
+const DEFAULT_BID_INCREASE = 100;
+const BASE_PRICE = 1000;
+const TEAM_ID = "639d4a67ddfe568981cf801d";
+
+// AUCTION_SCHEMA : {
+//   state: (null/'ready'/'progress'/'completed'/)
+//   teams: [<teamId>],
+//   budget: {teamId: <budget>}
+//   remainingPlayers : [<playerId>]
+//   unsoldPlayers: [<playerId>]
+//   soldPlayers: [<playerId>],
+//   playerLastBid: {playerId: <bidindex>},
+//   currentPlayer: {
+//     id : <playerId>
+//     bidAmount: <currentAmount>
+//     bids : [<teamId>]
+//     clock: <clock>
+//   }
+//   bids : [
+//     {playerId : <playerId>, teamId: <teamId>, amount: <amount> }
+//   ]
+// }
+
 
 // AUCTION_SCHEMA : {
 //   state: (null/'ready'/'progress'/'completed'/)
