@@ -29,8 +29,10 @@ function CircleTimer(props) {
           colors={['#60d74d', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[25, 15, 5, 0]}
           onComplete={() => ({ shouldRepeat: true })}
-          size={80}
-          strokeWidth={6}
+
+          size={100}
+          strokeWidth={10}
+
           isSmoothColorTransition={true}
           
         >

@@ -1,16 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { AuthContextProvider } from './store/auth-context'
+
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import './assets/scss/black-dashboard-react.scss'
 import './assets/demo/demo.css'
 import './assets/css/nucleo-icons.css'
+
 // import "@fortawesome/fontawesome-free/css/all.min.css";
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthContextProvider>
+      <App />
+    </AuthContextProvider>
   </React.StrictMode>
 )
 

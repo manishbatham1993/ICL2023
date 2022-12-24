@@ -1,3 +1,6 @@
+import React, { useContext } from 'react'
+import AuthContext from './store/auth-context'
+
 import './App.css'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -28,7 +31,32 @@ const darkTheme = createTheme({
 });
 
 function App() {
+  const authCtx = useContext(AuthContext)
+
+  let auctionElement = <SignIn />
+  if (authCtx.isLoggedIn) {
+    if (authCtx.role === 'owner' || authCtx.role === 'admin') {
+      auctionElement = <Auction />
+    } else {
+      auctionElement = <Countdown />
+    }
+  } else {
+    auctionElement = <SignIn />
+  }
+
+  let manageElement = <SignIn />
+  if (authCtx.isLoggedIn) {
+    if (authCtx.role === 'admin') {
+      manageElement = <ManageEntities />
+    } else {
+      manageElement = <Countdown />
+    }
+  } else {
+    manageElement = <SignIn />
+  }
+
   return (
+
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <div className="App">
@@ -58,20 +86,37 @@ function App() {
                     mt:8
                   }}
                 >
-          
-                  <Routes>
-                    <Route path="/signin" element={<SignIn />} />
-                    <Route path="/playerslist" element={<EnhancedTable />} />
-                    <Route path="/accountlist" element={<AccountList />} />
-                    <Route path="/teamlist" element={<Teamowners />} />
-                    <Route path="/auction" element={<Auction />} />
-                    <Route path="/manage" element={<ManageEntities />} />
-                    <Route path="/auction3" element={<Dashboard />} />
-                    <Route path="/sidebar" element={<Sidebar />} />
-                    <Route path="/overview" element={<Overview />} />
-                    <Route path="/accountdetail" element={<Accountdetail />} />
-                    <Route path="/squaddetail" element={<Squaddetail />} />
-                  </Routes>
+        <Routes>
+          <Route path="/" element={<Countdown />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route
+            path="/playerslist"
+            element={authCtx.isLoggedIn ? <EnhancedTable /> : <SignIn />}
+          />
+          <Route
+            path="/accountlist"
+            element={authCtx.isLoggedIn ? <AccountList /> : <SignIn />}
+          />
+          <Route
+            path="/teamlist"
+            element={authCtx.isLoggedIn ? <Teamowners /> : <SignIn />}
+          />
+          <Route
+            path="/overview"
+            element={authCtx.isLoggedIn ? <Overview /> : <SignIn />}
+          />
+          <Route
+            path="/accountdetail"
+            element={authCtx.isLoggedIn ? <Accountdetail /> : <SignIn />}
+          />
+          <Route
+            path="/squaddetail"
+            element={authCtx.isLoggedIn ? <Squaddetail /> : <SignIn />}
+          />
+          <Route path="/auction" element={auctionElement} />
+          <Route path="/manage" element={manageElement} />
+        </Routes>
+
                   <Footer />
               </Grid>
             </Grid>
