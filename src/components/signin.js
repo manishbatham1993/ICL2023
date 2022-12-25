@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-
 import AuthContext from '../store/auth-context'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
@@ -24,6 +23,15 @@ export default function SignIn() {
   const authCtx = useContext(AuthContext)
   const navigate = useNavigate()
 
+
+const styles = {
+  paperContainer: {
+      // height: 1356,
+      backgroundImage: `url("https://images.unsplash.com/photo-1631194758628-71ec7c35137e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80")`,
+      backgroundSize: "100% 100%",
+      height:"700px"
+  }
+};
   const handleSubmit = (event) => {
     event.preventDefault()
     const formBody = new FormData(event.currentTarget)
@@ -42,12 +50,15 @@ export default function SignIn() {
   }
 
   return (
+    <div
+      style={styles.paperContainer}
+    >
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <Box
           sx={{
-            marginTop: 8,
+            // marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -101,5 +112,6 @@ export default function SignIn() {
         </Box>
       </Container>
     </ThemeProvider>
+    </div>
   )
 }

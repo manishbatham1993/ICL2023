@@ -62,7 +62,7 @@ $(document).ready(function () {
 export default function Countdown() {
   return (
     <>
-      <div className="wrapper" style={{ marginTop: '20%' }}>
+      <div className="wrapper">
         {/* <div className="col-md-12"> */}
         <h1 id="header" style={{ fontSize: '100px' }}>
           ICL 2023 Auction Starts

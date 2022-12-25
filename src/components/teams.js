@@ -56,22 +56,22 @@ const headCells = [
   },
   {
     id: 'accountid',
-    numeric: false,
-    disablePadding: true,
+    numeric: true,
+    disablePadding: false,
     label: 'Account',
   },
 
   {
     id: 'budget',
-    numeric: false,
-    disablePadding: true,
+    numeric: true,
+    disablePadding: false,
     label: 'Budget',
   },
 
   {
     id: 'teamowner',
-    numeric: false,
-    disablePadding: true,
+    numeric: true,
+    disablePadding: false,
     label: 'Team Owner',
   },
 ]
@@ -88,7 +88,6 @@ function TeamownersHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property)
   }
-
   return (
     <TableHead>
       <TableRow>
@@ -100,15 +99,15 @@ function TeamownersHead(props) {
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
+           <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
+              direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
             </TableSortLabel>
@@ -117,6 +116,7 @@ function TeamownersHead(props) {
       </TableRow>
     </TableHead>
   )
+  
 }
 
 TeamownersHead.propTypes = {
@@ -182,7 +182,6 @@ export default function Teamowners() {
   const [rows, setRows] = React.useState([])
   const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
-
   function get_data() {
     const api = 'https://icl.up.railway.app/api/v1/team'
     axios.get(api, {}).then((res) => {
@@ -227,20 +226,6 @@ export default function Teamowners() {
 
     setSelected(newSelected)
   }
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage)
-  }
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked)
-  }
-
   const isSelected = (name) => selected.indexOf(name) !== -1
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -251,7 +236,7 @@ export default function Teamowners() {
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <TeamownersToolbar numSelected={selected.length} />
-        <TableContainer>
+        {/* <TableContainer> */}
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
@@ -268,9 +253,9 @@ export default function Teamowners() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+              {/* {stableSort(rows, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) */}
+                {rows.map((row, index) => {
                   const isItemSelected = isSelected(row.name)
                   const labelId = `enhanced-table-checkbox-${index}`
 
@@ -278,14 +263,14 @@ export default function Teamowners() {
                     <TableRow
                       hover
                       // onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      // aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.name}
+                      // role="checkbox"
+                      // // aria-checked={isItemSelected}
+                      // // tabIndex={-1}
+                      // key={row.name}
                       // selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                      <Avatar
+                      <TableCell>
+                        <Avatar
                           alt={row.name}
                           src={`${BASE_URL}/${row.imageUrl}`}
                         />
@@ -298,9 +283,9 @@ export default function Teamowners() {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="left">{row.accountId.name}</TableCell>
-                      <TableCell align="left">{row.teamOwner.budget}</TableCell>
-                      <TableCell align="left">
+                      <TableCell align="right">{row.accountId.name}</TableCell>
+                      <TableCell align="right">{row.teamOwner.budget}</TableCell>
+                      <TableCell align="right">
                         {row.teamOwner.playerId.name}
                       </TableCell>
                     </TableRow>
@@ -308,7 +293,7 @@ export default function Teamowners() {
                 })}
             </TableBody>
           </Table>
-        </TableContainer>
+        {/* </TableContainer> */}
       </Paper>
     </Box>
   )

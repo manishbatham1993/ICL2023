@@ -15,7 +15,7 @@ import ManageEntities from './components/manageEntities/ManageEntities'
 import Countdown from './components/countdown'
 import Accountdetail from './components/accountdetails'
 import Squaddetail from './components/squaddetails'
-
+import Signin1 from './components/signin1'
 function App() {
   const authCtx = useContext(AuthContext)
 
@@ -48,6 +48,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Countdown />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/signin1" element={<Signin1 />} />
+
+          
           <Route
             path="/playerslist"
             element={authCtx.isLoggedIn ? <EnhancedTable /> : <SignIn />}

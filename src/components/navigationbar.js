@@ -15,6 +15,7 @@ import Link from '@mui/material/Link'
 import logo from './logo.svg'
 
 function ResponsiveAppBar() {
+
   const navigate = useNavigate()
   const authCtx = useContext(AuthContext)
 
@@ -64,7 +65,7 @@ function ResponsiveAppBar() {
                   sx={{ my: 2, color: 'white', display: 'block' }}
                   href="/playerslist"
                 >
-                  playerslist
+                  Playerslist
                 </Button>
                 <Button
                   sx={{ my: 2, color: 'white', display: 'block' }}
