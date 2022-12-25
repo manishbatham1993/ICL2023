@@ -29,14 +29,13 @@ import {
   Progress,
 } from 'reactstrap'
 
-
-const BASE_URL = process.env.REACT_APP_BASE_URL || "";
-const socket = io(BASE_URL);
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+const socket = io(BASE_URL)
 
 // constants
-const DEFAULT_BID_INCREASE = 100;
-const BASE_PRICE = 1000;
-const TEAM_ID = "639d4a67ddfe568981cf801d";
+const DEFAULT_BID_INCREASE = 100
+const BASE_PRICE = 1000
+const TEAM_ID = '639d4a67ddfe568981cf801d'
 
 // AUCTION_SCHEMA : {
 //   state: (null/'ready'/'progress'/'completed'/)
@@ -56,7 +55,6 @@ const TEAM_ID = "639d4a67ddfe568981cf801d";
 //     {playerId : <playerId>, teamId: <teamId>, amount: <amount> }
 //   ]
 // }
-
 
 // AUCTION_SCHEMA : {
 //   state: (null/'ready'/'progress'/'completed'/)
@@ -294,10 +292,14 @@ const Auction = () => {
                     }}
                   >
                     <Button color="primary" className="animation-on-hover">
-                      {mappedData.currentPlayer.skill?mappedData.currentPlayer.skill:"NA"}
+                      {mappedData.currentPlayer.skill
+                        ? mappedData.currentPlayer.skill
+                        : 'NA'}
                     </Button>
                     <Button color="success" className="animation-on-hover">
-                      {mappedData.currentPlayer.rating?mappedData.currentPlayer.rating:"NA"}
+                      {mappedData.currentPlayer.rating
+                        ? mappedData.currentPlayer.rating
+                        : 'NA'}
                     </Button>
                   </div>
                 </CardBody>
@@ -332,7 +334,7 @@ const Auction = () => {
                   />
 
                   <CircleTimer duration={mappedData.clock} bidHistory={[]} />
-                  
+
                   <div className="pad10 mar10">
                     <Button
                       size="lg"
@@ -359,18 +361,17 @@ const Auction = () => {
                     <tbody>
                       {mappedData.bidHistory.map((history) => {
                         return (
-                          <tr>
+                          <tr style={{ fontSize: '1.2rem' }}>
                             <td>
-                              {console.log(history, 'testmanish')}
                               <Avatar
                                 className="center"
                                 alt={history.teamName}
                                 src={`${BASE_URL}/${history.teamImage}`}
-                                sx={{ width: 100, height: 100 }}
-                              />{' '}
-                              <span className="">Team {history.teamName}</span>
-                              Raised For {history.amount}
+                                sx={{ width: 75, height: 75 }}
+                              />
                             </td>
+                            <td>{history.teamName}</td>
+                            <td>Raised For {history.amount}</td>
                           </tr>
                         )
                       })}
@@ -389,36 +390,36 @@ const Auction = () => {
               </CardHeader>
               <CardBody className="">
                 <Row>
-                    <Table>
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <th>Player Details</th>
-                          <th>Bid Price</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Object.values(mappedData.previousAuctions).map(
-                          (data) => (
-                            <tr>
-                              <td>
-                                <Avatar
-                                  className="center"
-                                  alt={data.playerName}
-                                  src={`${BASE_URL}/${data.playerImage}`}
-                                />
-                              </td>
-                              <td>
-                                {data.playerName}
-                                <br></br>
-                                Sold To :{data.teamName}
-                              </td>
-                              <td>{data.amount}</td>
-                            </tr>
-                          )
-                        )}
-                      </tbody>
-                    </Table>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Player Details</th>
+                        <th>Bid Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.values(mappedData.previousAuctions).map(
+                        (data) => (
+                          <tr>
+                            <td>
+                              <Avatar
+                                className="center"
+                                alt={data.playerName}
+                                src={`${BASE_URL}/${data.playerImage}`}
+                              />
+                            </td>
+                            <td>
+                              {data.playerName}
+                              <br></br>
+                              Sold To :{data.teamName}
+                            </td>
+                            <td>{data.amount}</td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </Table>
                 </Row>
               </CardBody>
             </Card>

@@ -41,7 +41,10 @@ export default function ManageEntities() {
         setTeams(
           res.data.teams.map((team) => ({
             ...team,
-            teamOwnerName: team.teamOwner ? team.teamOwner.playerId.name : '',
+            teamOwnerName:
+              team.teamOwner && team.teamOwner.playerId
+                ? team.teamOwner.playerId.name
+                : '',
           }))
         )
       }
@@ -152,7 +155,7 @@ export default function ManageEntities() {
             isEdit={isEdit}
             data={data}
             accounts={accounts}
-            skills={['Batsman', 'Bowler', 'All Rounder', 'Spinner']}
+            skills={['Batsman', 'Bowler', 'All Rounder']}
             gender={['Male', 'Female']}
             onCloseOverlay={closeModalHandler}
             onRefresh={refreshPlayers}
@@ -211,7 +214,7 @@ export default function ManageEntities() {
           onClickDelete={deleteHandler.bind(null, 'team')}
           additionalColums={['teamOwnerName']}
         />
-        <Card 
+        <Card
           sx={{
             m: 2,
             borderRadius: 2,
@@ -220,8 +223,8 @@ export default function ManageEntities() {
             overflowY: 'auto',
           }}
         >
-          <CardContent  sx={{ mt: '2rem' }}>
-            <Button 
+          <CardContent sx={{ mt: '2rem' }}>
+            <Button
               variant="contained"
               onClick={openModalHandler.bind(null, 'teamOwner')}
             >

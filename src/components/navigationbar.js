@@ -14,8 +14,9 @@ import AdbIcon from '@mui/icons-material/Adb'
 import Link from '@mui/material/Link'
 import logo from './logo.svg'
 
-function ResponsiveAppBar() {
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
+function ResponsiveAppBar() {
   const navigate = useNavigate()
   const authCtx = useContext(AuthContext)
 
@@ -99,8 +100,15 @@ function ResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 0 }}>
             {authCtx.isLoggedIn ? (
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="../assets/img/Srikant.jpg" />
+              <IconButton onclick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar
+                  alt={
+                    authCtx && authCtx.user && authCtx.user.email
+                      ? authCtx.user.email.toUpperCase()
+                      : ''
+                  }
+                  src={`${BASE_URL}/${authCtx.imageUrl}`}
+                />
                 <Button
                   sx={{ my: 2, color: 'white', display: 'block' }}
                   onClick={logoutHandler}

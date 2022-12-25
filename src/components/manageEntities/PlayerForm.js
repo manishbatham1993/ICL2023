@@ -132,10 +132,11 @@ const PlayerForm = (props) => {
         </select>
       </div>
       <div className={classes.input}>
-        <label htmlFor="rating">Rating</label>
+        <label htmlFor="rating">Rating *</label>
         <input
           id="rating"
           type="number"
+          required
           ref={ratingRef}
           defaultValue={
             props.isEdit && props.data.rating ? props.data.rating : ''

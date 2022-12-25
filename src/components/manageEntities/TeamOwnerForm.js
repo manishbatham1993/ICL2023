@@ -54,11 +54,11 @@ const TeamOwnerForm = (props) => {
         </select>
       </div>
       <div className={classes.input}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Email *</label>
         <input id="email" type="text" ref={emailRef} required />
       </div>
       <div className={classes.input}>
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">Password *</label>
         <input id="password" type="text" ref={passwordRef} required />
       </div>
       <div className={classes.input}>

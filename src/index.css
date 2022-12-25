@@ -28,5 +28,7 @@ code {
   background: #006a56 !important;
 }
 .overflow{
-overflow: scroll !important;
+overflow: auto !important;
 }
+
+button:focus { outline: none !important;;}

@@ -284,9 +284,13 @@ export default function Teamowners() {
                         {row.name}
                       </TableCell>
                       <TableCell align="right">{row.accountId.name}</TableCell>
-                      <TableCell align="right">{row.teamOwner.budget}</TableCell>
                       <TableCell align="right">
-                        {row.teamOwner.playerId.name}
+                    {row.teamOwner && row.teamOwner.budget
+                      ? row.teamOwner.budget
+                      : ''}
+                  </TableCell>
+                  <TableCell align="right">
+                    {row.playerId ? row.playerId.name : ''}
                       </TableCell>
                     </TableRow>
                   )
