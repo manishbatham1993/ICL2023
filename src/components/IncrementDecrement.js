@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 function ButtonIncrement(props) {
   return (
     <button
-      className="btn-round"
-      style={{ marginLeft: '.5rem' }}
+      className="btn-round plus"
+      // style={{ marginLeft: '.5rem' ,width:"25px" }}
       onClick={props.onClickFunc}
     >
       +
@@ -13,8 +13,8 @@ function ButtonIncrement(props) {
 function ButtonDecrement(props) {
   return (
     <button
-      className="btn-round"
-      style={{ marginLeft: '.5rem' }}
+      className="btn-round minus"
+      // style={{ marginLeft: '.5rem' }}
       onClick={props.onClickFunc}
     >
       -
@@ -29,11 +29,12 @@ function Display(props) {
         border: '2px solid white',
         borderRadius: '20px',
         height: '30px',
-        width: '70px',
+        width: '140px',
         textAlign: 'center',
         fontSize: '15px',
         fontWeight: 'bold',
         lineHeight: '25px',
+        marginRight:'.5rem'
       }}
     >
       {props.message}
@@ -67,7 +68,8 @@ function IncrementDecrement(props) {
       style={{
         margin: 'auto',
         width: '50%',
-        padding: '10px',
+        // padding: '10px',
+        display: 'flex'
       }}
     >
       <ButtonDecrement onClickFunc={decrementCounter} />

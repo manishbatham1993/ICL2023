@@ -1,3 +1,14 @@
+/* html {
+  height: 100%;
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+  overflow: hidden;
+}
+
+body {
+  background: transparent;
+  color: #ffffff;
+} */
+
 .bluelight {
   text-shadow: 0 0 10px #3498DB,
                0 0 20px #3498DB,
@@ -68,15 +79,15 @@
   }
 }
 
-@media (min-width: 768px) {
-  /* body {
+/* @media (min-width: 768px) {
+  body {
     padding-top: 75px;
-  } */
-}
+  }
+} */
 
-h1 {
+/* h1 {
   padding-top: 10px;
-}
+} */
 
 @media (min-width: 768px) {
   h1 {
@@ -84,6 +95,7 @@ h1 {
     font-size: 100px;
   }
 }
+
 
 
 .center {

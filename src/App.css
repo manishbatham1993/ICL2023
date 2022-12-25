@@ -29,3 +29,22 @@
 }
 
 
+
+.minus,
+.plus {
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border: 1px solid #DDD;
+  border-radius: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 25px;
+}
+.wrapper{
+  height:100% !important;
+  margin: 10%;
+}

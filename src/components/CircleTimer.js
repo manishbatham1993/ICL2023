@@ -6,7 +6,7 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 const renderTime = ({ remainingTime }) => {
   if (remainingTime === 0) {
-    return <div className="timer">Player Sold</div>;
+    return <div className="timer">Loading...</div>;
   }
 
   return (

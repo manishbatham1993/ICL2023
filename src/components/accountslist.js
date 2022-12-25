@@ -246,9 +246,9 @@ export default function AccountList() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+              {/* {stableSort(rows, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) */}
+                {rows.map((row, index) => {
                   const isItemSelected = isSelected(row.name)
                   const labelId = `enhanced-table-checkbox-${index}`
 

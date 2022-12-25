@@ -294,10 +294,10 @@ const Auction = () => {
                     }}
                   >
                     <Button color="primary" className="animation-on-hover">
-                      {mappedData.currentPlayer.skill}
+                      {mappedData.currentPlayer.skill?mappedData.currentPlayer.skill:"NA"}
                     </Button>
                     <Button color="success" className="animation-on-hover">
-                      {mappedData.currentPlayer.rating}
+                      {mappedData.currentPlayer.rating?mappedData.currentPlayer.rating:"NA"}
                     </Button>
                   </div>
                 </CardBody>
@@ -311,7 +311,7 @@ const Auction = () => {
               <Card className="card-chart card-tasks">
                 <CardHeader>
                   <CardTitle tag="h3" className="text-center">
-                    <i className="tim-icons icon-money-coins text-primary" />{' '}
+                    {/* <i className="tim-icons icon-money-coins text-primary" />{' '} */}
                     {mappedData.lastBid ? mappedData.lastBid.amount : 'No Bids'}
                   </CardTitle>
                   <h4 className="text-center"> CURRENT BID </h4>
@@ -319,7 +319,7 @@ const Auction = () => {
                 <CardBody>
                   <p className="text-center">
                     {mappedData.lastBid
-                      ? `Team ${mappedData.lastBid.teamName} Raised for ${mappedData.lastBid.amount}`
+                      ? `Team ${mappedData.lastBid.teamName}Raised for ${mappedData.lastBid.amount}`
                       : ''}
                   </p>
 
@@ -332,12 +332,7 @@ const Auction = () => {
                   />
 
                   <CircleTimer duration={mappedData.clock} bidHistory={[]} />
-                  <div
-                    className="timer"
-                    style={{ duration: `${mappedData.clock}`, size: '100' }}
-                  >
-                    <div className="mask"></div>
-                  </div>
+                  
                   <div className="pad10 mar10">
                     <Button
                       size="lg"
@@ -394,7 +389,6 @@ const Auction = () => {
               </CardHeader>
               <CardBody className="">
                 <Row>
-                  <Col lg="6" md="12">
                     <Table>
                       <thead>
                         <tr>
@@ -425,7 +419,6 @@ const Auction = () => {
                         )}
                       </tbody>
                     </Table>
-                  </Col>
                 </Row>
               </CardBody>
             </Card>
