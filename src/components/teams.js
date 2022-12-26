@@ -17,6 +17,8 @@ import { visuallyHidden } from '@mui/utils'
 import axios from 'axios'
 import Avatar from '@mui/material/Avatar'
 
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1
@@ -28,7 +30,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === "desc"
+  return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy)
 }
@@ -49,10 +51,10 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: 'name',
     numeric: false,
     disablePadding: true,
-    label: "Team Name",
+    label: 'Team Name',
   },
   {
     id: 'accountid',
@@ -95,11 +97,11 @@ function TeamownersHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            align={headCell.numeric ? 'right' : 'left'}
+            padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-           <TableSortLabel
+            <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
@@ -116,14 +118,13 @@ function TeamownersHead(props) {
       </TableRow>
     </TableHead>
   )
-  
 }
 
 TeamownersHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 }
@@ -147,7 +148,7 @@ function TeamownersToolbar(props) {
     >
       {numSelected > 0 ? (
         <Typography
-          sx={{ flex: "1 1 100%" }}
+          sx={{ flex: '1 1 100%' }}
           color="inherit"
           variant="subtitle1"
           component="div"
@@ -156,7 +157,7 @@ function TeamownersToolbar(props) {
         </Typography>
       ) : (
         <Typography
-          sx={{ flex: "1 1 100%" }}
+          sx={{ flex: '1 1 100%' }}
           variant="h6"
           id="tableTitle"
           component="div"
@@ -180,10 +181,9 @@ export default function Teamowners() {
   const [dense, setDense] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [rows, setRows] = React.useState([])
-  const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
   function get_data() {
-    const api = 'https://icl.up.railway.app/api/v1/team'
+    const api = BASE_URL + '/api/v1/team'
     axios.get(api, {}).then((res) => {
       console.log('data', res.data)
       setRows(res.data.teams)
@@ -233,70 +233,70 @@ export default function Teamowners() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '100%', mb: 2 }}>
         <TeamownersToolbar numSelected={selected.length} />
         {/* <TableContainer> */}
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
-          >
-            <TeamownersHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+        <Table
+          sx={{ minWidth: 750 }}
+          aria-labelledby="tableTitle"
+          size={dense ? 'small' : 'medium'}
+        >
+          <TeamownersHead
+            numSelected={selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={rows.length}
+          />
+          <TableBody>
+            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.sort(getComparator(order, orderBy)).slice() */}
-              {/* {stableSort(rows, getComparator(order, orderBy))
+            {/* {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) */}
-                {rows.map((row, index) => {
-                  const isItemSelected = isSelected(row.name)
-                  const labelId = `enhanced-table-checkbox-${index}`
+            {rows.map((row, index) => {
+              const isItemSelected = isSelected(row.name)
+              const labelId = `enhanced-table-checkbox-${index}`
 
-                  return (
-                    <TableRow
-                      hover
-                      // onClick={(event) => handleClick(event, row.name)}
-                      // role="checkbox"
-                      // // aria-checked={isItemSelected}
-                      // // tabIndex={-1}
-                      // key={row.name}
-                      // selected={isItemSelected}
-                    >
-                      <TableCell>
-                        <Avatar
-                          alt={row.name}
-                          src={`${BASE_URL}/${row.imageUrl}`}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.accountId.name}</TableCell>
-                      <TableCell align="right">
+              return (
+                <TableRow
+                  hover
+                  // onClick={(event) => handleClick(event, row.name)}
+                  // role="checkbox"
+                  // // aria-checked={isItemSelected}
+                  // // tabIndex={-1}
+                  // key={row.name}
+                  // selected={isItemSelected}
+                >
+                  <TableCell>
+                    <Avatar
+                      alt={row.name}
+                      src={`${BASE_URL}/${row.imageUrl}`}
+                    />
+                  </TableCell>
+                  <TableCell
+                    component="th"
+                    id={labelId}
+                    scope="row"
+                    padding="none"
+                  >
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">{row.accountId.name}</TableCell>
+                  <TableCell align="right">
                     {row.teamOwner && row.teamOwner.budget
                       ? row.teamOwner.budget
                       : ''}
                   </TableCell>
                   <TableCell align="right">
                     {row.playerId ? row.playerId.name : ''}
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-            </TableBody>
-          </Table>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
         {/* </TableContainer> */}
       </Paper>
     </Box>

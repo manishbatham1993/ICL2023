@@ -49,7 +49,6 @@ function App() {
           <Route path="/" element={<Countdown />} />
           <Route path="/signin" element={<SignIn />} />
 
-          
           <Route
             path="/playerslist"
             element={authCtx.isLoggedIn ? <EnhancedTable /> : <SignIn />}

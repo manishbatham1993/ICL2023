@@ -23,6 +23,9 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import { visuallyHidden } from '@mui/utils'
 import axios from 'axios'
 import Avatar from '@mui/material/Avatar'
+
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1
@@ -190,9 +193,9 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [rows, setRows] = React.useState([])
-  const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+
   function get_data() {
-    const api = 'https://icl.up.railway.app/api/v1/player'
+    const api = BASE_URL + '/api/v1/player'
     axios.get(api, {}).then((res) => {
       console.log('data', res.data.players)
       setRows(res.data.players)
@@ -279,43 +282,42 @@ export default function EnhancedTable() {
                  rows.sort(getComparator(order, orderBy)).slice() */}
               {/* {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) */}
-                {rows.map((row, index) => {
-                  const isItemSelected = isSelected(row.name)
-                  const labelId = `enhanced-table-checkbox-${index}`
+              {rows.map((row, index) => {
+                const isItemSelected = isSelected(row.name)
+                const labelId = `enhanced-table-checkbox-${index}`
 
-                  return (
-                    <TableRow
-                      hover
-                      // onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      // aria-checked={isItemSelected}
-                      // tabIndex={-1}
-                      key={row.name}
-                      // selected={isItemSelected}
+                return (
+                  <TableRow
+                    hover
+                    // onClick={(event) => handleClick(event, row.name)}
+                    role="checkbox"
+                    // aria-checked={isItemSelected}
+                    // tabIndex={-1}
+                    key={row.name}
+                    // selected={isItemSelected}
+                  >
+                    <TableCell>
+                      <Avatar
+                        alt={row.name}
+                        src={`${BASE_URL}/${row.imageUrl}`}
+                      />
+                    </TableCell>
+                    <TableCell
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      padding="none"
                     >
-                      <TableCell>
-                        <Avatar
-                          alt={row.name}
-                          src={`${BASE_URL}/${row.imageUrl}`}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.email}</TableCell>
-                      <TableCell align="right">{row.accountId.name}</TableCell>
-                      <TableCell align="right">{row.employeeId}</TableCell>
-                      <TableCell align="right">{row.skill}</TableCell>
-                      <TableCell align="right">{row.skills}</TableCell>
-                    </TableRow>
-                  )
-                })}
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="right">{row.email}</TableCell>
+                    <TableCell align="right">{row.accountId.name}</TableCell>
+                    <TableCell align="right">{row.employeeId}</TableCell>
+                    <TableCell align="right">{row.skill}</TableCell>
+                    <TableCell align="right">{row.skills}</TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </TableContainer>
