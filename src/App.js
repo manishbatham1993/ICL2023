@@ -15,6 +15,7 @@ import ManageEntities from './components/manageEntities/ManageEntities'
 import Countdown from './components/countdown'
 import Accountdetail from './components/accountdetails'
 import Squaddetail from './components/squaddetails'
+import AlertCongratulationSlide from './components/modal'
 
 function App() {
   const authCtx = useContext(AuthContext)
@@ -44,7 +45,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <ResponsiveAppBar />
+       <ResponsiveAppBar />
         <Routes>
           <Route path="/" element={<Countdown />} />
           <Route path="/signin" element={<SignIn />} />
@@ -76,6 +77,7 @@ function App() {
           />
           <Route path="/auction" element={auctionElement} />
           <Route path="/manage" element={manageElement} />
+          <Route path="/modal" element={<AlertCongratulationSlide />} 
         </Routes>
         <Footer />
       </Router>

@@ -56,23 +56,29 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {authCtx.isLoggedIn && (
               <React.Fragment>
-                <Button
+                {/* <Button
                   sx={{ my: 2, color: 'white', display: 'block' }}
                   href="/accountlist"
                 >
                   Accounts
+                </Button> */}
+                <Button
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  href="/overview"
+                >
+                  Overview
                 </Button>
                 <Button
                   sx={{ my: 2, color: 'white', display: 'block' }}
                   href="/playerslist"
                 >
-                  Playerslist
+                  Players
                 </Button>
                 <Button
                   sx={{ my: 2, color: 'white', display: 'block' }}
                   href="/teamlist"
                 >
-                  Teamslist
+                  Teams
                 </Button>
                 <Button
                   sx={{ my: 2, color: 'white', display: 'block' }}
@@ -80,12 +86,7 @@ function ResponsiveAppBar() {
                 >
                   Auction
                 </Button>
-                <Button
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                  href="/overview"
-                >
-                  Overview
-                </Button>
+                
                 {authCtx.role === 'admin' && (
                   <Button
                     sx={{ my: 2, color: 'white', display: 'block' }}

@@ -76,8 +76,13 @@ const Squaddetail = () => {
               paddingTop: '20px',
               paddingBottom: '20px',
             }}
+            className="card-user"
           >
-            <div className="accountImage">
+            <div className="accountImage author">
+              <div className="block block-one" />
+              <div className="block block-two" />
+              <div className="block block-three" />
+              <div className="block block-four" />
               <Image
                 rounded="true"
                 roundedCircle="true"
@@ -86,7 +91,6 @@ const Squaddetail = () => {
                 style={{ width: '8rem', height: '8rem' }}
               />
             </div>
-
             <CardBody>
               <CardTitle
                 tag="h5"
@@ -99,8 +103,8 @@ const Squaddetail = () => {
                 {player.teamId && player.teamId.name}
               </CardSubtitle>
               <div style={{ marginTop: '10px' }}>
-                <Button>{player.skill}</Button>
-                <Button>{player.rating}</Button>
+                <Button className='btn-primary'>{player.skill}</Button>
+                <Button className='btn-success'>{player.rating}</Button>
               </div>
             </CardBody>
           </Card>
