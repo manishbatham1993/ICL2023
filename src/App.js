@@ -76,7 +76,7 @@ function App() {
           />
           <Route path="/auction" element={auctionElement} />
           <Route path="/manage" element={manageElement} />
-          <Route path="/modal" element={<AlertCongratulationSlide />} 
+          <Route path="/modal" element={<AlertCongratulationSlide />}  />
         </Routes>
         <Footer />
       </Router>
