@@ -38,6 +38,7 @@ const DEFAULT_BID_INCREASE = 100
 const BASE_PRICE = 1000
 const TEAM_ID = '639d4a67ddfe568981cf801d'
 
+
 // AUCTION_SCHEMA : {
 //   state: (null/'ready'/'progress'/'completed'/)
 //   teams: [<teamId>],
@@ -315,16 +316,21 @@ const Auction = () => {
                 <CardHeader>
                   <CardTitle tag="h3" className="text-center">
                     {/* <i className="tim-icons icon-money-coins text-primary" />{' '} */}
-                    {mappedData.lastBid ? mappedData.lastBid.amount : 'No Bids'}
+                    {/* {mappedData.lastBid ? mappedData.lastBid.amount : 'No Bids'} */}
+                    <h1 className="text-center">
+                    {mappedData.lastBid
+                      ? `Team ${mappedData.lastBid.teamName} Raised For ${mappedData.lastBid.amount}`
+                      : ''}
+                  </h1>
                   </CardTitle>
                   <h4 className="text-center"> CURRENT BID </h4>
                 </CardHeader>
                 <CardBody>
-                  <p className="text-center">
+                  {/* <p className="text-center">
                     {mappedData.lastBid
                       ? `Team ${mappedData.lastBid.teamName}Raised for ${mappedData.lastBid.amount}`
                       : ''}
-                  </p>
+                  </p> */}
 
                   <IncrementDecrement
                     defaultVal={defaultNextBidAmount}
@@ -413,7 +419,7 @@ const Auction = () => {
                             <td>
                               {data.playerName}
                               <br></br>
-                              Sold To :{data.teamName}
+                              Sold To Team :{data.teamName}
                             </td>
                             <td>{data.amount}</td>
                           </tr>
@@ -437,17 +443,14 @@ const Auction = () => {
                   {console.log(mappedData.teamStats)}
                   {Object.values(mappedData.teamStats).map((data) => (
                     <Col lg="6" md="12">
-                      <CardTitle tag="h3" className="text-center">
-                        {data.teamName}:{data.budget}
+                      <div >
+                      <CardTitle tag="h3" className="text-center" >
+                        {data.teamName}         <Button >{data.budget}</Button>
                       </CardTitle>
-                      {/* <p className="text-info text-center">Fund Remaining</p>
-                      <Button color="info" className="animation-on-hover">
-                        {data.budget}
-                      </Button>
-                      <p className="text-primary text-center">Total Players</p>
-                      <Button color="primary" className="animation-on-hover">
-                        {data.total}/set_total
-                      </Button> */}
+                      <CardTitle tag="h3" className="text-center" style={{float:"right"}}> 
+                      
+                      </CardTitle>
+                      </div>
                       <Table>
                         <thead>
                           <tr>

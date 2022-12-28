@@ -84,7 +84,7 @@ const Allplayer = () => {
                                 className="center"
                                 alt={player.name}
                                 src={`${BASE_URL}/${player.imageUrl}`}
-                                sx={{ width: 200, height: 200 }}
+                                sx={{ width: 200, height: 200,fontSize:"5rem" }}
                             />
                         </div>
                         <CardBody className="minheight">

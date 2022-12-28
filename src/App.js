@@ -17,6 +17,7 @@ import Accountdetail from './components/accountdetails'
 import Squaddetail from './components/squaddetails'
 import AlertCongratulationSlide from './components/modal'
 import Allplayer from './components/Allplayer'
+import TeamDetail from './components/teamdetail'
 
 function App() {
   const authCtx = useContext(AuthContext)
@@ -65,7 +66,7 @@ function App() {
           />
           <Route
             path="/teamlist"
-            element={authCtx.isLoggedIn ? <Teamowners /> : <SignIn />}
+            element={authCtx.isLoggedIn ? <TeamDetail /> : <SignIn />}
           />
           <Route
             path="/overview"
