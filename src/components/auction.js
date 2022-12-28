@@ -114,28 +114,28 @@ const Auction = () => {
       : null
     const currentPlayer = playerObj
       ? {
-          name: playerObj.name,
-          rating: playerObj.rating,
-          skill: playerObj.skill,
-          image: playerObj.imageUrl,
-        }
+        name: playerObj.name,
+        rating: playerObj.rating,
+        skill: playerObj.skill,
+        image: playerObj.imageUrl,
+      }
       : null
     const bidAmount = auctionData.currentPlayer
       ? auctionData.currentPlayer.bidAmount
       : null
     const bidHistory = auctionData.currentPlayer
       ? auctionData.currentPlayer.bids //[0,1,2]
-          .map((bidId) => auctionData.bids[bidId]) //[{playerId, teamId, amount}]
-          .map((bid) => {
-            const player = players.find((player) => player._id === bid.playerId)
-            const team = teams.find((team) => team._id === bid.teamId)
-            return {
-              teamId: team._id,
-              teamName: team.name,
-              teamImage: team.imageUrl,
-              amount: bid.amount,
-            }
-          })
+        .map((bidId) => auctionData.bids[bidId]) //[{playerId, teamId, amount}]
+        .map((bid) => {
+          const player = players.find((player) => player._id === bid.playerId)
+          const team = teams.find((team) => team._id === bid.teamId)
+          return {
+            teamId: team._id,
+            teamName: team.name,
+            teamImage: team.imageUrl,
+            amount: bid.amount,
+          }
+        })
       : []
     bidHistory.reverse()
     const lastBid = bidHistory.length > 0 ? bidHistory[0] : null
@@ -260,38 +260,35 @@ const Auction = () => {
           <Row>
             <Col md="4">
               <Card className="card-user card-tasks">
-                <CardBody style={{ marginTop: '10%' }}>
+                {/* <CardHeader>
+                  <CardTitle tag="h3" className="text-center">
+                  </CardTitle>
+                  <h4 className="text-center"> CURRENT BID FOR </h4>
+                </CardHeader> */}
+                <CardBody >
                   <CardText />
                   <div className="author">
                     <div className="block block-one" />
                     <div className="block block-two" />
                     <div className="block block-three" />
                     <div className="block block-four" />
-                    {/* <a href="#" onClick={(e) => e.preventDefault()}> */}
-                    {console.log(mappedData.currentPlayer.image, 'abcd')}
-                    {/* <img
-                        alt="..."
-                        className="avatar"
-                        src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
-                      /> */}
-                    <Avatar
-                      className="center"
-                      alt={mappedData.currentPlayer.name}
-                      src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
-                      sx={{ width: 100, height: 100 }}
-                    />
-                    <br></br>
-                    <h4 className="title">CURRENT BID FOR</h4>
-                    <h3>{mappedData.currentPlayer.name}</h3>
                   </div>
+                  <Avatar
+                    className="center"
+                    alt={mappedData.currentPlayer.name}
+                    src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
+                    sx={{ width: 225, height: 225 }}
+                  />
                   <div
                     className="card-description"
                     style={{
                       margin: 'auto',
                       width: '80%',
-                      padding: '10px',
+                      // padding: '10px',
                     }}
                   >
+                    <h2 className='botton-margin'>Current Bid For</h2>
+                    <h3>{mappedData.currentPlayer.name}</h3>
                     <Button color="primary" className="animation-on-hover">
                       {mappedData.currentPlayer.skill
                         ? mappedData.currentPlayer.skill
@@ -302,12 +299,15 @@ const Auction = () => {
                         ? mappedData.currentPlayer.rating
                         : 'NA'}
                     </Button>
+
                   </div>
+                  <h3 className="text-center botton-margin">
+                    Base Price
+                    <span className="text-success"> : {BASE_PRICE} </span>
+                  </h3>
+
                 </CardBody>
-                <h3 className="text-center">
-                  Base Price
-                  <span className="text-success"> : {BASE_PRICE} </span>
-                </h3>
+
               </Card>
             </Col>
             <Col lg="4">

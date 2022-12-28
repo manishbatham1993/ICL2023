@@ -20,7 +20,7 @@ function ResponsiveAppBar() {
   const navigate = useNavigate()
   const authCtx = useContext(AuthContext)
 
-  const handleOpenUserMenu = (event) => {}
+  const handleOpenUserMenu = (event) => { }
 
   const logoutHandler = () => {
     authCtx.logout()
@@ -70,7 +70,7 @@ function ResponsiveAppBar() {
                 </Button>
                 <Button
                   sx={{ my: 2, color: 'white', display: 'block' }}
-                  href="/playerslist"
+                  href="/allplayer"
                 >
                   Players
                 </Button>
@@ -86,7 +86,7 @@ function ResponsiveAppBar() {
                 >
                   Auction
                 </Button>
-                
+
                 {authCtx.role === 'admin' && (
                   <Button
                     sx={{ my: 2, color: 'white', display: 'block' }}

@@ -117,7 +117,7 @@ const Accountdetail = (props) => {
     account && (
       <div
         className="content mainContent container"
-        style={{ minHeight: '200vh' }}
+      // style={{ minHeight: '200vh' }}
       >
         <div>
           <h1>{account.name}</h1>

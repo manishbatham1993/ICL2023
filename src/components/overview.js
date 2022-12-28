@@ -45,7 +45,7 @@ const Overview = () => {
   return (
     <div
       className="content mainContent container"
-      style={{ minHeight: '100vh' }}
+    // style={{ minHeight: '100vh' }}
     >
       <div className="accounts-section">
         {accounts.map((account) => (

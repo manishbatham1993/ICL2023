@@ -11,24 +11,40 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
 .footer {
   flex-shrink: 0;
   text-align: center;
-  background-color:#006a56;
+  background-color: #006a56;
   color: white;
   padding: 24px 0px !important;
   bottom: 0;
   left: 0;
   right: 0;
+  position: fixed;
 }
+
 .content {
   margin-top: 10px;
 }
-.MuiAppBar-root{
+
+.MuiAppBar-root {
   background: #006a56 !important;
 }
-.overflow{
-overflow: auto !important;
+
+.overflow {
+  overflow: auto !important;
 }
 
-button:focus { outline: none !important;;}
+button:focus {
+  outline: none !important;
+  ;
+}
+
+.botton-margin {
+  margin-bottom: 0px !important;
+}
+
+.minheight {
+  min-height: auto !important;
+}

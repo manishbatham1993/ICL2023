@@ -185,7 +185,7 @@ export default function Teamowners() {
   function get_data() {
     const api = BASE_URL + '/api/v1/team'
     axios.get(api, {}).then((res) => {
-      console.log('data', res.data)
+      // console.log('data', res.data)
       setRows(res.data.teams)
     })
   }
@@ -258,7 +258,7 @@ export default function Teamowners() {
             {rows.map((row, index) => {
               const isItemSelected = isSelected(row.name)
               const labelId = `enhanced-table-checkbox-${index}`
-
+{console.log("row",row)}
               return (
                 <TableRow
                   hover
@@ -290,7 +290,8 @@ export default function Teamowners() {
                       : ''}
                   </TableCell>
                   <TableCell align="right">
-                    {row.playerId ? row.playerId.name : ''}
+                    {/* {row.playerId ? row.playerId.name : ''} */}
+                    {row.teamOwner && row.teamOwner.playerId && row.teamOwner.playerId.name?row.teamOwner.playerId.name:'-'}
                   </TableCell>
                 </TableRow>
               )

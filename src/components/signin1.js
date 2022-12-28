@@ -10,7 +10,7 @@ import {
   MDBIcon,
 } from 'mdb-react-ui-kit'
 
-function SignIn() {
+function SignIn1() {
   const styles = {
     paperContainer: {
       // height: 1356,
@@ -65,4 +65,4 @@ function SignIn() {
   )
 }
 
-export default SignIn
+export default SignIn1

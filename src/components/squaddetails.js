@@ -58,7 +58,7 @@ const Squaddetail = () => {
   return (
     <div
       className="content mainContent container"
-      style={{ minHeight: '200vh' }}
+    // style={{ minHeight: '200vh' }}
     >
       <h1>ICL SQUAD</h1>
       <div

@@ -16,6 +16,7 @@ import Countdown from './components/countdown'
 import Accountdetail from './components/accountdetails'
 import Squaddetail from './components/squaddetails'
 import AlertCongratulationSlide from './components/modal'
+import Allplayer from './components/Allplayer'
 
 function App() {
   const authCtx = useContext(AuthContext)
@@ -45,10 +46,14 @@ function App() {
   return (
     <div className="App">
       <Router>
-       <ResponsiveAppBar />
+        <ResponsiveAppBar />
         <Routes>
+          <Route path="/allplayer" element={<Allplayer />} />
+
           <Route path="/" element={<Countdown />} />
           <Route path="/signin" element={<SignIn />} />
+          {/* <Route path="/signin1" element={<Signin1 />} /> */}
+
 
           <Route
             path="/playerslist"
@@ -76,7 +81,7 @@ function App() {
           />
           <Route path="/auction" element={auctionElement} />
           <Route path="/manage" element={manageElement} />
-          <Route path="/modal" element={<AlertCongratulationSlide />}  />
+          <Route path="/modal" element={<AlertCongratulationSlide />} />
         </Routes>
         <Footer />
       </Router>
