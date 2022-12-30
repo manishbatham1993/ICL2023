@@ -6,6 +6,7 @@ import EntityContext from '../store/entity-context'
 import CircleTimer from './CircleTimer'
 import Image from 'react-bootstrap/Image'
 import './overview.css'
+import Avatar from '@mui/material/Avatar'
 
 import Nav from 'react-bootstrap/Nav'
 import Table from 'react-bootstrap/Table'
@@ -50,10 +51,25 @@ const Overview = () => {
       <div className="accounts-section">
         {accounts.map((account) => (
           <Card
-            style={{
-              width: '18rem',
-            }}
-          >
+          style={{
+            width: '21rem',
+            paddingTop: '20px',
+            paddingBottom: '20px',
+          }}
+          className="card-user minheight"
+        >
+          <div className="accountImage author">
+            <div className="block block-one" />
+            <div className="block block-two" />
+            <div className="block block-three" />
+            <div className="block block-four" />
+            <Avatar
+              className="center"
+              alt={account.name}
+              src={`${BASE_URL}/${account.imageUrl}`}
+              sx={{ width: 200, height: 200,fontSize:"5rem"}}
+            />
+          </div>
             <CardBody>
               <CardTitle tag="h5" className="accountTitle">
                 {account.name}
