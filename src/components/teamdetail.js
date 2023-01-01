@@ -13,6 +13,8 @@ import Avatar from '@mui/material/Avatar'
 import Nav from 'react-bootstrap/Nav'
 import Table from 'react-bootstrap/Table'
 import Tab from 'react-bootstrap/Tab'
+import './auction.css'
+
 
 // reactstrap components
 import {
@@ -131,7 +133,7 @@ const TeamDetail = (props) => {
                   Player Count
                 </CardSubtitle>
                 <CardText className="playerCount">{team.totalCount}</CardText>
-                <div className="playerSummary" style={{ alignContent: 'left' }}>
+                {/* <div className="playerSummary" style={{ alignContent: 'left' }}>
                   <h4>
                     Batsman <span>{team.batsmanCount}</span>
                   </h4>
@@ -141,7 +143,21 @@ const TeamDetail = (props) => {
                   <h4>
                     All Rounders <span>{team.allrounderCount}</span>
                   </h4>
-                </div>
+                </div> */}
+                 <div className="pointSection">
+                        <div className="point-div">
+                          <div className="pointText">Batsman</div>
+                          <div className="pointCircle">{team.batsmanCount}</div>
+                        </div>
+                        <div className="point-div">
+                          <div className="pointText">Bowler</div>
+                          <div className="pointCircle">{team.bowlerCount}</div>
+                        </div>
+                        <div className="point-div">
+                          <div className="pointText">All Rounder</div>
+                          <div className="pointCircle">{team.allrounderCount}</div>
+                        </div>
+                      </div>
                 <a href={`/squaddetail/${team.id}`}>
                   <Button>Team Details</Button>
                 </a>

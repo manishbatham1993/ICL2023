@@ -589,16 +589,16 @@ const Auction = () => {
                         </div>
                       </div>
                       <div className="team-player">
-                        <ul class="mb-0 px-1">
-                          <li class="m-0">
-                            <span class="rm-name">Total Players</span>
-                            <span class="rm-fund">
+                        <ul className="mb-0 px-1">
+                          <li className="m-0">
+                            <span className="rm-name">Total Players</span>
+                            <span className="rm-fund">
                               {data.batsman + data.bowlers + data.allRounders}
                             </span>
                           </li>
-                          <li class="m-0 px-1">
-                            <span class="rm-name">Need Players</span>
-                            <span class="rm-fund">
+                          <li className="m-0 px-1">
+                            <span className="rm-name">Need Players</span>
+                            <span className="rm-fund">
                               <NeededPlayers
                                 players={
                                   data.batsman + data.bowlers + data.allRounders
