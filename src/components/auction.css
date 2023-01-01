@@ -1,0 +1,180 @@
+.content {
+  margin-top: 10px;
+}
+
+.user-name {
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 25px;
+  margin-bottom: 15px;
+}
+
+.title {
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 5px;
+}
+
+.card-description {
+  margin-top: 0;
+}
+
+.base-price {
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+.score-div {
+  margin-top: 10px;
+}
+
+.base-price-amt {
+  font-size: 33px;
+}
+
+.card-height {
+  min-height: 500px;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.team-stats-card {
+  margin: 10px;
+  background: black;
+  padding: 15px;
+  border-radius: 20px;
+}
+
+.pointCircle {
+  background: white;
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.pointSection {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.pointText {
+  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.point-div {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  flex-direction: column;
+}
+
+.team-name {
+  color: #fff;
+  font-weight: 700;
+  display: block;
+  font-size: 18px;
+  text-align: center;
+  padding-block: 10px;
+}
+
+.fund-remaining {
+  text-align: center;
+  border-bottom: 1px solid rgba(255 255 255 / 10%);
+  padding-bottom: 5px;
+  color: #fff;
+}
+
+.rm-name {
+  font-size: 14px;
+  display: block;
+  padding-top: 5px;
+}
+
+.rm-fund {
+  font-size: 18px;
+  display: block;
+  font-weight: 700;
+}
+
+.team-player {
+  border-top: 1px solid rgba(255 255 255 / 10%);
+}
+
+.team-player ul {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 !important;
+  border-bottom: 0;
+  background: transparent;
+  min-width: auto;
+  list-style-type: none;
+}
+.team-player ul li {
+  width: 50%;
+}
+
+.cardbd::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.cardbd::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.cardbd::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  border-radius: 10px;
+}
+
+.sold-player {
+  color: #fff;
+  border-bottom: 1px solid rgba(255 255 255 / 10%);
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.sold-player-name {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.bid-history-section {
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255 255 255 / 10%);
+  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.bid-team-name {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.bid-amt {
+  font-size: 25px;
+  font-weight: bold;
+}
+.bid-increase-by {
+  font-size: 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: green;
+}
