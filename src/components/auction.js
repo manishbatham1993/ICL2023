@@ -11,7 +11,6 @@ import Avatar from '@mui/material/Avatar'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import './auction.css'
 
-
 // reactstrap components
 import {
   Button,
@@ -40,7 +39,6 @@ const socket = io(BASE_URL)
 const DEFAULT_BID_INCREASE = 100
 const BASE_PRICE = 1000
 const TEAM_ID = '639d4a67ddfe568981cf801d'
-
 
 // AUCTION_SCHEMA : {
 //   state: (null/'ready'/'progress'/'completed'/)
@@ -129,28 +127,28 @@ const Auction = () => {
       : null
     const currentPlayer = playerObj
       ? {
-        name: playerObj.name,
-        rating: playerObj.rating,
-        skill: playerObj.skill,
-        image: playerObj.imageUrl,
-      }
+          name: playerObj.name,
+          rating: playerObj.rating,
+          skill: playerObj.skill,
+          image: playerObj.imageUrl,
+        }
       : null
     const bidAmount = auctionData.currentPlayer
       ? auctionData.currentPlayer.bidAmount
       : null
     const bidHistory = auctionData.currentPlayer
       ? auctionData.currentPlayer.bids //[0,1,2]
-        .map((bidId) => auctionData.bids[bidId]) //[{playerId, teamId, amount}]
-        .map((bid) => {
-          const player = players.find((player) => player._id === bid.playerId)
-          const team = teams.find((team) => team._id === bid.teamId)
-          return {
-            teamId: team._id,
-            teamName: team.name,
-            teamImage: team.imageUrl,
-            amount: bid.amount,
-          }
-        })
+          .map((bidId) => auctionData.bids[bidId]) //[{playerId, teamId, amount}]
+          .map((bid) => {
+            const player = players.find((player) => player._id === bid.playerId)
+            const team = teams.find((team) => team._id === bid.teamId)
+            return {
+              teamId: team._id,
+              teamName: team.name,
+              teamImage: team.imageUrl,
+              amount: bid.amount,
+            }
+          })
       : []
     bidHistory.reverse()
     const lastBid = bidHistory.length > 0 ? bidHistory[0] : null
@@ -327,7 +325,6 @@ const Auction = () => {
                         ? mappedData.currentPlayer.rating
                         : 'NA'}
                     </Button>
-
                   </div>
                   <div className="score-div">
                     <h3 className="text-center title">
@@ -376,17 +373,21 @@ const Auction = () => {
                           }`
                         : ''}
                     </p>
-
-                    <IncrementDecrement
-                      defaultVal={defaultNextBidAmount}
-                      defaultChange={DEFAULT_BID_INCREASE}
-                      maxVal={mappedData.remBudget}
-                      currentVal={nextBidAmount}
-                      onChange={setNextBidAmount}
-                    />
-
-                    <CircleTimer duration={mappedData.clock} bidHistory={[]} />
-
+                    <div className="auction-price-count">
+                      <IncrementDecrement
+                        defaultVal={defaultNextBidAmount}
+                        defaultChange={DEFAULT_BID_INCREASE}
+                        maxVal={mappedData.remBudget}
+                        currentVal={nextBidAmount}
+                        onChange={setNextBidAmount}
+                      />
+                    </div>
+                    <div className="clock-timer">
+                      <CircleTimer
+                        duration={mappedData.clock}
+                        bidHistory={[]}
+                      />
+                    </div>
                     <div className="pad10 mar10">
                       <Button
                         size="lg"

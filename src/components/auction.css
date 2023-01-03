@@ -178,3 +178,15 @@
   font-weight: bold;
   background-color: green;
 }
+.auction-price-count {
+  display: flex;
+  justify-content: center;
+}
+.auction-price-count div {
+  justify-content: center;
+}
+
+.clock-timer div {
+  justify-content: center;
+  display: flex;
+}
