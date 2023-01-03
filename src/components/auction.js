@@ -102,6 +102,7 @@ const Auction = () => {
   const canBid =
     TEAM_ID &&
     mappedData &&
+    mappedData.state === 'progress' &&
     mappedData.remBudget >= nextBidAmount &&
     (!mappedData.lastBid || mappedData.lastBid.teamId !== TEAM_ID)
   // const[timer,setTimer]=useState(mappedData.clock?mappedData.clock:"")
@@ -198,6 +199,7 @@ const Auction = () => {
     })
     setMappedData({
       clock,
+      state: auctionData.state,
       remBudget,
       currentPlayer,
       bidAmount,

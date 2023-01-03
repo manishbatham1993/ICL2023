@@ -65,10 +65,10 @@ const Accountdetail = (props) => {
   const teamOwnerIds = teamOwners.map((to) => to._id)
 
   const soldPlayers = accountPlayers.filter(
-    (player) => player.teamId && !teamOwnerIds.includes(player._id)
+    (player) => player.auctionStatus && player.auctionStatus === 'SOLD'
   )
   const unsoldPlayers = accountPlayers.filter(
-    (player) => !player.teamId && !teamOwnerIds.includes(player._id)
+    (player) => player.auctionStatus && player.auctionStatus === 'UNSOLD'
   )
 
   const topBuys = [...soldPlayers]
