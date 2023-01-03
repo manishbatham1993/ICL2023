@@ -85,9 +85,14 @@ const Auction = () => {
   const [teams, setTeams] = useState([])
   const [players, setPlayers] = useState([])
   const [nextBidAmount, setNextBidAmount] = useState()
+
+  console.log('auction-data', auctionData)
+  console.log('mapped-data', mappedData)
+
   const canBid =
     TEAM_ID &&
     mappedData &&
+    mappedData.state === 'progress' &&
     mappedData.remBudget >= nextBidAmount &&
     (!mappedData.lastBid || mappedData.lastBid.teamId !== TEAM_ID)
   // const[timer,setTimer]=useState(mappedData.clock?mappedData.clock:"")
@@ -184,6 +189,7 @@ const Auction = () => {
     })
     setMappedData({
       clock,
+      state: auctionData.state,
       remBudget,
       currentPlayer,
       bidAmount,
@@ -213,15 +219,16 @@ const Auction = () => {
     })
   }
 
-  const makeBid = () => {
+  const makeBid = (teamId) => {
     axios
       .post(BASE_URL + '/api/v1/auction/bid', {
         playerId: auctionData.currentPlayer.id,
-        teamId: TEAM_ID,
+        // teamId: TEAM_ID,
+        teamId: teamId,
         amount: nextBidAmount,
       })
       .then((res) => {
-        console.log('posting-bid', res)
+        console.log('bid-posted', res)
       })
   }
 
@@ -336,7 +343,7 @@ const Auction = () => {
                   <CircleTimer duration={mappedData.clock} bidHistory={[]} />
 
                   <div className="pad10 mar10">
-                    <Button
+                    {/* <Button
                       size="lg"
                       color="success"
                       className="animation-on-hover btn-block"
@@ -344,7 +351,18 @@ const Auction = () => {
                       disabled={!canBid}
                     >
                       BID
-                    </Button>
+                    </Button> */}
+                    {teams.map((team) => (
+                      <Button
+                        size="lg"
+                        color="success"
+                        className="animation-on-hover btn-block"
+                        onClick={makeBid.bind(null, team._id)}
+                        // disabled={!canBid}
+                      >
+                        {team.name}
+                      </Button>
+                    ))}
                   </div>
                 </CardBody>
               </Card>
@@ -433,7 +451,6 @@ const Auction = () => {
               </CardHeader>
               <CardBody>
                 <Row>
-                  {console.log(mappedData.teamStats)}
                   {Object.values(mappedData.teamStats).map((data) => (
                     <Col lg="6" md="12">
                       <CardTitle tag="h3" className="text-center">

@@ -13,7 +13,12 @@ import TeamOwnerForm from './TeamOwnerForm'
 import AccountForm from './AccountForm'
 import TeamForm from './TeamForm'
 import PlayerForm from './PlayerForm'
-import { startAuction, pauseAuction, resetAuction } from './utils'
+import {
+  initializeAuction,
+  startAuction,
+  pauseAuction,
+  resetAuction,
+} from './utils'
 
 // constants
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
@@ -236,7 +241,7 @@ export default function ManageEntities() {
               <>
                 <Button
                   variant="contained"
-                  onClick={startAuction.bind(null, account._id)}
+                  onClick={initializeAuction.bind(null, account._id)}
                 >
                   {account.name}-auction
                 </Button>
@@ -244,7 +249,11 @@ export default function ManageEntities() {
                 <br></br>
               </>
             ))}
-
+            <Button variant="contained" onClick={startAuction}>
+              start auction
+            </Button>
+            <br></br>
+            <br></br>
             <Button variant="contained" onClick={pauseAuction}>
               pause auction
             </Button>
