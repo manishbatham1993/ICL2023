@@ -4,7 +4,7 @@ import AuthContext from './store/auth-context'
 import './App.css'
 import ResponsiveAppBar from './components/navigationbar.js'
 import SignIn from './components/signin.js'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import EnhancedTable from './components/playerslist'
 import AccountList from './components/accountslist'
 import Footer from './components/footer'
@@ -18,6 +18,7 @@ import Squaddetail from './components/squaddetails'
 import AlertCongratulationSlide from './components/modal'
 import Allplayer from './components/Allplayer'
 import TeamDetail from './components/teamdetail'
+import { Route, Routes } from 'react-router'
 
 function App() {
   const authCtx = useContext(AuthContext)
@@ -46,46 +47,44 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
-        <ResponsiveAppBar />
-        <Routes>
-          <Route path="/allplayer" element={<Allplayer />} />
+      <ResponsiveAppBar />
+      <Routes>
+        <Route path="/" element={<Countdown />} />
+        <Route
+          path="Players"
+          element={authCtx.isLoggedIn ? <Allplayer /> : <SignIn />}
+        />
+        <Route path="Signin" element={<SignIn />} />
 
-          <Route path="/" element={<Countdown />} />
-          <Route path="/signin" element={<SignIn />} />
-          {/* <Route path="/signin1" element={<Signin1 />} /> */}
-
-
-          <Route
-            path="/playerslist"
-            element={authCtx.isLoggedIn ? <EnhancedTable /> : <SignIn />}
-          />
-          <Route
-            path="/accountlist"
-            element={authCtx.isLoggedIn ? <AccountList /> : <SignIn />}
-          />
-          <Route
-            path="/teamlist"
-            element={authCtx.isLoggedIn ? <TeamDetail /> : <SignIn />}
-          />
-          <Route
-            path="/overview"
-            element={authCtx.isLoggedIn ? <Overview /> : <SignIn />}
-          />
-          <Route
-            path="/accountdetail/:id"
-            element={authCtx.isLoggedIn ? <Accountdetail /> : <SignIn />}
-          />
-          <Route
-            path="/squaddetail/:id"
-            element={authCtx.isLoggedIn ? <Squaddetail /> : <SignIn />}
-          />
-          <Route path="/auction" element={auctionElement} />
-          <Route path="/manage" element={manageElement} />
-          <Route path="/modal" element={<AlertCongratulationSlide />} />
-        </Routes>
-        <Footer />
-      </Router>
+        <Route
+          path="/playerslist"
+          element={authCtx.isLoggedIn ? <EnhancedTable /> : <SignIn />}
+        />
+        <Route
+          path="/accountlist"
+          element={authCtx.isLoggedIn ? <AccountList /> : <SignIn />}
+        />
+        <Route
+          path="/Teams"
+          element={authCtx.isLoggedIn ? <TeamDetail /> : <SignIn />}
+        />
+        <Route
+          path="/overview"
+          element={authCtx.isLoggedIn ? <Overview /> : <SignIn />}
+        />
+        <Route
+          path="/accountdetail/:id"
+          element={authCtx.isLoggedIn ? <Accountdetail /> : <SignIn />}
+        />
+        <Route
+          path="/squaddetail/:id"
+          element={authCtx.isLoggedIn ? <Squaddetail /> : <SignIn />}
+        />
+        <Route path="/Auction" element={auctionElement} />
+        <Route path="/Manage" element={manageElement} />
+        <Route path="/modal" element={<AlertCongratulationSlide />} />
+      </Routes>
+      <Footer />
     </div>
   )
 }

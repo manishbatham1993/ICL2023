@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
 }
 
 .App-logo {
@@ -28,14 +32,12 @@
   color: #61dafb;
 }
 
-
-
 .minus,
 .plus {
   width: 30px;
   height: 30px;
   background: #fff;
-  border: 1px solid #DDD;
+  border: 1px solid #ddd;
   border-radius: 15px;
   cursor: pointer;
   display: flex;
@@ -44,7 +46,7 @@
   position: relative;
   font-size: 25px;
 }
-.wrapper{
-  height:100% !important;
+.wrapper {
+  height: 100% !important;
   margin: 10%;
 }

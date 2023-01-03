@@ -1,16 +1,28 @@
-import React from 'react'
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBCardBody,
-  MDBInput,
-  MDBIcon,
-} from 'mdb-react-ui-kit'
+import React, { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import AuthContext from '../store/auth-context'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import CssBaseline from '@mui/material/CssBaseline'
+import TextField from '@mui/material/TextField'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
+import Link from '@mui/material/Link'
+import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-function SignIn1() {
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+const theme = createTheme()
+
+export default function SignIn() {
+  const authCtx = useContext(AuthContext)
+  const navigate = useNavigate()
+
   const styles = {
     paperContainer: {
       // height: 1356,
@@ -19,50 +31,81 @@ function SignIn1() {
       height: '700px',
     },
   }
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const formBody = new FormData(event.currentTarget)
+    console.log({
+      email: formBody.get('email'),
+      password: formBody.get('password'),
+    })
+    const api = BASE_URL + '/api/v1/auth/login'
+    axios.post(api, formBody).then((res) => {
+      console.log('res', res)
+      if (res.data.status === 'ok') {
+        authCtx.login(res.data.token)
+        navigate('/', { replace: true })
+      }
+    })
+  }
+
   return (
     <div style={styles.paperContainer}>
-      <MDBContainer fluid>
-        <MDBRow className="d-flex justify-content-center align-items-center h-100">
-          <MDBCol col="12">
-            <MDBCard
-              className="bg-dark text-white my-5 mx-auto"
-              style={{ borderRadius: '1rem', maxWidth: '400px', float: 'left' }}
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+          {/* <CssBaseline /> */}
+          <Box
+            sx={{
+              // marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
             >
-              <MDBCardBody className="p-5 d-flex flex-column align-items-center mx-auto w-100">
-                <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
-                <p className="text-white-50 mb-5"></p>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
 
-                <MDBInput
-                  style={{ borderRadius: '25px', padding: '25px' }}
-                  wrapperClass="mb-4 mx-5 w-100"
-                  labelClass="text-white"
-                  label="Email address"
-                  id="formControlLg"
-                  type="email"
-                  size="lg"
-                  placeholder="Please Enter Your Email"
-                />
-                <MDBInput
-                  style={{ borderRadius: '25px', padding: '25px' }}
-                  wrapperClass="mb-4 mx-5 w-100"
-                  labelClass="text-white"
-                  label="Password"
-                  id="formControlLg"
-                  type="password"
-                  size="lg"
-                  placeholder="Please Enter Your Password"
-                />
-
-                <MDBBtn outline className="mx-2 px-5" color="white" size="lg">
-                  Login
-                </MDBBtn>
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </Button>
+            </Box>
+          </Box>
+        </Container>
+      </ThemeProvider>
     </div>
   )
 }
-
-export default SignIn1
