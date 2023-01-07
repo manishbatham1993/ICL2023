@@ -65,7 +65,7 @@ function SignIn1() {
   }
 
   return (
-    <Container>
+    <Container className="content mainContent">
       <Row>
         <Col md={6}>
           <Image src={logo}></Image>

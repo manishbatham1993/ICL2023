@@ -115,14 +115,10 @@ const Accountdetail = (props) => {
 
   return (
     account && (
-      <div
-        className="content mainContent container"
-      // style={{ minHeight: '200vh' }}
-      >
-        <div>
-          <h1>{account.name}</h1>
-        </div>
-
+      <div className="content mainContent container">
+        <h1 style={{ textTransform: 'uppercase', marginTop: '30px' }}>
+          {account.name}
+        </h1>
         <Tab.Container id="left-tabs-example" defaultActiveKey="tab1">
           <Row>
             <Nav
@@ -135,7 +131,7 @@ const Accountdetail = (props) => {
                 <Nav.Link eventKey="tab1">TEAMS</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="tab2">All players</Nav.Link>
+                <Nav.Link eventKey="tab2">PLAYERS</Nav.Link>
               </Nav.Item>
               {account.isAuctioned && (
                 <React.Fragment>
@@ -174,7 +170,11 @@ const Accountdetail = (props) => {
                             />
                           </div>
                           <CardBody>
-                            <CardTitle tag="h5" className="accountTitle">
+                            <CardTitle
+                              tag="h5"
+                              className="accountTitle"
+                              style={{ textTransform: 'uppercase' }}
+                            >
                               {team.name}
                             </CardTitle>
                             <CardSubtitle className="mb-2 text-muted" tag="h6">
@@ -183,19 +183,25 @@ const Accountdetail = (props) => {
                             <CardText className="playerCount">
                               {team.totalCount}
                             </CardText>
-                            <div
-                              className="playerSummary"
-                              style={{ alignContent: 'left' }}
-                            >
-                              <h4>
-                                Batsman <span>{team.batsmanCount}</span>
-                              </h4>
-                              <h4>
-                                Bowlers <span>{team.bowlerCount}</span>
-                              </h4>
-                              <h4>
-                                All Rounders <span>{team.allrounderCount}</span>
-                              </h4>
+                            <div className="pointSection">
+                              <div className="point-div">
+                                <div className="pointText">Batsman</div>
+                                <div className="pointCircle">
+                                  {team.batsmanCount}
+                                </div>
+                              </div>
+                              <div className="point-div">
+                                <div className="pointText">Bowler</div>
+                                <div className="pointCircle">
+                                  {team.bowlerCount}
+                                </div>
+                              </div>
+                              <div className="point-div">
+                                <div className="pointText">All Rounder</div>
+                                <div className="pointCircle">
+                                  {team.allrounderCount}
+                                </div>
+                              </div>
                             </div>
                             <a href={`/squaddetail/${team.id}`}>
                               <Button>Team Details</Button>
