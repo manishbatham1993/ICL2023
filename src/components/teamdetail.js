@@ -15,7 +15,6 @@ import Table from 'react-bootstrap/Table'
 import Tab from 'react-bootstrap/Tab'
 import './auction.css'
 
-
 // reactstrap components
 import {
   Button,
@@ -89,10 +88,8 @@ const TeamDetail = (props) => {
   return (
     teams &&
     players && (
-        <div
-        className="content mainContent container-fluid"
-    >
-        <h1>ICL Teams List</h1>
+      <div className="content mainContent container-fluid">
+        <h1 style={{ marginTop: '30px' }}>ICL TEAMS</h1>
         <div
           className="squadSection row"
           style={{
@@ -109,7 +106,7 @@ const TeamDetail = (props) => {
               }}
               className="card-user minheight"
             >
-              <div className="accountImage author">
+              <div className="accountImage author" style={{ marginTop: 0 }}>
                 <div className="block block-one" />
                 <div className="block block-two" />
                 <div className="block block-three" />
@@ -118,7 +115,7 @@ const TeamDetail = (props) => {
                   className="center"
                   alt={team.name}
                   src={`${BASE_URL}/${team.imageUrl}`}
-                  sx={{ width: 200, height: 200,fontSize:"5rem"}}
+                  sx={{ width: 200, height: 200, fontSize: '5rem' }}
                 />
               </div>
               <CardBody className="minheight">
@@ -133,31 +130,20 @@ const TeamDetail = (props) => {
                   Player Count
                 </CardSubtitle>
                 <CardText className="playerCount">{team.totalCount}</CardText>
-                {/* <div className="playerSummary" style={{ alignContent: 'left' }}>
-                  <h4>
-                    Batsman <span>{team.batsmanCount}</span>
-                  </h4>
-                  <h4>
-                    Bowlers <span>{team.bowlerCount}</span>
-                  </h4>
-                  <h4>
-                    All Rounders <span>{team.allrounderCount}</span>
-                  </h4>
-                </div> */}
-                 <div className="pointSection">
-                        <div className="point-div">
-                          <div className="pointText">Batsman</div>
-                          <div className="pointCircle">{team.batsmanCount}</div>
-                        </div>
-                        <div className="point-div">
-                          <div className="pointText">Bowler</div>
-                          <div className="pointCircle">{team.bowlerCount}</div>
-                        </div>
-                        <div className="point-div">
-                          <div className="pointText">All Rounder</div>
-                          <div className="pointCircle">{team.allrounderCount}</div>
-                        </div>
-                      </div>
+                <div className="pointSection">
+                  <div className="point-div">
+                    <div className="pointText">Batsman</div>
+                    <div className="pointCircle">{team.batsmanCount}</div>
+                  </div>
+                  <div className="point-div">
+                    <div className="pointText">Bowler</div>
+                    <div className="pointCircle">{team.bowlerCount}</div>
+                  </div>
+                  <div className="point-div">
+                    <div className="pointText">All Rounder</div>
+                    <div className="pointCircle">{team.allrounderCount}</div>
+                  </div>
+                </div>
                 <a href={`/squaddetail/${team.id}`}>
                   <Button>Team Details</Button>
                 </a>

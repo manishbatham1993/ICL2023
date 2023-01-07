@@ -286,7 +286,7 @@ const Auction = () => {
 
   return (
     mappedData && (
-      <div className="content container-fluid">
+      <div className="content mainContent container-fluid">
         {mappedData.currentPlayer && (
           <Row>
             <Col md="4" lg="4">
@@ -308,7 +308,7 @@ const Auction = () => {
                       className="center"
                       alt={mappedData.currentPlayer.name}
                       src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
-                      sx={{ width: 250, height: 250 }}
+                      sx={{ width: 250, height: 250, fontSize: '5rem' }}
                     />
 
                     <h4 className="title">CURRENT BID FOR</h4>

@@ -44,49 +44,53 @@ const Overview = () => {
   const accounts = entityCtx.accounts
 
   return (
-    <div
-      className="content mainContent container"
-    // style={{ minHeight: '100vh' }}
-    >
-      <div className="accounts-section">
+    <div className="content mainContent container">
+      <h1 style={{ marginTop: '30px' }}>ACCOUNTS</h1>
+      <Row>
         {accounts.map((account) => (
-          <Card
-          style={{
-            width: '21rem',
-            paddingTop: '20px',
-            paddingBottom: '20px',
-          }}
-          className="card-user minheight"
-        >
-          <div className="accountImage author">
-            <div className="block block-one" />
-            <div className="block block-two" />
-            <div className="block block-three" />
-            <div className="block block-four" />
-            <Avatar
-              className="center"
-              alt={account.name}
-              src={`${BASE_URL}/${account.imageUrl}`}
-              sx={{ width: 200, height: 200,fontSize:"5rem"}}
-            />
-          </div>
-            <CardBody>
-              <CardTitle tag="h5" className="accountTitle">
-                {account.name}
-              </CardTitle>
-              <CardSubtitle className="mb-2 text-muted" tag="h6">
-                Participants
-              </CardSubtitle>
-              <CardText className="playerCount">
-                {account.participantsCount}
-              </CardText>
-              <a href={`/accountdetail/${account._id}`}>
-                <Button>Account Details</Button>
-              </a>
-            </CardBody>
-          </Card>
+          <Col md="5" sm="6" lg="4">
+            <Card
+              style={{
+                // width: '18rem',
+                paddingTop: '20px',
+                paddingBottom: '20px',
+              }}
+              className="card-user"
+            >
+              <div className="author" style={{ marginTop: 0 }}>
+                <div className="block block-one" />
+                <div className="block block-two" />
+                <div className="block block-three" />
+                <div className="block block-four" />
+                <Avatar
+                  className="center"
+                  alt={account.name}
+                  src={`${BASE_URL}/${account.imageUrl}`}
+                  sx={{ width: 200, height: 200, fontSize: '5rem' }}
+                />
+              </div>
+              <CardBody style={{ minHeight: 0 }}>
+                <CardTitle
+                  tag="h5"
+                  className="accountTitle"
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  {account.name}
+                </CardTitle>
+                <CardSubtitle className="mb-2 text-muted" tag="h6">
+                  Participants
+                </CardSubtitle>
+                <CardText className="playerCount">
+                  {account.participantsCount}
+                </CardText>
+                <a href={`/accountdetail/${account._id}`}>
+                  <Button>Account Details</Button>
+                </a>
+              </CardBody>
+            </Card>
+          </Col>
         ))}
-      </div>
+      </Row>
     </div>
   )
 }

@@ -3,11 +3,12 @@
   font-weight: 700;
   padding: 10px;
   font-family: 'source sans pro', sans-serif;
+  text-transform: uppercase;
 }
 
-.playerCount{
+.playerCount {
   font-size: 25px;
-    font-weight: 700;
+  font-weight: 700;
 }
 
 .playerSummary h4 span {
@@ -19,15 +20,16 @@
   margin: 0;
 }
 
-.accountImage{
-  padding-top: 15px;
+.accountImage {
+  padding-top: 10px;
 }
 
-.mainContent{
+.mainContent {
   margin: 10px;
+  padding-bottom: 69px;
 }
 
-.accounts-section{
+.accounts-section {
   display: flex;
   justify-content: space-evenly;
 }
