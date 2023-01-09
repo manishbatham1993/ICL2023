@@ -92,7 +92,8 @@ const Allplayer = () => {
                 {player.name}
               </CardTitle>
               <CardSubtitle className="mb-2 text-muted" tag="h6">
-                {player.teamId && player.teamId.name}
+                {/* {player.teamId && player.teamId.name} */}
+                {player.accountId.name}
               </CardSubtitle>
               <div style={{ marginTop: '10px' }}>
                 <Button className="btn-primary">{player.skill}</Button>

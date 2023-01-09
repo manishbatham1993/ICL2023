@@ -47,3 +47,9 @@ button:focus {
 .minheight {
   min-height: auto !important;
 }
+
+.string_text {
+  font-size: 35px;
+  color: aliceblue;
+  text-transform: uppercase;
+}

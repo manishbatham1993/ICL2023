@@ -40,7 +40,7 @@ const socket = io(BASE_URL)
 
 // constants
 const BASE_PRICE = 1000
-
+const string_text = "Auction is not yet started.. Data Will be available soon";
 const Accountdetail = (props) => {
   const { id } = useParams()
   const entityCtx = useContext(EntityContext)
@@ -112,7 +112,7 @@ const Accountdetail = (props) => {
     })
   }
   console.log('teamstats', teamStats)
-
+  console.log(account, "testmanish");
   return (
     account && (
       <div className="content mainContent container">
@@ -127,25 +127,26 @@ const Accountdetail = (props) => {
               className=""
               style={{ flex: 'auto', marginBottom: '40px' }}
             >
+              {console.log(account, "testaccount")}
               <Nav.Item>
                 <Nav.Link eventKey="tab1">TEAMS</Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="tab2">PLAYERS</Nav.Link>
               </Nav.Item>
-              {account.isAuctioned && (
-                <React.Fragment>
-                  <Nav.Item>
-                    <Nav.Link eventKey="tab3">SOLD PLAYERS</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="tab4">UNSOLD</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="tab5">TOP BUYS</Nav.Link>
-                  </Nav.Item>
-                </React.Fragment>
-              )}
+              {/* {account.isAuctioned && ( */}
+              <React.Fragment>
+                <Nav.Item>
+                  <Nav.Link eventKey="tab3">SOLD PLAYERS</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="tab4">UNSOLD</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey="tab5">TOP BUYS</Nav.Link>
+                </Nav.Item>
+              </React.Fragment>
+              {/* )} */}
             </Nav>
           </Row>
           <Row>
@@ -153,7 +154,7 @@ const Accountdetail = (props) => {
               <Tab.Content>
                 <Tab.Pane eventKey="tab1">
                   <Row md="12">
-                    {teamStats.map((team) => (
+                    {teamStats == " " ? teamStats.map((team) => (
                       <Col md="4">
                         <Card
                           style={{
@@ -209,8 +210,10 @@ const Accountdetail = (props) => {
                           </CardBody>
                         </Card>
                       </Col>
-                    ))}
+                    )) : <div className="string_text">{string_text}</div>
+                    }
                   </Row>
+
                 </Tab.Pane>
                 {/* players to be auctioned */}
                 <Tab.Pane eventKey="tab2">
@@ -254,24 +257,25 @@ const Accountdetail = (props) => {
                 </Tab.Pane>
                 {/* sold players */}
                 <Tab.Pane eventKey="tab3">
-                  <Table
-                    striped
-                    hover
-                    variant="dark"
-                    style={{ border: '0.1rem solid #e3e3e3' }}
-                  >
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>Player Name</th>
-                        <th>Team</th>
-                        <th>Skill</th>
-                        <th>Rating</th>
-                        <th>Sold at</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {soldPlayers.map((player) => (
+                  {soldPlayers == " " ? soldPlayers.map((player) => (
+                    <Table
+                      striped
+                      hover
+                      variant="dark"
+                      style={{ border: '0.1rem solid #e3e3e3' }}
+                    >
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Player Name</th>
+                          <th>Team</th>
+                          <th>Skill</th>
+                          <th>Rating</th>
+                          <th>Sold at</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
                         <tr>
                           <td>
                             <Image
@@ -290,28 +294,31 @@ const Accountdetail = (props) => {
                             {player.lastBid ? player.lastBid.amount : null}
                           </td>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
+
+                      </tbody>
+                    </Table>
+                  )) : <div className="string_text">{string_text}</div>
+                  }
                 </Tab.Pane>
                 {/* unsold players */}
                 <Tab.Pane eventKey="tab4">
-                  <Table
-                    striped
-                    hover
-                    variant="dark"
-                    style={{ border: '0.1rem solid #e3e3e3' }}
-                  >
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>Player Name</th>
-                        <th>Skill</th>
-                        <th>Rating</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {unsoldPlayers.map((player) => (
+                  {unsoldPlayers == " " ? unsoldPlayers.map((player) => (
+                    <Table
+                      striped
+                      hover
+                      variant="dark"
+                      style={{ border: '0.1rem solid #e3e3e3' }}
+                    >
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Player Name</th>
+                          <th>Skill</th>
+                          <th>Rating</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
                         <tr>
                           <td>
                             <Image
@@ -326,30 +333,33 @@ const Accountdetail = (props) => {
                           <td>{player.skill}</td>
                           <td>{player.rating}</td>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
+                      </tbody>
+                    </Table>
+                  )) : <div className="string_text">{string_text}</div>
+                  }
+
                 </Tab.Pane>
                 {/*  Top buys */}
                 <Tab.Pane eventKey="tab5">
-                  <Table
-                    striped
-                    hover
-                    variant="dark"
-                    style={{ border: '0.1rem solid #e3e3e3' }}
-                  >
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>Player Name</th>
-                        <th>Team</th>
-                        <th>Skill</th>
-                        <th>Rating</th>
-                        <th>Sold At</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {topBuys.map((player) => (
+                  {topBuys == " " ? topBuys.map((player) => (
+                    <Table
+                      striped
+                      hover
+                      variant="dark"
+                      style={{ border: '0.1rem solid #e3e3e3' }}
+                    >
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Player Name</th>
+                          <th>Team</th>
+                          <th>Skill</th>
+                          <th>Rating</th>
+                          <th>Sold At</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
                         <tr>
                           <td>
                             <Image
@@ -366,9 +376,12 @@ const Accountdetail = (props) => {
                           <td>{player.rating}</td>
                           <td>{player.lastBid && player.lastBid.amount}</td>
                         </tr>
-                      ))}
-                    </tbody>
-                  </Table>
+                      </tbody>
+                    </Table>
+                  ))
+
+                    : <div className="string_text">{string_text}</div>
+                  }
                 </Tab.Pane>
               </Tab.Content>
             </Col>

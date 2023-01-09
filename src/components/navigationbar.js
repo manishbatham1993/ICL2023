@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 import Logo from './ICL_Logo.svg'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
-const pages = ['Overview', 'Players', 'Teams', 'Auction']
+const pages = ['Teams', 'Auction']
 const profile = ['Logout']
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
@@ -83,47 +83,64 @@ function ResponsiveAppBar() {
                 src={Logo}
               />
             </div>
-            {authCtx.isLoggedIn && (
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: 'block', md: 'none', flexDirection: 'column' },
-                }}
-              >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Link
-                      to={`/${page}`}
-                      style={{ color: 'black', textDecoration: 'none' }}
-                    >
-                      {page}
-                    </Link>
-                  </MenuItem>
-                ))}
-                {authCtx.role === 'admin' && (
-                  <MenuItem key="Manage" onClick={handleCloseNavMenu}>
-                    <Link
-                      to="/Manage"
-                      style={{ color: 'black', textDecoration: 'none' }}
-                    >
-                      Manage
-                    </Link>
-                  </MenuItem>
-                )}
-              </Menu>
-            )}
+
+
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none', flexDirection: 'column' },
+              }}
+            >
+              {authCtx.isLoggedIn && pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Link
+                    to={`/${page}`}
+                    style={{ color: 'black', textDecoration: 'none' }}
+                  >
+                    {page}
+                  </Link>
+                </MenuItem>
+              ))}
+              {authCtx.role === 'admin' && (
+                <MenuItem key="Manage" onClick={handleCloseNavMenu}>
+                  <Link
+                    to="/Manage"
+                    style={{ color: 'black', textDecoration: 'none' }}
+                  >
+                    Manage
+                  </Link>
+                </MenuItem>
+              )}
+
+              <MenuItem key="Players" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/players"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Players
+                </Link>
+              </MenuItem>
+              <MenuItem key="Overview" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/overview"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Overview
+                </Link>
+              </MenuItem>
+            </Menu>
           </Box>
           {/* This box is for desktop view */}
           <Box
@@ -160,6 +177,7 @@ function ResponsiveAppBar() {
                   </Button>
                 </Link>
               ))}
+
             {authCtx.role === 'admin' && (
               <Link
                 to="Manage"
@@ -174,6 +192,31 @@ function ResponsiveAppBar() {
                 </Button>
               </Link>
             )}
+            <Link
+              to="players"
+              style={{ color: 'white', textDecoration: 'none' }}
+            >
+              <Button
+                key="Players"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Players
+              </Button>
+            </Link>
+            <Link
+              to="overview"
+              style={{ color: 'white', textDecoration: 'none' }}
+            >
+              <Button
+                key="Overview"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Overview
+              </Button>
+            </Link>
+
           </Box>
           {authCtx.isLoggedIn ? (
             <Box sx={{ flexGrow: 0 }}>
