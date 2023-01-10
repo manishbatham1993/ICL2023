@@ -62,7 +62,7 @@ const PlayerForm = (props) => {
               selected={
                 props.isEdit &&
                 props.data.accountId &&
-                account._id === props.data.accountId
+                account._id === props.data.accountId._id
               }
             >
               {account.name}

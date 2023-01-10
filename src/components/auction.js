@@ -388,7 +388,7 @@ const Auction = () => {
                       {mappedData.lastBid
                         ? `YOU RAISING PREVIOUS BID BY ${
                             nextBidAmount -
-                            auctionData.currentPlayer.bidAmount +
+                            mappedData.bidAmount +
                             DEFAULT_BID_INCREASE
                           }`
                         : ''}

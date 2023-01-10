@@ -49,7 +49,9 @@ export default function ManageEntities() {
             teamOwnerName:
               team.teamOwner && team.teamOwner.playerId
                 ? team.teamOwner.playerId.name
-                : '',
+                : '-',
+            accountName:
+              team.accountId && team.accountId.name ? team.accountId.name : '-',
           }))
         )
       }
@@ -224,7 +226,7 @@ export default function ManageEntities() {
           onClickEdit={openEditModalHandler.bind(null, 'team')}
           onClickView={viewHandler.bind(null, 'team')}
           onClickDelete={deleteHandler.bind(null, 'team')}
-          additionalColums={['teamOwnerName']}
+          additionalColums={['accountName', 'teamOwnerName']}
         />
         <Card
           sx={{
