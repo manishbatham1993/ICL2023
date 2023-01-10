@@ -58,59 +58,82 @@ const Squaddetail = () => {
   return (
     <div className="content mainContent container">
       <h1 style={{ marginTop: '30px' }}>ICL SQUAD</h1>
-      <div
-        className="squadSection"
-        style={{
-          display: 'grid',
-          columnGap: '1rem',
-          gridTemplateColumns: '1fr 1fr 1fr',
-        }}
-      >
-        <Row>
-          {teamPlayers.map((player) => (
-            <Col>
-              <Card
-                style={{
-                  width: '21rem',
-                  paddingTop: '20px',
-                  paddingBottom: '20px',
-                }}
-                className="card-user"
-              >
-                <div className="accountImage author">
-                  <div className="block block-one" />
-                  <div className="block block-two" />
-                  <div className="block block-three" />
-                  <div className="block block-four" />
-                  <Image
-                    rounded="true"
-                    roundedCircle="true"
-                    alt="Sample"
-                    src={`${BASE_URL}/${player.imageUrl}`}
-                    style={{ width: '8rem', height: '8rem' }}
-                  />
-                </div>
-                <CardBody>
-                  <CardTitle
-                    tag="h5"
-                    className="playerName"
-                    style={{ fontWeight: 'bold' }}
-                  >
-                    {player.name}
-                  </CardTitle>
-                  <CardSubtitle className="mb-2 text-muted" tag="h6">
-                    {player.teamId && player.teamId.name}
-                  </CardSubtitle>
-                  <div style={{ marginTop: '10px' }}>
-                    <Button className="btn-primary">{player.skill}</Button>
-                    <Button className="btn-success">{player.rating}</Button>
+      <Row>
+        {teamPlayers.map((player) => (
+          <Col md="6" sm="12">
+            <Card
+              style={{
+                width: '21rem',
+                paddingTop: '20px',
+                paddingBottom: '20px',
+              }}
+              className="card-user"
+            >
+              <div className="accountImage author">
+                <div className="block block-one" />
+                <div className="block block-two" />
+                <div className="block block-three" />
+                <div className="block block-four" />
+                <Image
+                  rounded="true"
+                  roundedCircle="true"
+                  alt="Sample"
+                  src={`${BASE_URL}/${player.imageUrl}`}
+                  style={{ width: '8rem', height: '8rem' }}
+                />
+              </div>
+              <CardBody style={{ minHeight: 0 }}>
+                <CardTitle
+                  tag="h5"
+                  className="playerName"
+                  style={{ fontWeight: 'bold' }}
+                >
+                  {player.name}
+                </CardTitle>
+                <CardSubtitle
+                  className="mb-2 text-muted"
+                  tag="h6"
+                  style={{ fontSize: '15px' }}
+                >
+                  {player.teamId && player.teamId.name}
+                </CardSubtitle>
+                <div
+                  style={{
+                    marginTop: '10px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div>
+                    <p>SKILL</p>
+                    <Button
+                      className="btn-primary"
+                      style={{ textTransform: 'uppercase' }}
+                    >
+                      {player.skill}
+                    </Button>
                   </div>
-                </CardBody>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </div>
+                  <div>
+                    <p>RATING</p>
+                    <Button
+                      className="btn-success"
+                      style={{ textTransform: 'uppercase' }}
+                    >
+                      {player.rating}
+                    </Button>
+                  </div>
+                </div>
+                <Button
+                  className="btn-info"
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  LEVEL : {player.level}
+                </Button>
+              </CardBody>
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </div>
   )
 }

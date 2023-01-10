@@ -317,20 +317,32 @@ const Auction = () => {
                       {mappedData.currentPlayer.name}
                     </h3>
                   </div>
-                  <Button color="primary" className="animation-on-hover">
+                  <Button
+                    color="info"
+                    className="animation-on-hover"
+                    style={{ textTransform: 'uppercase' }}
+                  >
                     {mappedData.currentPlayer.level
-                      ? mappedData.currentPlayer.level
+                      ? 'LEVEL : ' + mappedData.currentPlayer.level
                       : 'NA'}
                   </Button>
                   <div>
-                    <Button color="primary" className="animation-on-hover">
+                    <Button
+                      color="primary"
+                      className="animation-on-hover"
+                      style={{ textTransform: 'uppercase' }}
+                    >
                       {mappedData.currentPlayer.skill
-                        ? mappedData.currentPlayer.skill
+                        ? 'SKILL : ' + mappedData.currentPlayer.skill
                         : 'NA'}
                     </Button>
-                    <Button color="success" className="animation-on-hover">
+                    <Button
+                      color="success"
+                      className="animation-on-hover"
+                      style={{ textTransform: 'uppercase' }}
+                    >
                       {mappedData.currentPlayer.rating
-                        ? mappedData.currentPlayer.rating
+                        ? 'RATING : ' + mappedData.currentPlayer.rating
                         : 'NA'}
                     </Button>
                   </div>
@@ -413,9 +425,10 @@ const Auction = () => {
             </Col>
             <Col md="4">
               <Card
+                className="card-height"
                 style={{
                   maxHeight: '500px',
-                  minHeight: '500px',
+                  minHeight: '546px',
                 }}
               >
                 <CardHeader>

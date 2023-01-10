@@ -62,46 +62,105 @@ const Allplayer = () => {
           justifyContent: 'space-evenly',
         }}
       >
-        {rows.sort((a, b) => a.name > b.name ? 1 : -1).map((player) => (
-          <Card
-            style={{
-              width: '21rem',
-              paddingTop: '20px',
-              paddingBottom: '20px',
-            }}
-            className="card-user minheight"
-          >
-            <div className="accountImage author">
-              <div className="block block-one" />
-              <div className="block block-two" />
-              <div className="block block-three" />
-              <div className="block block-four" />
-              <Avatar
-                className="center"
-                alt={player.name}
-                src={`${BASE_URL}/${player.imageUrl}`}
-                sx={{ width: 200, height: 200, fontSize: '5rem' }}
-              />
-            </div>
-            <CardBody className="minheight">
-              <CardTitle
-                tag="h5"
-                className="playerName"
-                style={{ fontWeight: 'bold' }}
-              >
-                {player.name}
-              </CardTitle>
-              <CardSubtitle className="mb-2 text-muted" tag="h6">
-                {/* {player.teamId && player.teamId.name} */}
-                {player.accountId.name}
-              </CardSubtitle>
-              <div style={{ marginTop: '10px' }}>
-                <Button className="btn-primary">{player.skill}</Button>
-                <Button className="btn-success">{player.rating}</Button>
+        {rows
+          .sort((a, b) => (a.name > b.name ? 1 : -1))
+          .map((player) => (
+            <Card
+              style={{
+                width: '21rem',
+                paddingTop: '20px',
+                paddingBottom: '20px',
+              }}
+              className="card-user minheight"
+            >
+              <div className="accountImage author">
+                <div className="block block-one" />
+                <div className="block block-two" />
+                <div className="block block-three" />
+                <div className="block block-four" />
+                {player.imageUrl ? (
+                  <Avatar
+                    className="center"
+                    alt={player.name}
+                    src={`${BASE_URL}/${player.imageUrl}`}
+                    sx={{ width: 200, height: 200, fontSize: '5rem' }}
+                  />
+                ) : (
+                  <Avatar
+                    className="center"
+                    alt={player.name}
+                    src={`${BASE_URL}/${player.imageUrl}`}
+                    sx={{ width: 200, height: 200, fontSize: '5rem' }}
+                  />
+                )}
               </div>
-            </CardBody>
-          </Card>
-        ))}
+              <CardBody className="minheight">
+                <CardTitle
+                  tag="h5"
+                  className="playerName"
+                  style={{ fontWeight: 'bold' }}
+                >
+                  {player.name}
+                </CardTitle>
+                <CardSubtitle
+                  className="mb-2 text-muted"
+                  tag="h6"
+                  style={{ fontSize: '15px' }}
+                >
+                  {/* {player.teamId && player.teamId.name} */}
+                  {player.accountId.name}
+                </CardSubtitle>
+
+                <div
+                  style={{
+                    marginTop: '10px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div>
+                    <p>SKILL</p>
+                    <Button
+                      className="btn-primary"
+                      style={{ textTransform: 'uppercase' }}
+                    >
+                      {player.skill}
+                    </Button>
+                  </div>
+                  <div>
+                    <p>RATING</p>
+                    <Button
+                      className="btn-success"
+                      style={{ textTransform: 'uppercase' }}
+                    >
+                      {player.rating}
+                    </Button>
+                  </div>
+                </div>
+                <Button
+                  className="btn-info"
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  LEVEL : {player.level}
+                </Button>
+
+                {/* <div style={{ marginTop: '10px' }}>
+                  <Button
+                    className="btn-primary"
+                    style={{ textTransform: 'uppercase' }}
+                  >
+                    {player.skill}
+                  </Button>
+                  <Button
+                    className="btn-success"
+                    style={{ textTransform: 'uppercase' }}
+                  >
+                    {player.rating}
+                  </Button>
+                </div> */}
+              </CardBody>
+            </Card>
+          ))}
       </div>
     </div>
   )

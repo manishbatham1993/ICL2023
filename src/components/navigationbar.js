@@ -84,7 +84,6 @@ function ResponsiveAppBar() {
               />
             </div>
 
-
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -103,16 +102,42 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none', flexDirection: 'column' },
               }}
             >
-              {authCtx.isLoggedIn && pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+              <MenuItem key="Overview" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/overview"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Overview
+                </Link>
+              </MenuItem>
+              <MenuItem key="Players" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/players"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Players
+                </Link>
+              </MenuItem>
+              {authCtx.isLoggedIn && (
+                <MenuItem key="Teams" onClick={handleCloseNavMenu}>
                   <Link
-                    to={`/${page}`}
+                    to="/Teams"
                     style={{ color: 'black', textDecoration: 'none' }}
                   >
-                    {page}
+                    Teams
                   </Link>
                 </MenuItem>
-              ))}
+              )}
+              {authCtx.isLoggedIn && (
+                <MenuItem key="Auction" onClick={handleCloseNavMenu}>
+                  <Link
+                    to="/Auction"
+                    style={{ color: 'black', textDecoration: 'none' }}
+                  >
+                    Auction
+                  </Link>
+                </MenuItem>
+              )}
               {authCtx.role === 'admin' && (
                 <MenuItem key="Manage" onClick={handleCloseNavMenu}>
                   <Link
@@ -123,23 +148,6 @@ function ResponsiveAppBar() {
                   </Link>
                 </MenuItem>
               )}
-
-              <MenuItem key="Players" onClick={handleCloseNavMenu}>
-                <Link
-                  to="/players"
-                  style={{ color: 'black', textDecoration: 'none' }}
-                >
-                  Players
-                </Link>
-              </MenuItem>
-              <MenuItem key="Overview" onClick={handleCloseNavMenu}>
-                <Link
-                  to="/overview"
-                  style={{ color: 'black', textDecoration: 'none' }}
-                >
-                  Overview
-                </Link>
-              </MenuItem>
             </Menu>
           </Box>
           {/* This box is for desktop view */}
@@ -161,23 +169,58 @@ function ResponsiveAppBar() {
               />
             </Link>
 
-            {authCtx.isLoggedIn &&
-              pages.map((page) => (
-                <Link
-                  key={page}
-                  to={`/${page}`}
-                  style={{ color: 'white', textDecoration: 'none' }}
+            <Link
+              to="overview"
+              style={{ color: 'white', textDecoration: 'none' }}
+            >
+              <Button
+                key="Overview"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Overview
+              </Button>
+            </Link>
+            <Link
+              to="players"
+              style={{ color: 'white', textDecoration: 'none' }}
+            >
+              <Button
+                key="Players"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Players
+              </Button>
+            </Link>
+            {authCtx.isLoggedIn && (
+              <Link
+                to="teams"
+                style={{ color: 'white', textDecoration: 'none' }}
+              >
+                <Button
+                  key="Teams"
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
                 >
-                  <Button
-                    key={page}
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                  >
-                    {page}
-                  </Button>
-                </Link>
-              ))}
-
+                  Teams
+                </Button>
+              </Link>
+            )}
+            {authCtx.isLoggedIn && (
+              <Link
+                to="auction"
+                style={{ color: 'white', textDecoration: 'none' }}
+              >
+                <Button
+                  key="Auction"
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  Auction
+                </Button>
+              </Link>
+            )}
             {authCtx.role === 'admin' && (
               <Link
                 to="Manage"
@@ -192,31 +235,6 @@ function ResponsiveAppBar() {
                 </Button>
               </Link>
             )}
-            <Link
-              to="players"
-              style={{ color: 'white', textDecoration: 'none' }}
-            >
-              <Button
-                key="Players"
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                Players
-              </Button>
-            </Link>
-            <Link
-              to="overview"
-              style={{ color: 'white', textDecoration: 'none' }}
-            >
-              <Button
-                key="Overview"
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                Overview
-              </Button>
-            </Link>
-
           </Box>
           {authCtx.isLoggedIn ? (
             <Box sx={{ flexGrow: 0 }}>
