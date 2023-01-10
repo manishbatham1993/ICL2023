@@ -6,7 +6,7 @@ function Footer() {
   return (
     <footer className="footer">
       <Container fluid>
-        <div>©Incedo Cricket League@2022 All right reserved</div>
+        <div>©Incedo Cricket League@2023 All Rights Reserved</div>
       </Container>
     </footer>
   )

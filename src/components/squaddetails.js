@@ -57,7 +57,9 @@ const Squaddetail = () => {
 
   return (
     <div className="content mainContent container">
-      <h1 style={{ marginTop: '30px' }}>ICL SQUAD</h1>
+      <h1 style={{ marginTop: '30px', textTransform: 'uppercase' }}>
+        ICL SQUAD
+      </h1>
       <Row>
         {teamPlayers.map((player) => (
           <Col md="6" sm="12">

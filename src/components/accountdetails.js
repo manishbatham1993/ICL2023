@@ -2,18 +2,12 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import io from 'socket.io-client'
-
 import EntityContext from '../store/entity-context'
-import IncrementDecrement from './IncrementDecrement'
-import CircleTimer from './CircleTimer'
-import Image from 'react-bootstrap/Image'
 import './overview.css'
-
 import Nav from 'react-bootstrap/Nav'
 import Table from 'react-bootstrap/Table'
 import Tab from 'react-bootstrap/Tab'
 import Avatar from '@mui/material/Avatar'
-
 // reactstrap components
 import {
   Button,
@@ -48,8 +42,6 @@ const Accountdetail = (props) => {
   const accounts = entityCtx.accounts
   const teams = entityCtx.teams
   const players = entityCtx.players
-
-  console.log('entities', entityCtx)
 
   const account = accounts.find((account) => account._id === id)
   const accountTeams = teams
@@ -112,15 +104,31 @@ const Accountdetail = (props) => {
       allrounderCount,
     })
   }
-  console.log('teamstats', teamStats)
-  console.log(account, 'testmanish')
+  const [order, setorder] = useState('ASC')
+  const [sortdata, setsortdata] = useState()
+  const sorting = (col) => {
+    if (order === 'ASC') {
+      const sorted = [...accountPlayers].sort((a, b) =>
+        a[col] > b[col] ? 1 : -1
+      )
+      setsortdata(sorted)
+      setorder('DSC')
+    }
+    if (order === 'DSC') {
+      const sorted = [...accountPlayers].sort((a, b) =>
+        a[col] < b[col] ? 1 : -1
+      )
+      setsortdata(sorted)
+      setorder('ASC')
+    }
+  }
   return (
     account && (
       <div className="content mainContent container">
         <h1 style={{ textTransform: 'uppercase', marginTop: '30px' }}>
           {account.name}
         </h1>
-        <Tab.Container id="left-tabs-example" defaultActiveKey="tab1">
+        <Tab.Container id="left-tabs-example" defaultActiveKey="tab2">
           <Row>
             <Nav
               fill
@@ -128,7 +136,6 @@ const Accountdetail = (props) => {
               className=""
               style={{ flex: 'auto', marginBottom: '40px' }}
             >
-              {console.log(account, 'testaccount')}
               <Nav.Item>
                 <Nav.Link eventKey="tab1">TEAMS</Nav.Link>
               </Nav.Item>
@@ -164,13 +171,6 @@ const Accountdetail = (props) => {
                             }}
                           >
                             <div className="accountImage">
-                              {/* <Image
-                              rounded="true"
-                              roundedCircle="true"
-                              alt="Sample"
-                              src={`${BASE_URL}/${team.imageUrl}`}
-                              style={{ width: '14rem', height: '14rem' }}
-                            /> */}
                               <Avatar
                                 className="center"
                                 alt={team.name}
@@ -242,24 +242,17 @@ const Accountdetail = (props) => {
                     <thead>
                       <tr>
                         <th></th>
-                        <th>Player Name</th>
+                        <th onClick={() => sorting('name')}>Player Name</th>
                         <th>Team</th>
-                        <th>Skill</th>
-                        <th>Rating</th>
+                        <th onClick={() => sorting('skill')}>Skill</th>
+                        <th onClick={() => sorting('rating')}>Rating</th>
                         <th>Base Price</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {accountPlayers.map((player) => (
-                        <tr>
+                      {(sortdata ? sortdata : accountPlayers).map((player) => (
+                        <tr key={player.name}>
                           <td>
-                            {/* <Image
-                              rounded="true"
-                              roundedCircle="true"
-                              alt="Sample"
-                              src={`${BASE_URL}/${player.imageUrl}`}
-                              style={{ width: '4rem', height: '4rem' }}
-                            /> */}
                             <Avatar
                               className="center"
                               alt={player.name}
@@ -283,129 +276,142 @@ const Accountdetail = (props) => {
                 </Tab.Pane>
                 {/* sold players */}
                 <Tab.Pane eventKey="tab3">
-                  {soldPlayers.length != 0 ? (
-                    soldPlayers.map((player) => (
-                      <Table
-                        striped
-                        hover
-                        variant="dark"
-                        style={{ border: '0.1rem solid #e3e3e3' }}
-                      >
-                        <thead>
-                          <tr>
-                            <th></th>
-                            <th>Player Name</th>
-                            <th>Team</th>
-                            <th>Skill</th>
-                            <th>Rating</th>
-                            <th>Sold at</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                  <Table
+                    striped
+                    hover
+                    variant="dark"
+                    style={{ border: '0.1rem solid #e3e3e3' }}
+                  >
+                    {soldPlayers.length != 0 ? (
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Player Name</th>
+                          <th>Team</th>
+                          <th>Skill</th>
+                          <th>Rating</th>
+                          <th>Sold at</th>
+                        </tr>
+                      </thead>
+                    ) : (
+                      ''
+                    )}
+                    <tbody>
+                      {soldPlayers.length != 0 ? (
+                        soldPlayers.map((player) => (
                           <tr>
                             <td>
-                              <Image
-                                rounded="true"
-                                roundedCircle="true"
-                                alt="Sample"
+                              <Avatar
+                                className="center"
+                                alt={player.name}
                                 src={`${BASE_URL}/${player.imageUrl}`}
-                                style={{ width: '4rem', height: '4rem' }}
+                                sx={{ width: 75, height: 75, fontSize: '1rem' }}
                               />
                             </td>
                             <td>{player.name}</td>
-                            <td>{player.teamId && player.teamId.name}</td>
+                            <td>
+                              {player.teamId && player.teamId.name
+                                ? player.teamId && player.teamId.name
+                                : '-'}
+                            </td>
                             <td>{player.skill}</td>
                             <td>{player.rating}</td>
                             <td>
                               {player.lastBid ? player.lastBid.amount : null}
                             </td>
                           </tr>
-                        </tbody>
-                      </Table>
-                    ))
-                  ) : (
-                    <div className="string_text">{string_text}</div>
-                  )}
+                        ))
+                      ) : (
+                        <div className="string_text">{string_text}</div>
+                      )}
+                    </tbody>
+                  </Table>
                 </Tab.Pane>
                 {/* unsold players */}
                 <Tab.Pane eventKey="tab4">
-                  {unsoldPlayers.length != 0 ? (
-                    unsoldPlayers.map((player) => (
-                      <Table
-                        striped
-                        hover
-                        variant="dark"
-                        style={{ border: '0.1rem solid #e3e3e3' }}
-                      >
-                        <thead>
-                          <tr>
-                            <th></th>
-                            <th>Player Name</th>
-                            <th>Skill</th>
-                            <th>Rating</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                  {/* {console.log(unsoldPlayers, "testmanish123")} */}
+
+                  <Table
+                    striped
+                    hover
+                    variant="dark"
+                    style={{ border: '0.1rem solid #e3e3e3' }}
+                  >
+                    {unsoldPlayers.length != 0 ? (
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Player Name</th>
+                          <th>Skill</th>
+                          <th>Rating</th>
+                        </tr>
+                      </thead>
+                    ) : (
+                      ''
+                    )}
+                    <tbody>
+                      {unsoldPlayers.length != 0 ? (
+                        unsoldPlayers.map((player) => (
                           <tr>
                             <td>
-                              {/* <Image
-                              rounded="true"
-                              roundedCircle="true"
-                              alt="Sample"
-                              src={`${BASE_URL}/${player.imageUrl}`}
-                              style={{ width: '4rem', height: '4rem' }}
-                            /> */}
                               <Avatar
                                 className="center"
                                 alt={player.name}
                                 src={`${BASE_URL}/${player.imageUrl}`}
-                                sx={{
-                                  width: 75,
-                                  height: 75,
-                                  fontSize: '5rem',
-                                }}
+                                sx={{ width: 75, height: 75, fontSize: '5rem' }}
                               />
                             </td>
                             <td>{player.name}</td>
                             <td>{player.skill}</td>
                             <td>{player.rating}</td>
                           </tr>
-                        </tbody>
-                      </Table>
-                    ))
-                  ) : (
-                    <div className="string_text">{string_text}</div>
-                  )}
+                        ))
+                      ) : (
+                        <div className="string_text">{string_text}</div>
+                      )}
+                    </tbody>
+                  </Table>
                 </Tab.Pane>
                 {/*  Top buys */}
                 <Tab.Pane eventKey="tab5">
-                  {topBuys.length != 0 ? (
-                    topBuys.map((player) => (
-                      <Table
-                        striped
-                        hover
-                        variant="dark"
-                        style={{ border: '0.1rem solid #e3e3e3' }}
-                      >
-                        <thead>
-                          <tr>
-                            <th></th>
-                            <th>Player Name</th>
-                            <th>Team</th>
-                            <th>Skill</th>
-                            <th>Rating</th>
-                            <th>Sold At</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                  <Table
+                    striped
+                    hover
+                    variant="dark"
+                    style={{ border: '0.1rem solid #e3e3e3' }}
+                  >
+                    {topBuys.length != 0 ? (
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Player Name</th>
+                          <th>Team</th>
+                          <th>Skill</th>
+
+                          <th>Rating</th>
+                          <th>Sold At</th>
+                        </tr>
+                      </thead>
+                    ) : (
+                      ''
+                    )}
+                    <tbody>
+                      {topBuys.length != 0 ? (
+                        topBuys.map((player) => (
                           <tr>
                             <td>
-                              <Image
+                              {/* <Image
                                 rounded="true"
                                 roundedCircle="true"
                                 alt="Sample"
                                 src={`${BASE_URL}/${player.imageUrl}`}
                                 style={{ width: '4rem', height: '4rem' }}
+                            /> */}
+                              <Avatar
+                                className="center"
+                                alt={player.name}
+                                src={`${BASE_URL}/${player.imageUrl}`}
+                                sx={{ width: 75, height: 75, fontSize: '1rem' }}
                               />
                             </td>
                             <td>{player.name}</td>
@@ -414,12 +420,12 @@ const Accountdetail = (props) => {
                             <td>{player.rating}</td>
                             <td>{player.lastBid && player.lastBid.amount}</td>
                           </tr>
-                        </tbody>
-                      </Table>
-                    ))
-                  ) : (
-                    <div className="string_text">{string_text}</div>
-                  )}
+                        ))
+                      ) : (
+                        <div className="string_text">{string_text}</div>
+                      )}
+                    </tbody>
+                  </Table>
                 </Tab.Pane>
               </Tab.Content>
             </Col>
