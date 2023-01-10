@@ -131,6 +131,7 @@ const Auction = () => {
           name: playerObj.name,
           rating: playerObj.rating,
           skill: playerObj.skill,
+          level: playerObj.level,
           image: playerObj.imageUrl,
         }
       : null
@@ -316,6 +317,11 @@ const Auction = () => {
                       {mappedData.currentPlayer.name}
                     </h3>
                   </div>
+                  <Button color="primary" className="animation-on-hover">
+                    {mappedData.currentPlayer.level
+                      ? mappedData.currentPlayer.level
+                      : 'NA'}
+                  </Button>
                   <div>
                     <Button color="primary" className="animation-on-hover">
                       {mappedData.currentPlayer.skill

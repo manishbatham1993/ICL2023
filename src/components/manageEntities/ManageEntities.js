@@ -161,6 +161,13 @@ export default function ManageEntities() {
             data={data}
             accounts={accounts}
             skills={['Batsman', 'Bowler', 'All Rounder']}
+            levels={[
+              'Basic',
+              'Inter School',
+              'Inter College',
+              'District Level',
+              'State Level',
+            ]}
             gender={['Male', 'Female']}
             onCloseOverlay={closeModalHandler}
             onRefresh={refreshPlayers}

@@ -12,6 +12,7 @@ const PlayerForm = (props) => {
   const accountIdRef = useRef()
   const emailRef = useRef()
   const skillRef = useRef()
+  const levelRef = useRef()
   const bioRef = useRef()
   const imageRef = useRef()
   const genderRef = useRef()
@@ -25,6 +26,7 @@ const PlayerForm = (props) => {
     playerFormData.append('accountId', accountIdRef.current.value)
     playerFormData.append('email', emailRef.current.value)
     playerFormData.append('skill', skillRef.current.value)
+    playerFormData.append('level', levelRef.current.value)
     playerFormData.append('bio', bioRef.current.value)
     playerFormData.append('image', imageRef.current.files[0])
     playerFormData.append('gender', genderRef.current.value)
@@ -127,6 +129,21 @@ const PlayerForm = (props) => {
               }
             >
               {skill}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="level">level</label>
+        <select id="level" ref={levelRef}>
+          {props.levels.map((level) => (
+            <option
+              value={level}
+              selected={
+                props.isEdit && props.data.level && level === props.data.level
+              }
+            >
+              {level}
             </option>
           ))}
         </select>
