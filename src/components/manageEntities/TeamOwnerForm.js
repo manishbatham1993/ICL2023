@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import axios from 'axios'
 
 import classes from './form.module.css'
@@ -13,6 +13,7 @@ const TeamOwnerForm = (props) => {
   const emailRef = useRef()
   const passwordRef = useRef()
   const budgetRef = useRef()
+  const [accountPlayers, setAccountPlayers] = useState([])
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
@@ -35,20 +36,38 @@ const TeamOwnerForm = (props) => {
     })
   }
 
+  const changeTeamHandler = () => {
+    const selectedTeamId = teamRef.current.value
+    if (!selectedTeamId) {
+      setAccountPlayers([])
+      return
+    }
+    const selectedTeam = props.teams.find((team) => team._id === selectedTeamId)
+    const selectedAccountId = selectedTeam.accountId._id
+    setAccountPlayers(
+      props.players.filter(
+        (player) => player.accountId._id === selectedAccountId
+      )
+    )
+  }
+
   return (
     <form className={classes.form} onSubmit={formSubmitHandler}>
       <div className={classes.input}>
         <label htmlFor="team">Team</label>
-        <select id="team" ref={teamRef}>
+        <select id="team" ref={teamRef} onChange={changeTeamHandler} required>
+          <option value="">-- Select --</option>
           {props.teams.map((team) => (
-            <option value={team._id}>{team.name}</option>
+            <option value={team._id}>
+              {team.name} ({team.accountName})
+            </option>
           ))}
         </select>
       </div>
       <div className={classes.input}>
         <label htmlFor="player">Player</label>
         <select id="player" ref={playerRef}>
-          {props.players.map((player) => (
+          {accountPlayers.map((player) => (
             <option value={player._id}>{player.name}</option>
           ))}
         </select>
