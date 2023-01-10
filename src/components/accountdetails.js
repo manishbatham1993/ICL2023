@@ -12,6 +12,8 @@ import './overview.css'
 import Nav from 'react-bootstrap/Nav'
 import Table from 'react-bootstrap/Table'
 import Tab from 'react-bootstrap/Tab'
+import Avatar from '@mui/material/Avatar'
+
 
 // reactstrap components
 import {
@@ -162,12 +164,18 @@ const Accountdetail = (props) => {
                           }}
                         >
                           <div className="accountImage">
-                            <Image
+                            {/* <Image
                               rounded="true"
                               roundedCircle="true"
                               alt="Sample"
                               src={`${BASE_URL}/${team.imageUrl}`}
                               style={{ width: '14rem', height: '14rem' }}
+                            /> */}
+                            <Avatar
+                              className="center"
+                              alt={team.name}
+                              src={`${BASE_URL}/${team.imageUrl}`}
+                              sx={{ width: 100, height: 100, fontSize: '5rem' }}
                             />
                           </div>
                           <CardBody>
@@ -237,12 +245,18 @@ const Accountdetail = (props) => {
                       {accountPlayers.map((player) => (
                         <tr>
                           <td>
-                            <Image
+                            {/* <Image
                               rounded="true"
                               roundedCircle="true"
                               alt="Sample"
                               src={`${BASE_URL}/${player.imageUrl}`}
                               style={{ width: '4rem', height: '4rem' }}
+                            /> */}
+                            <Avatar
+                              className="center"
+                              alt={player.name}
+                              src={`${BASE_URL}/${player.imageUrl}`}
+                              sx={{ width: "4rem", height: "4rem", fontSize: '1rem' }}
                             />
                           </td>
                           <td>{player.name}</td>
@@ -321,12 +335,18 @@ const Accountdetail = (props) => {
 
                         <tr>
                           <td>
-                            <Image
+                            {/* <Image
                               rounded="true"
                               roundedCircle="true"
                               alt="Sample"
                               src={`${BASE_URL}/${player.imageUrl}`}
                               style={{ width: '4rem', height: '4rem' }}
+                            /> */}
+                            <Avatar
+                              className="center"
+                              alt={player.name}
+                              src={`${BASE_URL}/${player.imageUrl}`}
+                              sx={{ width: 200, height: 200, fontSize: '5rem' }}
                             />
                           </td>
                           <td>{player.name}</td>

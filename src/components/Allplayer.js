@@ -62,7 +62,7 @@ const Allplayer = () => {
           justifyContent: 'space-evenly',
         }}
       >
-        {rows.map((player) => (
+        {rows.sort((a, b) => a.name > b.name ? 1 : -1).map((player) => (
           <Card
             style={{
               width: '21rem',
