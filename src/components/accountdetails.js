@@ -55,7 +55,7 @@ const Accountdetail = (props) => {
     .filter((team) => team.teamOwner)
     .map((team) => team.teamOwner.playerId)
 
-  const teamOwnerIds = teamOwners.map((to) => to._id)
+  // const teamOwnerIds = teamOwners.map((to) => (to._id ? to._id : ''))
 
   const soldPlayers = accountPlayers.filter(
     (player) => player.auctionStatus && player.auctionStatus === 'SOLD'

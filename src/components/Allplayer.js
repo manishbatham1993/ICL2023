@@ -71,20 +71,21 @@ const Allplayer = () => {
     <div className="content mainContent container-fluid">
       <h1 style={{ marginTop: '30px' }}>ICL PLAYERS</h1>
 
-      <div class="input-group">
-        <div class="form-outline">
-          <input
-            type="search"
-            id="form1"
-            class="form-control"
-            onChange={(e) => searchItems(e.target.value)}
-            placeholder="Search..."
-          />
-          <label class="form-label" for="form1">
-            Search
-          </label>
-        </div>
-      </div>
+      {/* <div class="input-group"> */}
+      {/* <div class="form-outline"> */}
+      <input
+        className="searchbox"
+        type="search"
+        // id="form1"
+        // class="form-control"
+        onChange={(e) => searchItems(e.target.value)}
+        placeholder="Search..."
+      />
+      {/* <label class="form-label" for="form1"> */}
+      {/* Search */}
+      {/* </label> */}
+      {/* </div> */}
+      {/* </div> */}
       {searchInput.length > 1 ? (
         filteredResults
           .sort((a, b) => (a.name > b.name ? 1 : -1))
