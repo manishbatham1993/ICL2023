@@ -13,7 +13,25 @@ const TeamOwnerForm = (props) => {
   const emailRef = useRef()
   const passwordRef = useRef()
   const budgetRef = useRef()
-  const [accountPlayers, setAccountPlayers] = useState([])
+
+  const [selectedTeam, setSelectedTeam] = useState(null)
+  const [selectedPlayer, setSelectedPlayer] = useState(null)
+
+  const getLinkedPlayers = (teamId) => {
+    if (!teamId) return []
+    const team = props.teams.find((team) => team._id === teamId)
+    const accountId = team.accountId._id
+    return props.players.filter((player) => player.accountId._id === accountId)
+  }
+
+  const getLinkedEmail = (playerId) => {
+    if (!playerId) return ''
+    const player = props.players.find((player) => player._id === playerId)
+    return player.email
+  }
+
+  const accountPlayers = getLinkedPlayers(selectedTeam)
+  const playerEmail = getLinkedEmail(selectedPlayer)
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
@@ -36,45 +54,58 @@ const TeamOwnerForm = (props) => {
     })
   }
 
-  const changeTeamHandler = () => {
-    const selectedTeamId = teamRef.current.value
-    if (!selectedTeamId) {
-      setAccountPlayers([])
-      return
-    }
-    const selectedTeam = props.teams.find((team) => team._id === selectedTeamId)
-    const selectedAccountId = selectedTeam.accountId._id
-    setAccountPlayers(
-      props.players.filter(
-        (player) => player.accountId._id === selectedAccountId
-      )
-    )
-  }
-
   return (
     <form className={classes.form} onSubmit={formSubmitHandler}>
       <div className={classes.input}>
-        <label htmlFor="team">Team</label>
-        <select id="team" ref={teamRef} onChange={changeTeamHandler} required>
-          <option value="">-- Select --</option>
+        <label htmlFor="team">Team *</label>
+        <select
+          id="team"
+          ref={teamRef}
+          onChange={(e) => {
+            setSelectedTeam(e.target.value)
+            setSelectedPlayer(null)
+          }}
+          required
+        >
+          <option value="" selected>
+            -- Select --
+          </option>
           {props.teams.map((team) => (
-            <option value={team._id}>
+            <option key={team._id} value={team._id}>
               {team.name} ({team.accountName})
             </option>
           ))}
         </select>
       </div>
       <div className={classes.input}>
-        <label htmlFor="player">Player</label>
-        <select id="player" ref={playerRef}>
+        <label htmlFor="player">Player *</label>
+        <select
+          id="player"
+          ref={playerRef}
+          onChange={(e) => {
+            setSelectedPlayer(e.target.value)
+          }}
+          required
+        >
+          <option value="" selected>
+            -- Select --
+          </option>
           {accountPlayers.map((player) => (
-            <option value={player._id}>{player.name}</option>
+            <option key={`${selectedTeam}-${player._id}`} value={player._id}>
+              {player.name}
+            </option>
           ))}
         </select>
       </div>
       <div className={classes.input}>
-        <label htmlFor="email">Email *</label>
-        <input id="email" type="text" ref={emailRef} required />
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="text"
+          ref={emailRef}
+          value={playerEmail}
+          disabled
+        />
       </div>
       <div className={classes.input}>
         <label htmlFor="password">Password *</label>

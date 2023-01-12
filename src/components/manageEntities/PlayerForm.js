@@ -108,7 +108,7 @@ const PlayerForm = (props) => {
         </select>
       </div>
       <div className={classes.input}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Email *</label>
         <input
           id="email"
           type="string"
@@ -116,6 +116,7 @@ const PlayerForm = (props) => {
           defaultValue={
             props.isEdit && props.data.email ? props.data.email : ''
           }
+          required
         />
       </div>
       <div className={classes.input}>

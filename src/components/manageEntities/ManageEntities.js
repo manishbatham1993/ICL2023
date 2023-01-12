@@ -52,6 +52,10 @@ export default function ManageEntities() {
                 : '-',
             accountName:
               team.accountId && team.accountId.name ? team.accountId.name : '-',
+            playerEmail:
+              team.teamOwner && team.teamOwner.playerId
+                ? team.teamOwner.playerId.email
+                : '-',
           }))
         )
       }
@@ -61,7 +65,13 @@ export default function ManageEntities() {
   const refreshPlayers = useCallback(() => {
     axios.get(BASE_URL + '/api/v1/player').then((res) => {
       if (res.data.status === 'ok') {
-        setPlayers(res.data.players)
+        setPlayers(
+          res.data.players.map((player) => ({
+            ...player,
+            accountName: player.accountId ? player.accountId.name : '-',
+            teamName: player.teamId ? player.teamId.name : '-',
+          }))
+        )
       }
     })
   }, [])
@@ -102,9 +112,11 @@ export default function ManageEntities() {
             break
           case 'player':
             refreshPlayers()
+            refreshTeams()
             break
           case 'team':
             refreshTeams()
+            refreshPlayers()
             break
           default:
             console.log('unknown entity name')
@@ -197,7 +209,7 @@ export default function ManageEntities() {
         <Entity
           rows={accounts}
           title={'Accounts'}
-          boxWidth={50}
+          boxWidth={40}
           onClickAdd={openModalHandler.bind(null, 'account')}
           onClickEdit={openEditModalHandler.bind(null, 'account')}
           onClickView={viewHandler.bind(null, 'account')}
@@ -206,11 +218,12 @@ export default function ManageEntities() {
         <Entity
           rows={players}
           title={'Players'}
-          boxWidth={50}
+          boxWidth={60}
           onClickAdd={openModalHandler.bind(null, 'player')}
           onClickEdit={openEditModalHandler.bind(null, 'player')}
           onClickView={viewHandler.bind(null, 'player')}
           onClickDelete={deleteHandler.bind(null, 'player')}
+          additionalColums={['accountName', 'teamName']}
         />
       </Box>
       <Box
@@ -226,7 +239,7 @@ export default function ManageEntities() {
           onClickEdit={openEditModalHandler.bind(null, 'team')}
           onClickView={viewHandler.bind(null, 'team')}
           onClickDelete={deleteHandler.bind(null, 'team')}
-          additionalColums={['accountName', 'teamOwnerName']}
+          additionalColums={['accountName', 'teamOwnerName', 'playerEmail']}
         />
         <Card
           sx={{

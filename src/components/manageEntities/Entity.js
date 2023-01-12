@@ -61,14 +61,21 @@ export default function Entity({
                     key={row.name}
                     onClick={() => onClickView(row._id)}
                   >
-                    <TableCell component="th" id={labelId} scope="row">
+                    <TableCell
+                      align="center"
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                    >
                       {row.name}
                     </TableCell>
-                    <TableCell align="right">{row._id}</TableCell>
+                    <TableCell align="center">{row._id}</TableCell>
+
                     {additionalColums.map((col) => (
-                      <TableCell align="right">{row[col]}</TableCell>
+                      <TableCell align="center">{row[col]}</TableCell>
                     ))}
-                    <TableCell align="right">
+
+                    <TableCell align="center">
                       <Tooltip title="Edit">
                         <IconButton
                           onClick={(e) => {
