@@ -10,6 +10,7 @@ import CircleTimer from './CircleTimer'
 import Avatar from '@mui/material/Avatar'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import './auction.css'
+import Showmodal from './popmodal'
 
 // reactstrap components
 import {
@@ -36,8 +37,8 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
 
 // constants
-const DEFAULT_BID_INCREASE = 100
-const BASE_PRICE = 1000
+const DEFAULT_BID_INCREASE = 500
+const BASE_PRICE = 5000
 const TEAM_ID = '639d4a67ddfe568981cf801d'
 
 // AUCTION_SCHEMA : {
@@ -99,14 +100,19 @@ const Auction = () => {
   const [teams, setTeams] = useState([])
   const [players, setPlayers] = useState([])
   const [nextBidAmount, setNextBidAmount] = useState()
+  const [auctionEnded, setAuctionEnded] = useState(false)
+  const [playerStatus, setPlayerStatus] = useState()
+  const [previousPlayerData, setPreviousPlayerData] = useState([])
+  function setChanged() {
+    // console.log('called from child')
+    setAuctionEnded(false)
+  }
   const canBid =
     TEAM_ID &&
     mappedData &&
     mappedData.state === 'progress' &&
     mappedData.remBudget >= nextBidAmount &&
     (!mappedData.lastBid || mappedData.lastBid.teamId !== TEAM_ID)
-  // const[timer,setTimer]=useState(mappedData.clock?mappedData.clock:"")
-  // //console.log('timer',timer)
 
   // set default amount for upcoming bid
   const defaultNextBidAmount =
@@ -135,6 +141,8 @@ const Auction = () => {
           image: playerObj.imageUrl,
         }
       : null
+
+    console.log('prev pl', previousPlayerData)
     const bidAmount = auctionData.currentPlayer
       ? auctionData.currentPlayer.bidAmount
       : null
@@ -209,6 +217,10 @@ const Auction = () => {
       teamStats,
       previousAuctions,
     })
+    setPreviousPlayerData((previousPlayerData) => [
+      ...previousPlayerData,
+      mappedData.currentPlayer,
+    ])
   }
 
   const updateData = () => {
@@ -244,17 +256,33 @@ const Auction = () => {
 
   // update data and initialize socket functions
   useEffect(() => {
-    //console.log('--------use-effect---------')
+    // console.log('--------use-effect---------')
     updateData()
     socket.on('connect', () => {
-      //console.log('socket connected')
+      // console.log('socket connected')
+      // console.log(mappedData.previousAuctions)
     })
     socket.on('disconnect', () => {
       //console.log('socket disconnected')
     })
     socket.on('event', (payload) => {
-      //console.log('event:', payload)
+      // console.log('event:', payload)
       setAuctionData(payload.data)
+      switch (payload.type) {
+        case 'ROUND_ENDED':
+
+        case 'AUCTION_COMPLETED':
+
+        case 'AUCTION_ENDED':
+          setAuctionEnded(true)
+          payload.data.soldPlayers.includes(payload.data.prevPlayer)
+            ? setPlayerStatus('sold')
+            : setPlayerStatus('unsold')
+
+          break
+      }
+      // console.log(payload.data)
+      // console.log(mappedData.previousAuctions)
     })
     return () => {
       socket.off('connect')
@@ -266,6 +294,7 @@ const Auction = () => {
   useEffect(() => {
     if (teams.length > 0 && players.length > 0 && auctionData) {
       updateMappedData()
+      // console.log(mappedData && mappedData.previousAuctions)
     }
   }, [teams, players, auctionData])
 
@@ -486,6 +515,34 @@ const Auction = () => {
           </Row>
         )}
         <Row>
+          {mappedData.previousAuctions.length != 0 &&
+            auctionEnded &&
+            playerStatus ===
+              'sold'(
+                <div style={{ color: 'white' }}>
+                  <Showmodal
+                    status="sold"
+                    showpop="true"
+                    data={
+                      mappedData.previousAuctions[
+                        mappedData.previousAuctions.length - 1
+                      ]
+                    }
+                    setauctionflag={setChanged}
+                  />
+                </div>
+              )}
+          {auctionEnded && playerStatus === 'unsold' && (
+            <div style={{ color: 'white' }}>
+              <Showmodal
+                status="unsold"
+                showpop="true"
+                data={previousPlayerData[previousPlayerData.length - 1]}
+                setauctionflag={setChanged}
+              />
+              {console.log('from unsold', previousPlayerData)}
+            </div>
+          )}
           <Col lg="4" md="12">
             <Card
               className="overflow card-height"

@@ -53,9 +53,9 @@ button:focus {
   color: aliceblue;
   text-transform: uppercase;
 }
-.searchbox{
+.searchbox {
   margin-bottom: 15px;
-    border-radius: 15px;
-    padding: 5px;
-
+  border-radius: 15px;
+  padding: 8px;
+  width: inherit;
 }
