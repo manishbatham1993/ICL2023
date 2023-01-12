@@ -19,6 +19,7 @@ import AlertCongratulationSlide from './components/modal'
 import Allplayer from './components/Allplayer'
 import TeamDetail from './components/teamdetail'
 import { Route, Routes } from 'react-router'
+import Modal from './UI/Modal'
 
 function App() {
   const authCtx = useContext(AuthContext)
@@ -54,10 +55,7 @@ function App() {
           path="Players"
           element={authCtx.isLoggedIn ? <Allplayer /> : <SignIn />}
         /> */}
-        <Route
-          path="players"
-          element={<Allplayer />}
-        />
+        <Route path="players" element={<Allplayer />} />
         <Route path="Signin" element={<SignIn />} />
 
         <Route
@@ -72,18 +70,9 @@ function App() {
           path="/Teams"
           element={authCtx.isLoggedIn ? <TeamDetail /> : <SignIn />}
         />
-        <Route
-          path="/overview"
-          element={<Overview />}
-        />
-        <Route
-          path="/accountdetail/:id"
-          element={<Accountdetail />}
-        />
-        <Route
-          path="/squaddetail/:id"
-          element={<Squaddetail />}
-        />
+        <Route path="/overview" element={<Overview />} />
+        <Route path="/accountdetail/:id" element={<Accountdetail />} />
+        <Route path="/squaddetail/:id" element={<Squaddetail />} />
         <Route path="/Auction" element={auctionElement} />
         <Route path="/Manage" element={manageElement} />
         <Route path="/modal" element={<AlertCongratulationSlide />} />

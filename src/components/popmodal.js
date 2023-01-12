@@ -92,7 +92,7 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
                   <div>
                     <Avatar
                       className="center"
-                      alt="Avinash"
+                      alt={data.name}
                       src={`${BASE_URL}/${data.image}`}
                       sx={{ width: 150, height: 150, fontSize: '5rem' }}
                     />
@@ -112,7 +112,7 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
               <>
                 <Row>
                   <Col>
-                    <div className="round-text">ROUND 1</div>
+                    <div className="round-text">ROUND {data}</div>
                     <div className="round-text">FINISHED</div>
                   </Col>
                 </Row>

@@ -32,6 +32,7 @@ import {
   Badge,
   Progress,
 } from 'reactstrap'
+import { ManageHistorySharp, PriceChange } from '@mui/icons-material'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
@@ -103,6 +104,9 @@ const Auction = () => {
   const [auctionEnded, setAuctionEnded] = useState(false)
   const [playerStatus, setPlayerStatus] = useState()
   const [previousPlayerData, setPreviousPlayerData] = useState([])
+  const [roundEnd, setRoundEnd] = useState(false)
+  const [roundEndcount, setRoundEndcount] = useState()
+
   function setChanged() {
     // console.log('called from child')
     setAuctionEnded(false)
@@ -119,7 +123,8 @@ const Auction = () => {
     auctionData && auctionData.currentPlayer
       ? auctionData.currentPlayer.bidAmount
       : null
-
+  //
+  // console.log('prevdata', auctionData.currentPlayer.id)
   useEffect(() => {
     setNextBidAmount(defaultNextBidAmount)
   }, [defaultNextBidAmount])
@@ -141,8 +146,6 @@ const Auction = () => {
           image: playerObj.imageUrl,
         }
       : null
-
-    console.log('prev pl', previousPlayerData)
     const bidAmount = auctionData.currentPlayer
       ? auctionData.currentPlayer.bidAmount
       : null
@@ -217,10 +220,6 @@ const Auction = () => {
       teamStats,
       previousAuctions,
     })
-    setPreviousPlayerData((previousPlayerData) => [
-      ...previousPlayerData,
-      mappedData.currentPlayer,
-    ])
   }
 
   const updateData = () => {
@@ -265,11 +264,85 @@ const Auction = () => {
     socket.on('disconnect', () => {
       //console.log('socket disconnected')
     })
+    // socket.on('event', (payload) => {
+    //   // console.log('event:', payload.type, payload.data)
+    //   // console.log(payload.data.playerLastBid)
+    //   // PLAYER AUCTION COMPLETED
+
+    //   setAuctionData(payload.data)
+    //   // switch (payload.state) {
+    //   //   // case 'AUCTION_INITIALIZED':
+    //   //   //   break;
+    //   //   // case 'TIMER_UPDATED':
+    //   //   //   break;
+    //   //   // case 'BID':
+    //   //   //   break;
+    //   //   case 'AUCTION_ENDED': // single player is sold/unsold
+    //   //     // alert('player sold')
+    //   //     break
+    //   //   case 'ROUND_ENDED':
+    //   //     break
+    //   //   case 'ACCOUNT_AUCTION_COMPLETE':
+    //   //     break
+    //   // }
+    //   if (payload.type === 'AUCTION_ENDED') {
+    //     //
+    //     // playerinformation:{
+    //     //   playername:name;
+    //     //   playerstatus:sold/unsold;
+    //     //   if(sold):
+    //     //   playerteam:teamname;
+    //     //   bid:Price;
+    //     //   playerimage:imageurl
+    //     // }
+    //     // autionend:{
+    //     //   round:Number;
+    //     //   if(auctionend_completely)
+    //     //   round:auctionended
+    //     // }
+    //     // console.log('test', payload)
+    //     // console.log(mappedData, 'mappdedata')
+    //   }
+    //   if ((payload.type = 'TIMER_UPDATED' && payload.data.clock === 0)) {
+    //     console.log(payload)
+    //     console.log(payload.data.currentPlayer)
+    //   }
+    // })
     socket.on('event', (payload) => {
-      // console.log('event:', payload)
+      console.log('event:', payload)
       setAuctionData(payload.data)
+
+      // setAuctionData(payload.data)
+
+      // const showPopup = () => {
+      const playerId = payload.data.prevPlayer
+      //   console.log(playerId, 'playerid')
+      const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+      if (playerId != 'undefined') {
+        axios.get(BASE_URL + `/api/v1/player/${playerId}`).then((res) => {
+          if (res.data.status === 'ok') {
+            const player = res.data.player
+            setPreviousPlayerData(player)
+
+            //         const teamdata = player.teamId
+            //           ? teams.find((team) => team._id === player.teamId)
+            //           : 'UNSOLD'
+            //         // console.log('prev-player', player)
+            //         // console.log(
+            //         //   'prev-team',
+
+            //         //   teams.find((team) => team._id === player.teamId)
+            //         // )
+            //         console.log(player, teamdata)
+          }
+        })
+      }
+      // }
+
       switch (payload.type) {
         case 'ROUND_ENDED':
+          setRoundEnd(true)
+          setRoundEndcount(payload.data.round)
 
         case 'AUCTION_COMPLETED':
 
@@ -517,32 +590,41 @@ const Auction = () => {
         <Row>
           {mappedData.previousAuctions.length != 0 &&
             auctionEnded &&
-            playerStatus ===
-              'sold'(
-                <div style={{ color: 'white' }}>
-                  <Showmodal
-                    status="sold"
-                    showpop="true"
-                    data={
-                      mappedData.previousAuctions[
-                        mappedData.previousAuctions.length - 1
-                      ]
-                    }
-                    setauctionflag={setChanged}
-                  />
-                </div>
-              )}
+            playerStatus === 'sold' && (
+              <div style={{ color: 'white' }}>
+                <Showmodal
+                  status="sold"
+                  showpop="true"
+                  data={
+                    mappedData.previousAuctions[
+                      mappedData.previousAuctions.length - 1
+                    ]
+                  }
+                  setauctionflag={setChanged}
+                />
+              </div>
+            )}
           {auctionEnded && playerStatus === 'unsold' && (
             <div style={{ color: 'white' }}>
               <Showmodal
                 status="unsold"
                 showpop="true"
-                data={previousPlayerData[previousPlayerData.length - 1]}
+                data={previousPlayerData}
                 setauctionflag={setChanged}
               />
-              {console.log('from unsold', previousPlayerData)}
             </div>
           )}
+          {roundEnd && roundEndcount && (
+            <div style={{ color: 'white' }}>
+              <Showmodal
+                status="round"
+                showpop="true"
+                data={roundEndcount}
+                setauctionflag={setChanged}
+              />
+            </div>
+          )}
+
           <Col lg="4" md="12">
             <Card
               className="overflow card-height"

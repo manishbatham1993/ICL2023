@@ -24,11 +24,11 @@ $(document).ready(function () {
   }
 
   $('#header').hover(function () {
-    $(this).toggleclassName('bluelight')
+    // $(this).toggleclassName('bluelight')
   })
 
   $('.clock').hover(function () {
-    $(this).toggleclassName('bluelight')
+    // $(this).toggleclassName('bluelight')
   })
 
   var setClock = function (newyear) {

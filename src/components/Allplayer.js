@@ -55,6 +55,7 @@ const Allplayer = () => {
   const [filteredResults, setFilteredResults] = useState([])
   const [searchInput, setSearchInput] = useState('')
   const searchItems = (searchValue) => {
+    // console.log(searchValue)
     setSearchInput(searchValue)
     if (searchInput !== '') {
       const filteredData = rows.filter((item) => {

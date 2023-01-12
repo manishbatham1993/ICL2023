@@ -32,6 +32,7 @@ const TeamForm = (props) => {
     })
   }
 
+  // console.log('test')
   return (
     <form className={classes.form} onSubmit={formSubmitHandler}>
       {props.isEdit && props.data && (

@@ -9,6 +9,7 @@ import CircleTimer from './CircleTimer'
 import Image from 'react-bootstrap/Image'
 import './overview.css'
 import './squaddetails.css'
+import Avatar from '@mui/material/Avatar'
 
 import Nav from 'react-bootstrap/Nav'
 import Table from 'react-bootstrap/Table'
@@ -76,12 +77,11 @@ const Squaddetail = () => {
                 <div className="block block-two" />
                 <div className="block block-three" />
                 <div className="block block-four" />
-                <Image
-                  rounded="true"
-                  roundedCircle="true"
-                  alt="Sample"
+                <Avatar
+                  className="center"
+                  alt={player.name}
                   src={`${BASE_URL}/${player.imageUrl}`}
-                  style={{ width: '8rem', height: '8rem' }}
+                  sx={{ width: 200, height: 200, fontSize: '5rem' }}
                 />
               </div>
               <CardBody style={{ minHeight: 0 }}>
