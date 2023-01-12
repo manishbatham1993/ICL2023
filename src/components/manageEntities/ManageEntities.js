@@ -17,7 +17,8 @@ import {
   initializeAuction,
   startAuction,
   pauseAuction,
-  resetAuction,
+  endAuction,
+  clearAuction,
 } from './utils'
 
 // constants
@@ -272,17 +273,22 @@ export default function ManageEntities() {
               </>
             ))}
             <Button variant="contained" onClick={startAuction}>
-              start auction
+              start timer
             </Button>
             <br></br>
             <br></br>
             <Button variant="contained" onClick={pauseAuction}>
-              pause/resume auction
+              pause / resume
             </Button>
             <br></br>
             <br></br>
-            <Button variant="contained" onClick={resetAuction}>
-              reset auction
+            <Button variant="contained" onClick={endAuction}>
+              end auction
+            </Button>
+            <br></br>
+            <br></br>
+            <Button variant="contained" onClick={clearAuction}>
+              clear auction
             </Button>
           </CardContent>
         </Card>

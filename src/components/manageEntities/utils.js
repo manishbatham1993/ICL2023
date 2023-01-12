@@ -31,17 +31,51 @@ const startAuction = () => {
 }
 
 const pauseAuction = () => {
-  axios.post(BASE_URL + '/api/v1/auction/pause').then((res) => {
-    console.log('auction-paused')
-    console.log('res: ', res)
-  })
+  axios
+    .post(BASE_URL + '/api/v1/auction/pause')
+    .then((res) => {
+      console.log('auction-pause/resume')
+      console.log('res: ', res)
+    })
+    .catch((err) => {
+      if (err.response && err.response.data && err.response.data.msg) {
+        alert(err.response.data.msg)
+      }
+    })
 }
 
-const resetAuction = () => {
-  axios.post(BASE_URL + '/api/v1/auction/reset').then((res) => {
-    console.log('auction-reset')
-    console.log('res:', res)
-  })
+const endAuction = () => {
+  axios
+    .post(BASE_URL + '/api/v1/auction/end')
+    .then((res) => {
+      console.log('auction-ended')
+      console.log('res:', res)
+    })
+    .catch((err) => {
+      if (err.response && err.response.data && err.response.data.msg) {
+        alert(err.response.data.msg)
+      }
+    })
 }
 
-export { initializeAuction, startAuction, pauseAuction, resetAuction }
+const clearAuction = () => {
+  axios
+    .post(BASE_URL + '/api/v1/auction/clear')
+    .then((res) => {
+      console.log('auction-cleared')
+      console.log('res:', res)
+    })
+    .catch((err) => {
+      if (err.response && err.response.data && err.response.data.msg) {
+        alert(err.response.data.msg)
+      }
+    })
+}
+
+export {
+  initializeAuction,
+  startAuction,
+  pauseAuction,
+  endAuction,
+  clearAuction,
+}
