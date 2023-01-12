@@ -109,6 +109,7 @@ const Auction = () => {
 
   function setChanged() {
     // console.log('called from child')
+    setRoundEnd(false)
     setAuctionEnded(false)
   }
   const canBid =
@@ -344,9 +345,9 @@ const Auction = () => {
           setRoundEnd(true)
           setRoundEndcount(payload.data.round)
 
-        case 'AUCTION_COMPLETED':
+        case 'ACCOUNT_AUCTION_COMPLETED':
 
-        case 'AUCTION_ENDED':
+        case 'PLAYER_AUCTION_ENDED':
           setAuctionEnded(true)
           payload.data.soldPlayers.includes(payload.data.prevPlayer)
             ? setPlayerStatus('sold')

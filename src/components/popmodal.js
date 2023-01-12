@@ -8,6 +8,7 @@ import Icon from './iconstamp'
 import { Col, Row } from 'react-bootstrap'
 
 function Showmodal({ status, showpop = false, data, setauctionflag }) {
+  console.log(data)
   const BASE_URL = process.env.REACT_APP_BASE_URL || ''
   const [show, setShow] = useState({ showpop })
   // console.log(setauctionflag)
@@ -56,7 +57,7 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
                   <div>
                     <Avatar
                       className="center"
-                      alt="Avinash"
+                      alt={data.playerName}
                       src={`${BASE_URL}/${data.playerImage}`}
                       sx={{ width: 150, height: 150, fontSize: '5rem' }}
                     />
@@ -71,7 +72,7 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
                   <div>
                     <Avatar
                       className="center"
-                      alt="Avinash"
+                      alt={data.teamName}
                       src={`${BASE_URL}/${data.teamImage}`}
                       sx={{ width: 150, height: 150, fontSize: '5rem' }}
                     />
@@ -93,7 +94,7 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
                     <Avatar
                       className="center"
                       alt={data.name}
-                      src={`${BASE_URL}/${data.image}`}
+                      src={`${BASE_URL}/${data.imageUrl}`}
                       sx={{ width: 150, height: 150, fontSize: '5rem' }}
                     />
                     <p className="name" style={{ color: 'white' }}>
