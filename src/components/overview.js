@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import io from 'socket.io-client'
-
+import '../index.css'
 import EntityContext from '../store/entity-context'
 import CircleTimer from './CircleTimer'
 import Image from 'react-bootstrap/Image'
@@ -36,7 +36,6 @@ import {
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
-
 const Overview = () => {
   const entityCtx = useContext(EntityContext)
   const teams = entityCtx.teams
@@ -62,14 +61,26 @@ const Overview = () => {
                 <div className="block block-two" />
                 <div className="block block-three" />
                 <div className="block block-four" />
-                {/* {console.log(
-                  `localhost:3000/static/account_logo/${account.name}.png`
-                )} */}
-                <Avatar
+                <div hidden>
+                  {account.name == 'Support Staff(HR/TA/IT/Facilities)'
+                    ? (account.name = 'Support Staff(HRTAITFacilities)')
+                    : (account.name = account.name)}
+                </div>
+                <img
                   className="center"
-                  alt={account.name}
-                  src={`${BASE_URL}/static/account_logo/${account.name}.png`}
-                  sx={{ width: 200, height: 200, fontSize: '5rem' }}
+                  // alt={account.name}
+                  style={{
+                    borderRadius: '50%',
+                    width: '200px',
+                    height: '200px',
+                  }}
+                  src={`static/account_logo/${account.name}.png`}
+                  // sx={{
+                  //   width: 200,
+                  //   height: 200,
+                  //   fontSize: '1rem',
+                  //   objectFit: 'contain',
+                  // }}
                 />
               </div>
               <CardBody style={{ minHeight: 0 }}>
