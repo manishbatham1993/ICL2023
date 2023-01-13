@@ -45,6 +45,7 @@ const pauseAuction = () => {
 }
 
 const endAuction = () => {
+  alert('Are you sure you want to End current Auction ? \nClick OK to CONFIRM')
   axios
     .post(BASE_URL + '/api/v1/auction/end')
     .then((res) => {
@@ -59,6 +60,7 @@ const endAuction = () => {
 }
 
 const clearAuction = () => {
+  alert('Are you sure you want to clear the Auction ? \nClick OK to CONFIRM')
   axios
     .post(BASE_URL + '/api/v1/auction/clear')
     .then((res) => {
