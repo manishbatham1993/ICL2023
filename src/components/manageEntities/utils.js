@@ -45,33 +45,41 @@ const pauseAuction = () => {
 }
 
 const endAuction = () => {
-  alert('Are you sure you want to End current Auction ? \nClick OK to CONFIRM')
-  axios
-    .post(BASE_URL + '/api/v1/auction/end')
-    .then((res) => {
-      console.log('auction-ended')
-      console.log('res:', res)
-    })
-    .catch((err) => {
-      if (err.response && err.response.data && err.response.data.msg) {
-        alert(err.response.data.msg)
-      }
-    })
+  const action = window.confirm(
+    'Are you sure you want to End current Auction ? \nClick OK to CONFIRM'
+  )
+  if (action) {
+    axios
+      .post(BASE_URL + '/api/v1/auction/end')
+      .then((res) => {
+        console.log('auction-ended')
+        console.log('res:', res)
+      })
+      .catch((err) => {
+        if (err.response && err.response.data && err.response.data.msg) {
+          alert(err.response.data.msg)
+        }
+      })
+  }
 }
 
 const clearAuction = () => {
-  alert('Are you sure you want to clear the Auction ? \nClick OK to CONFIRM')
-  axios
-    .post(BASE_URL + '/api/v1/auction/clear')
-    .then((res) => {
-      console.log('auction-cleared')
-      console.log('res:', res)
-    })
-    .catch((err) => {
-      if (err.response && err.response.data && err.response.data.msg) {
-        alert(err.response.data.msg)
-      }
-    })
+  const action = window.confirm(
+    'Are you sure you want to clear the Auction ? \nClick OK to CONFIRM'
+  )
+  if (action) {
+    axios
+      .post(BASE_URL + '/api/v1/auction/clear')
+      .then((res) => {
+        console.log('auction-cleared')
+        console.log('res:', res)
+      })
+      .catch((err) => {
+        if (err.response && err.response.data && err.response.data.msg) {
+          alert(err.response.data.msg)
+        }
+      })
+  }
 }
 
 export {
