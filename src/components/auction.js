@@ -11,6 +11,13 @@ import Avatar from '@mui/material/Avatar'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import './auction.css'
 import Showmodal from './popmodal'
+import IconButton from '@mui/material/IconButton'
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar'
+import Toast from 'react-bootstrap/Toast'
+import CloseIcon from '@mui/icons-material/Close'
+import MuiAlert, { AlertProps } from '@mui/material/Alert'
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm'
 
 // reactstrap components
 import {
@@ -106,6 +113,9 @@ const Auction = () => {
   const [previousPlayerData, setPreviousPlayerData] = useState([])
   const [roundEnd, setRoundEnd] = useState(false)
   const [roundEndcount, setRoundEndcount] = useState()
+  const [openSnackbar, setOpenSnackbar] = useState(true)
+  const [vertical, setVertical] = useState('top')
+  const [horizontal, setHorizontal] = useState('center')
 
   function setChanged() {
     // console.log('called from child')
@@ -342,6 +352,7 @@ const Auction = () => {
 
       switch (payload.type) {
         case 'ROUND_ENDED':
+          setOpenSnackbar(true)
           setRoundEnd(true)
           setRoundEndcount(payload.data.round)
 
@@ -387,6 +398,35 @@ const Auction = () => {
       return 10
     }
   }
+
+  const handleClose = (event) => {
+    // if (reason === 'clickaway') {
+    //   return
+    // }
+    setOpenSnackbar(false)
+  }
+  const action = (
+    <React.Fragment>
+      {/* <Button color="secondary" size="small" onClick={handleClose}>
+        UNDO
+      </Button> */}
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  )
+
+  // const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  //   props,
+  //   ref,
+  // ) {
+  //   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  // });
 
   return (
     mappedData && (
@@ -616,14 +656,31 @@ const Auction = () => {
             </div>
           )}
           {roundEnd && roundEndcount && (
-            <div style={{ color: 'white' }}>
-              <Showmodal
-                status="round"
-                showpop="true"
-                data={roundEndcount}
-                setauctionflag={setChanged}
-              />
-            </div>
+            <Snackbar
+              anchorOrigin={{ vertical, horizontal }}
+              open={openSnackbar}
+              onClose={handleClose}
+              message="ROUND ENDED"
+              action={action}
+              sx={{ width: '100%' }}
+            >
+              <div
+                style={{
+                  color: 'white',
+                  fontSize: '45px',
+                  borderRadius: '20px',
+                  fontWeight: '600',
+                  width: '100%',
+                  marginLeft: '20px',
+                  marginRight: '60px',
+                  background: 'red',
+                }}
+              >
+                <AccessAlarmIcon fontSize="65px" /> ROUND{' '}
+                <span style={{ fontSize: '65px' }}>{roundEndcount}</span> ENDED
+                .. BE HURRY <ThumbUpIcon fontSize="65px" />
+              </div>
+            </Snackbar>
           )}
 
           <Col lg="4" md="12">
