@@ -21,7 +21,13 @@ const TeamOwnerForm = (props) => {
     if (!teamId) return []
     const team = props.teams.find((team) => team._id === teamId)
     const accountId = team.accountId._id
-    return props.players.filter((player) => player.accountId._id === accountId)
+    return props.players
+      .filter((player) => player.accountId._id === accountId)
+      .sort((a, b) => {
+        if (a.name < b.name) return -1
+        else if (a.name > b.name) return 1
+        else return 0
+      })
   }
 
   const getLinkedEmail = (playerId) => {
@@ -70,11 +76,13 @@ const TeamOwnerForm = (props) => {
           <option value="" selected>
             -- Select --
           </option>
-          {props.teams.map((team) => (
-            <option key={team._id} value={team._id}>
-              {team.name} ({team.accountName})
-            </option>
-          ))}
+          {props.teams
+            .sort((a, b) => (a.accountName < b.accountName ? -1 : 1))
+            .map((team) => (
+              <option key={team._id} value={team._id}>
+                {team.name} ({team.accountName})
+              </option>
+            ))}
         </select>
       </div>
       <div className={classes.input}>
