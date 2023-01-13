@@ -74,7 +74,7 @@ const Overview = () => {
                     width: '200px',
                     height: '200px',
                   }}
-                  src={`static/account_logo/${account.name}.png`}
+                  src={`${BASE_URL}/static/account_logo/${account.name}.png`}
                   // sx={{
                   //   width: 200,
                   //   height: 200,
