@@ -127,6 +127,7 @@ const Auction = () => {
     mappedData &&
     mappedData.state === 'progress' &&
     mappedData.remBudget >= nextBidAmount &&
+    mappedData.teamStats[TEAM_ID].total < 10 &&
     (!mappedData.lastBid || mappedData.lastBid.teamId !== TEAM_ID)
 
   // set default amount for upcoming bid

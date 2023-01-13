@@ -72,7 +72,13 @@ const Allplayer = () => {
     <div className="content mainContent container-fluid">
       <Row style={{ marginTop: '30px' }}>
         <Col sm="12" lg="10" md="10">
-          <h1>ICL PLAYERS</h1>
+          <h1
+            style={{
+              marginLeft: '20%',
+            }}
+          >
+            ICL PLAYERS
+          </h1>
         </Col>
         <Col sm="12" lg="2" md="2">
           <input

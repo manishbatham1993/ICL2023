@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import io from 'socket.io-client'
-
 import EntityContext from '../store/entity-context'
 import IncrementDecrement from './IncrementDecrement'
 import CircleTimer from './CircleTimer'
@@ -10,7 +9,6 @@ import Image from 'react-bootstrap/Image'
 import './overview.css'
 import './squaddetails.css'
 import Avatar from '@mui/material/Avatar'
-
 import Nav from 'react-bootstrap/Nav'
 import Table from 'react-bootstrap/Table'
 import Tab from 'react-bootstrap/Tab'
@@ -55,11 +53,13 @@ const Squaddetail = () => {
   const teamPlayers = players.filter(
     (player) => player.teamId && player.teamId._id === id
   )
-
+  console.log(teams)
   return (
     <div className="content mainContent container">
       <h1 style={{ marginTop: '30px', textTransform: 'uppercase' }}>
-        ICL SQUAD
+        {teamPlayers[0] && teamPlayers[0].teamId.name
+          ? teamPlayers[0].teamId.name + ' SQUAD'
+          : 'ICL SQUAD'}
       </h1>
       <Row>
         {teamPlayers.map((player) => (
@@ -139,5 +139,4 @@ const Squaddetail = () => {
     </div>
   )
 }
-
 export default Squaddetail

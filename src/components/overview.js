@@ -62,10 +62,13 @@ const Overview = () => {
                 <div className="block block-two" />
                 <div className="block block-three" />
                 <div className="block block-four" />
+                {/* {console.log(
+                  `localhost:3000/static/account_logo/${account.name}.png`
+                )} */}
                 <Avatar
                   className="center"
                   alt={account.name}
-                  src={`${BASE_URL}/${account.imageUrl}`}
+                  src={`${BASE_URL}/static/account_logo/${account.name}.png`}
                   sx={{ width: 200, height: 200, fontSize: '5rem' }}
                 />
               </div>
