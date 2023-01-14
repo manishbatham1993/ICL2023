@@ -13,6 +13,8 @@ import TeamOwnerForm from './TeamOwnerForm'
 import AccountForm from './AccountForm'
 import TeamForm from './TeamForm'
 import PlayerForm from './PlayerForm'
+import ConfigForm from './ConfigForm'
+
 import {
   initializeAuction,
   startAuction,
@@ -25,9 +27,13 @@ import {
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
 export default function ManageEntities() {
+  // data fetched from backend api
   const [teams, setTeams] = useState([])
   const [players, setPlayers] = useState([])
   const [accounts, setAccounts] = useState([])
+  const [configurations, setConfigurations] = useState([])
+
+  // declared states
   const [modal, setModal] = useState(null)
   const [data, setData] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
@@ -77,6 +83,21 @@ export default function ManageEntities() {
     })
   }, [])
 
+  const refreshConfigurations = useCallback(() => {
+    axios.get(BASE_URL + '/api/v1/config').then((res) => {
+      if (res.data.status === 'ok') {
+        setConfigurations(res.data.configurations)
+      }
+    })
+  }, [])
+
+  const refreshAllData = () => {
+    refreshAccounts()
+    refreshPlayers()
+    refreshTeams()
+    refreshConfigurations()
+  }
+
   const viewHandler = (entityName, entityId) => {
     const api = `${BASE_URL}/api/v1/${entityName}/${entityId}`
     axios.get(api).then((res) => {
@@ -109,18 +130,17 @@ export default function ManageEntities() {
       if (res.data.status === 'ok') {
         switch (entityName) {
           case 'account':
-            refreshAccounts()
+            refreshAllData()
             break
           case 'player':
-            refreshPlayers()
-            refreshTeams()
+            refreshAllData()
             break
           case 'team':
-            refreshTeams()
-            refreshPlayers()
+            refreshAllData()
             break
           default:
             console.log('unknown entity name')
+            break
         }
       }
     })
@@ -138,7 +158,8 @@ export default function ManageEntities() {
     refreshAccounts()
     refreshTeams()
     refreshPlayers()
-  }, [refreshAccounts, refreshTeams, refreshPlayers])
+    refreshConfigurations()
+  }, [refreshAccounts, refreshTeams, refreshPlayers, refreshConfigurations])
 
   return (
     <React.Fragment>
@@ -154,7 +175,7 @@ export default function ManageEntities() {
             isEdit={isEdit}
             data={data}
             onCloseOverlay={closeModalHandler}
-            onRefresh={refreshAccounts}
+            onRefresh={refreshAllData()}
           />
         </Modal>
       )}
@@ -165,7 +186,7 @@ export default function ManageEntities() {
             data={data}
             accounts={accounts}
             onCloseOverlay={closeModalHandler}
-            onRefresh={refreshTeams}
+            onRefresh={refreshAllData}
           />
         </Modal>
       )}
@@ -185,7 +206,7 @@ export default function ManageEntities() {
             ]}
             gender={['Male', 'Female']}
             onCloseOverlay={closeModalHandler}
-            onRefresh={refreshPlayers}
+            onRefresh={refreshAllData}
           />
         </Modal>
       )}
@@ -196,7 +217,19 @@ export default function ManageEntities() {
             teams={teams}
             players={players}
             onCloseOverlay={closeModalHandler}
-            onRefresh={refreshTeams}
+            onRefresh={refreshAllData}
+          />
+        </Modal>
+      )}
+      {/* set configurations */}
+      {modal === 'config' && (
+        <Modal onCloseOverlay={closeModalHandler}>
+          <ConfigForm
+            configurations={configurations}
+            onCloseOverlay={closeModalHandler}
+            onRefresh={() => {
+              window.location.reload(false)
+            }}
           />
         </Modal>
       )}
@@ -252,6 +285,14 @@ export default function ManageEntities() {
           }}
         >
           <CardContent sx={{ mt: '2rem' }}>
+            <Button
+              variant="contained"
+              onClick={openModalHandler.bind(null, 'config')}
+            >
+              Set Configurations
+            </Button>
+            <br></br>
+            <br></br>
             <Button
               variant="contained"
               onClick={openModalHandler.bind(null, 'teamOwner')}

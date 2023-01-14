@@ -5,6 +5,7 @@ import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import AuthContext from '../store/auth-context'
+import EntityContext from '../store/entity-context'
 import IncrementDecrement from './IncrementDecrement'
 import CircleTimer from './CircleTimer'
 import Avatar from '@mui/material/Avatar'
@@ -43,11 +44,6 @@ import { ManageHistorySharp, PriceChange } from '@mui/icons-material'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
-
-// constants
-const DEFAULT_BID_INCREASE = 500
-const BASE_PRICE = 5000
-const TEAM_ID = '639d4a67ddfe568981cf801d'
 
 // AUCTION_SCHEMA : {
 //   state: (null/'ready'/'progress'/'completed'/)
@@ -89,7 +85,12 @@ const TEAM_ID = '639d4a67ddfe568981cf801d'
 
 const Auction = () => {
   const authCtx = useContext(AuthContext)
+  const entityCtx = useContext(EntityContext)
+
+  const { DEFAULT_BID_AMOUNT, BID_INCREASE, PLAYERS_PER_TEAM } =
+    entityCtx.configurations
   const TEAM_ID = authCtx.user ? authCtx.user.teamId : null
+
   const COLORS = [
     { c1: '#0078BC', c2: '#17479E' },
     { c1: '#1C1C1C', c2: '#0B4973' },
@@ -127,7 +128,7 @@ const Auction = () => {
     mappedData &&
     mappedData.state === 'progress' &&
     mappedData.remBudget >= nextBidAmount &&
-    mappedData.teamStats[TEAM_ID].total < 10 &&
+    mappedData.teamStats[TEAM_ID].total < PLAYERS_PER_TEAM - 1 &&
     (!mappedData.lastBid || mappedData.lastBid.teamId !== TEAM_ID)
 
   // set default amount for upcoming bid
@@ -388,15 +389,7 @@ const Auction = () => {
     if (props.current && props.elements[props.index + 1]) {
       return props.current.amount - props.elements[props.index + 1].amount
     } else {
-      return props.current.amount - BASE_PRICE
-    }
-  }
-
-  function NeededPlayers(props) {
-    if (props.players) {
-      return 10 - props.players
-    } else {
-      return 10
+      return props.current.amount - DEFAULT_BID_AMOUNT
     }
   }
 
@@ -494,7 +487,7 @@ const Auction = () => {
                     <h3 className="text-center title">
                       BASE PRICE :
                       <span className="text-success base-price-amt">
-                        {BASE_PRICE}{' '}
+                        {DEFAULT_BID_AMOUNT}{' '}
                       </span>
                     </h3>
                   </div>
@@ -531,16 +524,14 @@ const Auction = () => {
                     >
                       {mappedData.lastBid
                         ? `YOU RAISING PREVIOUS BID BY ${
-                            nextBidAmount -
-                            mappedData.bidAmount +
-                            DEFAULT_BID_INCREASE
+                            nextBidAmount - mappedData.bidAmount + BID_INCREASE
                           }`
                         : ''}
                     </p>
                     <div className="auction-price-count">
                       <IncrementDecrement
                         defaultVal={defaultNextBidAmount}
-                        defaultChange={DEFAULT_BID_INCREASE}
+                        defaultChange={BID_INCREASE}
                         maxVal={mappedData.remBudget}
                         currentVal={nextBidAmount}
                         onChange={setNextBidAmount}
@@ -812,18 +803,12 @@ const Auction = () => {
                         <ul className="mb-0 px-1">
                           <li className="m-0">
                             <span className="rm-name">Total Players</span>
-                            <span className="rm-fund">
-                              {data.batsman + data.bowlers + data.allRounders}
-                            </span>
+                            <span className="rm-fund">{data.total}</span>
                           </li>
                           <li className="m-0 px-1">
                             <span className="rm-name">Need Players</span>
                             <span className="rm-fund">
-                              <NeededPlayers
-                                players={
-                                  data.batsman + data.bowlers + data.allRounders
-                                }
-                              />
+                              {PLAYERS_PER_TEAM - 1 - data.total}
                             </span>
                           </li>
                         </ul>

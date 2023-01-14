@@ -13,6 +13,13 @@ export const EntityContextProvider = (props) => {
   const [accounts, setAccounts] = useState([])
   const [players, setPlayers] = useState([])
   const [teams, setTeams] = useState([])
+  const [configurations, setConfigurations] = useState({
+    DEFAULT_BUDGET: 60000,
+    DEFAULT_BID_AMOUNT: 5000,
+    BID_INCREASE: 500,
+    PLAYERS_PER_TEAM: 10,
+    YEAR: '2023',
+  })
 
   const updateAccounts = () => {
     const api = BASE_URL + '/api/v1/account'
@@ -39,16 +46,44 @@ export const EntityContextProvider = (props) => {
     })
   }
 
+  const updateConfigurations = () => {
+    const api = BASE_URL + '/api/v1/config'
+    axios.get(api).then((res) => {
+      if (res.data.status === 'ok') {
+        const dbConfigurations = res.data.configurations
+        console.log('db-configurations', dbConfigurations)
+        setConfigurations((prev) => ({
+          ...prev,
+          DEFAULT_BUDGET: dbConfigurations.DEFAULT_BUDGET
+            ? parseInt(dbConfigurations.DEFAULT_BUDGET)
+            : prev.DEFAULT_BUDGET,
+          DEFAULT_BID_AMOUNT: dbConfigurations.DEFAULT_BID_AMOUNT
+            ? parseInt(dbConfigurations.DEFAULT_BID_AMOUNT)
+            : prev.DEFAULT_BID_AMOUNT,
+          BID_INCREASE: dbConfigurations.BID_INCREASE
+            ? parseInt(dbConfigurations.BID_INCREASE)
+            : prev.BID_INCREASE,
+          PLAYERS_PER_TEAM: dbConfigurations.PLAYERS_PER_TEAM
+            ? parseInt(dbConfigurations.PLAYERS_PER_TEAM)
+            : prev.PLAYERS_PER_TEAM,
+          YEAR: dbConfigurations.YEAR ? dbConfigurations.YEAR : prev.YEAR,
+        }))
+      }
+    })
+  }
+
   useEffect(() => {
     updateAccounts()
     updatePlayers()
     updateTeams()
+    updateConfigurations()
   }, [])
 
   const contextValue = {
     accounts,
     teams,
     players,
+    configurations,
   }
   return (
     <EntityContext.Provider value={contextValue}>

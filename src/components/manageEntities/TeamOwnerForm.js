@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import axios from 'axios'
+import EntityContext from '../../store/entity-context'
 
 import classes from './form.module.css'
 
@@ -7,6 +8,9 @@ import classes from './form.module.css'
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
 const TeamOwnerForm = (props) => {
+  const entityCtx = useContext(EntityContext)
+  const { DEFAULT_BUDGET } = entityCtx.configurations
+
   // initialize references
   const teamRef = useRef()
   const playerRef = useRef()
@@ -126,7 +130,7 @@ const TeamOwnerForm = (props) => {
           type="number"
           ref={budgetRef}
           required
-          defaultValue={50000}
+          defaultValue={DEFAULT_BUDGET}
         />
       </div>
       <button type="submit">Set</button>
