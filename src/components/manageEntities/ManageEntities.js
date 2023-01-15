@@ -175,7 +175,7 @@ export default function ManageEntities() {
             isEdit={isEdit}
             data={data}
             onCloseOverlay={closeModalHandler}
-            onRefresh={refreshAllData()}
+            onRefresh={refreshAllData}
           />
         </Modal>
       )}
