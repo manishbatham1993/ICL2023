@@ -62,7 +62,7 @@ const Allplayer = () => {
         return Object.values(item.name)
           .join('')
           .toLowerCase()
-          .includes(searchInput.toLowerCase())
+          .includes(searchValue.toLowerCase())
       })
       setFilteredResults(filteredData)
     }
