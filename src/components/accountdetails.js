@@ -34,8 +34,8 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
 
 // constants
-const BASE_PRICE = 1000
-const string_text = 'Auction is not yet started.. Data Will be available soon'
+const BASE_PRICE = 5000
+const string_text = 'Data Will be available soon...'
 const Accountdetail = (props) => {
   const { id } = useParams()
   const entityCtx = useContext(EntityContext)

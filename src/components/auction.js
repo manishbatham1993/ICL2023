@@ -393,6 +393,14 @@ const Auction = () => {
     }
   }
 
+  function NeededPlayers(props) {
+    if (props.players) {
+      return 9 - props.players
+    } else {
+      return 9
+    }
+  }
+
   const handleClose = (event) => {
     // if (reason === 'clickaway') {
     //   return

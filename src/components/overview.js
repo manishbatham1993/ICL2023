@@ -33,6 +33,7 @@ import {
   CardSubtitle,
   image,
 } from 'reactstrap'
+import { height } from '@mui/system'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
@@ -66,28 +67,35 @@ const Overview = () => {
                     ? (account.name = 'Support Staff(HRTAITFacilities)')
                     : (account.name = account.name)}
                 </div>
-                <img
+                <Avatar
                   className="center"
-                  // alt={account.name}
+                  alt={account.name}
                   style={{
                     borderRadius: '50%',
                     width: '200px',
                     height: '200px',
                   }}
-                  src={`${BASE_URL}/static/account_logo/${account.name}.png`}
-                  // sx={{
-                  //   width: 200,
-                  //   height: 200,
-                  //   fontSize: '1rem',
-                  //   objectFit: 'contain',
-                  // }}
+                  src={`static/account_logo/${account.name}.png`}
+                  sx={{
+                    width: 200,
+                    height: 200,
+                    fontSize: '1rem',
+                    objectFit: 'contain',
+                  }}
+                  imgProps={{
+                    style: {
+                      // maxHeight: '100%',
+                      // maxWidth: '100%',
+                      objectFit: 'contain',
+                    },
+                  }}
                 />
               </div>
               <CardBody style={{ minHeight: 0 }}>
                 <CardTitle
                   tag="h5"
                   className="accountTitle"
-                  style={{ textTransform: 'uppercase' }}
+                  style={{ textTransform: 'uppercase', whiteSpace: 'nowrap' }}
                 >
                   {account.name}
                 </CardTitle>

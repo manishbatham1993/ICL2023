@@ -24,16 +24,16 @@ import Modal from './UI/Modal'
 function App() {
   const authCtx = useContext(AuthContext)
 
-  let auctionElement = <SignIn />
-  if (authCtx.isLoggedIn) {
-    if (authCtx.role === 'owner' || authCtx.role === 'admin') {
-      auctionElement = <Auction />
-    } else {
-      auctionElement = <Countdown />
-    }
-  } else {
-    auctionElement = <SignIn />
-  }
+  // let auctionElement = <SignIn />
+  // if (authCtx.isLoggedIn) {
+  // if (authCtx.role === 'owner' || authCtx.role === 'admin') {
+  // auctionElement = <Auction />
+  // } else {
+  // auctionElement = <Countdown />
+  // }
+  // } else {
+  // auctionElement = <SignIn />
+  // }
 
   let manageElement = <SignIn />
   if (authCtx.isLoggedIn) {
@@ -73,7 +73,7 @@ function App() {
         <Route path="/overview" element={<Overview />} />
         <Route path="/accountdetail/:id" element={<Accountdetail />} />
         <Route path="/squaddetail/:id" element={<Squaddetail />} />
-        <Route path="/Auction" element={auctionElement} />
+        <Route path="/Auction" element={<Auction />} />
         <Route path="/Manage" element={manageElement} />
         <Route path="/modal" element={<AlertCongratulationSlide />} />
       </Routes>

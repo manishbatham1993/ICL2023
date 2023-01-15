@@ -125,7 +125,7 @@ const Allplayer = () => {
                       <Avatar
                         className="center"
                         alt={player.name}
-                        src={`${BASE_URL}/${player.imageUrl}`}
+                        src={'static/account_logo/default.png'}
                         sx={{ width: 200, height: 200, fontSize: '5rem' }}
                       />
                     )}
@@ -218,7 +218,7 @@ const Allplayer = () => {
                       <Avatar
                         className="center"
                         alt={player.name}
-                        src={`${BASE_URL}/${player.imageUrl}`}
+                        src={'static/account_logo/default.png'}
                         sx={{ width: 200, height: 200, fontSize: '5rem' }}
                       />
                     )}

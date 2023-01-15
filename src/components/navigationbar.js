@@ -128,16 +128,16 @@ function ResponsiveAppBar() {
                   </Link>
                 </MenuItem>
               )}
-              {authCtx.isLoggedIn && (
-                <MenuItem key="Auction" onClick={handleCloseNavMenu}>
-                  <Link
-                    to="/Auction"
-                    style={{ color: 'black', textDecoration: 'none' }}
-                  >
-                    Auction
-                  </Link>
-                </MenuItem>
-              )}
+              {/* {authCtx.isLoggedIn && ( */}
+              <MenuItem key="Auction" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/Auction"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Auction
+                </Link>
+              </MenuItem>
+              {/* )} */}
               {authCtx.role === 'admin' && (
                 <MenuItem key="Manage" onClick={handleCloseNavMenu}>
                   <Link
@@ -207,20 +207,20 @@ function ResponsiveAppBar() {
                 </Button>
               </Link>
             )}
-            {authCtx.isLoggedIn && (
-              <Link
-                to="auction"
-                style={{ color: 'white', textDecoration: 'none' }}
+            {/* {authCtx.isLoggedIn && ( */}
+            <Link
+              to="auction"
+              style={{ color: 'white', textDecoration: 'none' }}
+            >
+              <Button
+                key="Auction"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                <Button
-                  key="Auction"
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  Auction
-                </Button>
-              </Link>
-            )}
+                Auction
+              </Button>
+            </Link>
+            {/* )} */}
             {authCtx.role === 'admin' && (
               <Link
                 to="Manage"
