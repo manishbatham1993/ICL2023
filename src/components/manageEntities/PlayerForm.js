@@ -33,11 +33,16 @@ const PlayerForm = (props) => {
     playerFormData.append('rating', ratingRef.current.value)
     if (props.isEdit) playerFormData.append('playerId', props.data._id)
 
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
     // POST add player
     const api =
       BASE_URL +
       (props.isEdit ? '/api/v1/admin/player/edit' : '/api/v1/admin/player/add')
-    axios.post(api, playerFormData).then((res) => {
+    axios.post(api, playerFormData, config).then((res) => {
       console.log('res', res.data)
       // close overlay and refresh players
       props.onCloseOverlay()

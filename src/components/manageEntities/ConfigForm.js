@@ -26,10 +26,15 @@ const ConfigForm = (props) => {
       AUCTION_INTERVAL_IN_SEC: auctionIntervalInSecRef.current.value,
       YEAR: yearRef.current.value,
     }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
 
     // POST request to backend and then close the overlay and refresh the accounts
     const api = BASE_URL + '/api/v1/admin/config/update'
-    axios.post(api, payload).then((res) => {
+    axios.post(api, payload, config).then((res) => {
       console.log('res', res.data)
       props.onCloseOverlay()
       props.onRefresh()

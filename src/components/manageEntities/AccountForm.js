@@ -13,21 +13,26 @@ const AccountForm = (props) => {
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
+
     const payload = {
       name: nameRef.current.value,
       totalCount: totalCountRef.current.value,
     }
     if (props.isEdit) payload.accountId = props.data._id
 
-    // POST request to backend and then close the overlay and refresh the accounts
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
+
     const api =
       BASE_URL +
       (props.isEdit
         ? '/api/v1/admin/account/edit'
         : '/api/v1/admin/account/add')
-    console.log('api', api)
-    console.log('PAYLOAD', payload)
-    axios.post(api, payload).then((res) => {
+    // POST request to backend and then close the overlay and refresh the accounts
+    axios.post(api, payload, config).then((res) => {
       console.log('res', res.data)
       props.onCloseOverlay()
       props.onRefresh()

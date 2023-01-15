@@ -124,8 +124,13 @@ export default function ManageEntities() {
   }
 
   const deleteHandler = (entityName, entityId) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
     const api = `${BASE_URL}/api/v1/admin/${entityName}/${entityId}`
-    axios.delete(api).then((res) => {
+    axios.delete(api, config).then((res) => {
       console.log('DELETE - res', res.data)
       if (res.data.status === 'ok') {
         switch (entityName) {

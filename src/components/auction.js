@@ -255,15 +255,22 @@ const Auction = () => {
   }
 
   const makeBid = () => {
-    axios
-      .post(BASE_URL + '/api/v1/auction/bid', {
-        playerId: auctionData.currentPlayer.id,
-        teamId: TEAM_ID,
-        amount: nextBidAmount,
-      })
-      .then((res) => {
-        //console.log('posting-bid', res)
-      })
+    const payload = {
+      playerId: auctionData.currentPlayer.id,
+      teamId: TEAM_ID,
+      amount: nextBidAmount,
+    }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
+
+    // make bid
+    const api = BASE_URL + '/api/v1/auction/bid'
+    axios.post(api, payload, config).then((res) => {
+      //console.log('posting-bid', res)
+    })
   }
 
   // update data and initialize socket functions

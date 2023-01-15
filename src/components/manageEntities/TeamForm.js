@@ -20,11 +20,16 @@ const TeamForm = (props) => {
     teamFormData.append('image', imageRef.current.files[0])
     if (props.isEdit) teamFormData.append('teamId', props.data._id)
 
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }
     // POST request to add team
     const api =
       BASE_URL +
       (props.isEdit ? '/api/v1/admin/team/edit' : '/api/v1/admin/team/add')
-    axios.post(api, teamFormData).then((res) => {
+    axios.post(api, teamFormData, config).then((res) => {
       console.log('res', res.data)
       // close overlay and refresh the teams
       props.onCloseOverlay()
