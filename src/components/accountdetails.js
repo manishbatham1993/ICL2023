@@ -9,6 +9,9 @@ import Table from 'react-bootstrap/Table'
 import Tab from 'react-bootstrap/Tab'
 import Avatar from '@mui/material/Avatar'
 // reactstrap components
+import ImportExportIcon from '@mui/icons-material/ImportExport'
+import SortIcon from '@mui/icons-material/Sort'
+
 import {
   Button,
   ButtonGroup,
@@ -242,10 +245,19 @@ const Accountdetail = (props) => {
                     <thead>
                       <tr>
                         <th></th>
-                        <th onClick={() => sorting('name')}>Player Name</th>
+                        <th onClick={() => sorting('name')}>
+                          <SortIcon></SortIcon>Player Name
+                        </th>
                         <th>Team</th>
-                        <th onClick={() => sorting('skill')}>Skill</th>
-                        <th onClick={() => sorting('rating')}>Rating</th>
+                        <th onClick={() => sorting('gender')}>
+                          <SortIcon></SortIcon>Gender
+                        </th>
+                        <th onClick={() => sorting('skill')}>
+                          <SortIcon></SortIcon>Skill
+                        </th>
+                        <th onClick={() => sorting('rating')}>
+                          <SortIcon></SortIcon>Rating
+                        </th>
                         <th>Base Price</th>
                       </tr>
                     </thead>
@@ -253,7 +265,7 @@ const Accountdetail = (props) => {
                       {(sortdata ? sortdata : accountPlayers).map((player) => (
                         <tr key={player.name}>
                           <td>
-                            <Avatar
+                            {/* <Avatar
                               className="center"
                               alt={player.name}
                               src={`${BASE_URL}/${player.imageUrl}`}
@@ -262,10 +274,40 @@ const Accountdetail = (props) => {
                                 height: 75,
                                 fontSize: '1rem',
                               }}
-                            />
+                            /> */}
+
+                            {player.imageUrl ? (
+                              <Avatar
+                                className="center"
+                                alt={player.name}
+                                src={`${BASE_URL}/${player.imageUrl}`}
+                                sx={{
+                                  width: 75,
+                                  height: 75,
+                                  fontSize: '1rem',
+                                }}
+                              />
+                            ) : (
+                              <Avatar
+                                className="center"
+                                alt={player.name}
+                                src={`${BASE_URL}/static/account_logo/default.png`}
+                                sx={{
+                                  width: 75,
+                                  height: 75,
+                                  fontSize: '1rem',
+                                }}
+                              />
+                            )}
                           </td>
                           <td>{player.name}</td>
-                          <td>{player.teamId && player.teamId.name}</td>
+                          <td>
+                            {player.teamId && player.teamId.name
+                              ? player.teamId && player.teamId.name
+                              : '-'}
+                          </td>
+
+                          <td>{player.gender}</td>
                           <td>{player.skill}</td>
                           <td>{player.rating}</td>
                           <td>{BASE_PRICE}</td>
@@ -288,6 +330,8 @@ const Accountdetail = (props) => {
                           <th></th>
                           <th>Player Name</th>
                           <th>Team</th>
+                          <th>Gender</th>
+
                           <th>Skill</th>
                           <th>Rating</th>
                           <th>Sold at</th>
@@ -301,12 +345,29 @@ const Accountdetail = (props) => {
                         soldPlayers.map((player) => (
                           <tr>
                             <td>
-                              <Avatar
-                                className="center"
-                                alt={player.name}
-                                src={`${BASE_URL}/${player.imageUrl}`}
-                                sx={{ width: 75, height: 75, fontSize: '1rem' }}
-                              />
+                              {player.imageUrl ? (
+                                <Avatar
+                                  className="center"
+                                  alt={player.name}
+                                  src={`${BASE_URL}/${player.imageUrl}`}
+                                  sx={{
+                                    width: 75,
+                                    height: 75,
+                                    fontSize: '1rem',
+                                  }}
+                                />
+                              ) : (
+                                <Avatar
+                                  className="center"
+                                  alt={player.name}
+                                  src={`${BASE_URL}/static/account_logo/default.png`}
+                                  sx={{
+                                    width: 75,
+                                    height: 75,
+                                    fontSize: '1rem',
+                                  }}
+                                />
+                              )}
                             </td>
                             <td>{player.name}</td>
                             <td>
@@ -314,6 +375,8 @@ const Accountdetail = (props) => {
                                 ? player.teamId && player.teamId.name
                                 : '-'}
                             </td>
+                            <td>{player.gender}</td>
+
                             <td>{player.skill}</td>
                             <td>{player.rating}</td>
                             <td>
@@ -342,6 +405,8 @@ const Accountdetail = (props) => {
                         <tr>
                           <th></th>
                           <th>Player Name</th>
+                          <th>Gender</th>
+
                           <th>Skill</th>
                           <th>Rating</th>
                         </tr>
@@ -354,14 +419,33 @@ const Accountdetail = (props) => {
                         unsoldPlayers.map((player) => (
                           <tr>
                             <td>
-                              <Avatar
-                                className="center"
-                                alt={player.name}
-                                src={`${BASE_URL}/${player.imageUrl}`}
-                                sx={{ width: 75, height: 75, fontSize: '5rem' }}
-                              />
+                              {player.imageUrl ? (
+                                <Avatar
+                                  className="center"
+                                  alt={player.name}
+                                  src={`${BASE_URL}/${player.imageUrl}`}
+                                  sx={{
+                                    width: 75,
+                                    height: 75,
+                                    fontSize: '1rem',
+                                  }}
+                                />
+                              ) : (
+                                <Avatar
+                                  className="center"
+                                  alt={player.name}
+                                  src={`${BASE_URL}/static/account_logo/default.png`}
+                                  sx={{
+                                    width: 75,
+                                    height: 75,
+                                    fontSize: '1rem',
+                                  }}
+                                />
+                              )}
                             </td>
                             <td>{player.name}</td>
+                            <td>{player.gender}</td>
+
                             <td>{player.skill}</td>
                             <td>{player.rating}</td>
                           </tr>
@@ -386,8 +470,8 @@ const Accountdetail = (props) => {
                           <th></th>
                           <th>Player Name</th>
                           <th>Team</th>
+                          <th>Gender</th>
                           <th>Skill</th>
-
                           <th>Rating</th>
                           <th>Sold At</th>
                         </tr>
@@ -400,22 +484,33 @@ const Accountdetail = (props) => {
                         topBuys.map((player) => (
                           <tr>
                             <td>
-                              {/* <Image
-                                rounded="true"
-                                roundedCircle="true"
-                                alt="Sample"
-                                src={`${BASE_URL}/${player.imageUrl}`}
-                                style={{ width: '4rem', height: '4rem' }}
-                            /> */}
-                              <Avatar
-                                className="center"
-                                alt={player.name}
-                                src={`${BASE_URL}/${player.imageUrl}`}
-                                sx={{ width: 75, height: 75, fontSize: '1rem' }}
-                              />
+                              {player.imageUrl ? (
+                                <Avatar
+                                  className="center"
+                                  alt={player.name}
+                                  src={`${BASE_URL}/${player.imageUrl}`}
+                                  sx={{
+                                    width: 75,
+                                    height: 75,
+                                    fontSize: '1rem',
+                                  }}
+                                />
+                              ) : (
+                                <Avatar
+                                  className="center"
+                                  alt={player.name}
+                                  src={`${BASE_URL}/static/account_logo/default.png`}
+                                  sx={{
+                                    width: 75,
+                                    height: 75,
+                                    fontSize: '1rem',
+                                  }}
+                                />
+                              )}
                             </td>
                             <td>{player.name}</td>
                             <td>{player.teamId && player.teamId.name}</td>
+                            <td>{player.gender}</td>
                             <td>{player.skill}</td>
                             <td>{player.rating}</td>
                             <td>{player.lastBid && player.lastBid.amount}</td>

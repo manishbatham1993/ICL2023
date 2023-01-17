@@ -223,7 +223,7 @@ function ResponsiveAppBar() {
             {/* )} */}
             {authCtx.role === 'admin' && (
               <Link
-                to="Manage"
+                to="manage"
                 style={{ color: 'white', textDecoration: 'none' }}
               >
                 <Button

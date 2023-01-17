@@ -457,12 +457,35 @@ const Auction = () => {
                         className="avatar"
                         src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
                       /> */}
-                    <Avatar
+                    {/* <Avatar
                       className="center"
                       alt={mappedData.currentPlayer.name}
                       src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
                       sx={{ width: 250, height: 250, fontSize: '5rem' }}
-                    />
+                    /> */}
+                    {mappedData.currentPlayer.image ? (
+                      <Avatar
+                        className="center"
+                        alt={mappedData.currentPlayer.name}
+                        src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
+                        sx={{
+                          width: 250,
+                          height: 250,
+                          fontSize: '5rem',
+                        }}
+                      />
+                    ) : (
+                      <Avatar
+                        className="center"
+                        alt={mappedData.currentPlayer.name}
+                        src={`${BASE_URL}/static/account_logo/default.png`}
+                        sx={{
+                          width: 250,
+                          height: 250,
+                          fontSize: '1rem',
+                        }}
+                      />
+                    )}
 
                     <h4 className="title">CURRENT BID FOR</h4>
                     <h3 className="user-name">

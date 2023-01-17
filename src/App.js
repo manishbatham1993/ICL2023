@@ -74,7 +74,7 @@ function App() {
         <Route path="/accountdetail/:id" element={<Accountdetail />} />
         <Route path="/squaddetail/:id" element={<Squaddetail />} />
         <Route path="/Auction" element={<Auction />} />
-        <Route path="/Manage" element={manageElement} />
+        <Route path="/manage" element={manageElement} />
         <Route path="/modal" element={<AlertCongratulationSlide />} />
       </Routes>
       <Footer />

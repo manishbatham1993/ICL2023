@@ -70,7 +70,7 @@ const Allplayer = () => {
 
   return (
     <div className="content mainContent container-fluid">
-      <Row style={{ marginTop: '30px' }}>
+      <Row style={{ marginTop: '30px', marginLeft: 0, marginRight: 0 }}>
         <Col sm="12" lg="10" md="10">
           <h1
             style={{
@@ -90,7 +90,7 @@ const Allplayer = () => {
         </Col>
       </Row>
       <div
-        className="squadSection row"
+        // className="squadSection row"
         style={{
           display: 'flex',
           justifyContent: 'space-evenly',
