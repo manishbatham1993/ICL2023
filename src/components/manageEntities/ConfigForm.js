@@ -15,6 +15,7 @@ const ConfigForm = (props) => {
   const bidIncreaseRef = useRef()
   const auctionIntervalInSecRef = useRef()
   const yearRef = useRef()
+  const countdownRef = useRef()
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
@@ -25,6 +26,7 @@ const ConfigForm = (props) => {
       BID_INCREASE: bidIncreaseRef.current.value,
       AUCTION_INTERVAL_IN_SEC: auctionIntervalInSecRef.current.value,
       YEAR: yearRef.current.value,
+      COUNTDOWN: countdownRef.current.value,
     }
     const config = {
       headers: {
@@ -116,6 +118,17 @@ const ConfigForm = (props) => {
           ref={yearRef}
           defaultValue={
             props.configurations.YEAR ? props.configurations.YEAR : ''
+          }
+        />
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="countdown">COUNTDOWN</label>
+        <input
+          id="countdown"
+          type="datetime-local"
+          ref={countdownRef}
+          defaultValue={
+            props.configurations.COUNTDOWN ? props.configurations.COUNTDOWN : ''
           }
         />
       </div>

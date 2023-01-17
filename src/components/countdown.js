@@ -1,65 +1,50 @@
-import react from 'react'
+import react, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import EntityContext from '../store/entity-context'
+
 import './countdown.css'
-import $ from 'jquery'
-function timeLeft(endtime) {
-  var t = Date.parse(endtime) - Date.parse(new Date())
-  var seconds = Math.floor((t / 1000) % 60)
-  var minutes = Math.floor((t / 1000 / 60) % 60)
-  var hours = Math.floor((t / (1000 * 60 * 60)) % 24)
-  var days = Math.floor(t / (1000 * 60 * 60 * 24))
-  return {
-    total: t,
-    days: days,
-    hours: hours,
-    minutes: minutes,
-    seconds: seconds,
-  }
-}
-
-$(document).ready(function () {
-  var today = new Date()
-  var deadline = 'January 17 ' + (today.getFullYear() + 1) + ' 00:00:00'
-  if (today.getMonth() == 0) {
-    deadline = 'January 17 ' + today.getFullYear() + ' 00:00:00'
-  }
-
-  $('#header').hover(function () {
-    // $(this).toggleclassName('bluelight')
-  })
-
-  $('.clock').hover(function () {
-    // $(this).toggleclassName('bluelight')
-  })
-
-  var setClock = function (newyear) {
-    var timeinterval = setInterval(function () {
-      var t = timeLeft(newyear)
-      $('#days').text(t.days)
-      $('#hours').text(t.hours)
-      $('#mins').text(('0' + t.minutes).slice(-2))
-      $('#secs').text(('0' + t.seconds).slice(-2))
-      if (t.total <= 0) {
-        clearInterval(timeinterval)
-        var now = new Date()
-        var yearStr = now.getFullYear().toString()
-        $('#header').text('ICL 2023 Auction Started')
-        $('#days').text(yearStr[0])
-        $('#days-text').text('Happy')
-        $('#hours').text(yearStr[1])
-        $('#hours-text').text('New')
-        $('#mins').text(yearStr[2])
-        $('#mins-text').text('Year')
-        $('#secs').text(yearStr[3])
-        $('#secs-text').text('!!!')
-        $('#info').text('Countdown starts again tomorrow!')
-      }
-    }, 1000)
-  }
-
-  setClock(deadline)
-})
 
 export default function Countdown() {
+  const entityCtx = useContext(EntityContext)
+  const navigate = useNavigate()
+
+  const COUNTDOWN = entityCtx.configurations.COUNTDOWN
+  const auctionStartTimestamp = new Date(COUNTDOWN)
+  const [currentTimestamp, setCurrentTimestamp] = useState(Date.now())
+
+  // get total seconds between the times
+  var delta = (auctionStartTimestamp - currentTimestamp) / 1000
+
+  // if auction started then redirect to auction page
+  if (delta <= 0) {
+    delta = 0
+    navigate('/auction', { replace: true })
+  }
+
+  // calculate (and subtract) whole days
+  var days = Math.floor(delta / 86400)
+  delta -= days * 86400
+
+  // calculate (and subtract) whole hours
+  var hours = Math.floor(delta / 3600) % 24
+  delta -= hours * 3600
+
+  // calculate (and subtract) whole minutes
+  var minutes = Math.floor(delta / 60) % 60
+  delta -= minutes * 60
+
+  // what's left is seconds
+  var seconds = Math.floor(delta % 60)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTimestamp(Date.now())
+    }, 1000)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
   return (
     <>
       <div>
@@ -73,7 +58,7 @@ export default function Countdown() {
             <div className="clock">
               <div className="well top-pane">
                 <div id="days" className="num">
-                  00
+                  {days}
                 </div>
               </div>
               <div className="well bottom-pane">
@@ -87,7 +72,7 @@ export default function Countdown() {
             <div className="clock">
               <div className="well top-pane">
                 <div id="hours" className="num">
-                  00
+                  {hours}
                 </div>
               </div>
               <div className="well bottom-pane">
@@ -101,7 +86,7 @@ export default function Countdown() {
             <div className="clock">
               <div className="well top-pane">
                 <div id="mins" className="num">
-                  00
+                  {minutes}
                 </div>
               </div>
               <div className="well bottom-pane">
@@ -115,7 +100,7 @@ export default function Countdown() {
             <div className="clock">
               <div className="well top-pane">
                 <div id="secs" className="num">
-                  00
+                  {seconds}
                 </div>
               </div>
               <div className="well bottom-pane">

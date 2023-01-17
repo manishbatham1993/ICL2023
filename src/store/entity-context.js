@@ -67,6 +67,9 @@ export const EntityContextProvider = (props) => {
             ? parseInt(dbConfigurations.PLAYERS_PER_TEAM)
             : prev.PLAYERS_PER_TEAM,
           YEAR: dbConfigurations.YEAR ? dbConfigurations.YEAR : prev.YEAR,
+          COUNTDOWN: dbConfigurations.COUNTDOWN
+            ? dbConfigurations.COUNTDOWN
+            : '2023-01-01T00:00',
         }))
       }
     })
