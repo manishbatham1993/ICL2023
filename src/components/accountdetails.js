@@ -63,15 +63,28 @@ const Accountdetail = (props) => {
   const soldPlayers = accountPlayers.filter(
     (player) => player.auctionStatus && player.auctionStatus === 'SOLD'
   )
+  console.log('accountplayer', accountPlayers)
   const unsoldPlayers = accountPlayers.filter(
-    (player) => player.auctionStatus && player.auctionStatus === 'UNSOLD'
+    (player) => !player.auctionStatus || player.auctionStatus === 'UNSOLD'
   )
 
+  // const topBuys = [...soldPlayers]
+  //   .sort(
+  //     (a, b) => a.lastBid && b.lastBid && a.lastBid.amount > b.lastBid.amount
+  //   )
+  //   .slice(0, 2)
+  console.log('sold_player', soldPlayers)
   const topBuys = [...soldPlayers]
-    .sort(
-      (a, b) => a.lastBid && b.lastBid && a.lastBid.amount > b.lastBid.amount
+    .filter((player) => player.lastBid && player.lastBid.amount)
+    .sort((a, b) =>
+      a.lastBid.amount &&
+      b.lastBid.amount &&
+      a.lastBid.amount < b.lastBid.amount
+        ? 1
+        : -1
     )
     .slice(0, 2)
+  console.log('topbuys', topBuys)
 
   const teamStats = []
   for (let team of accountTeams) {
@@ -331,7 +344,6 @@ const Accountdetail = (props) => {
                           <th>Player Name</th>
                           <th>Team</th>
                           <th>Gender</th>
-
                           <th>Skill</th>
                           <th>Rating</th>
                           <th>Sold at</th>

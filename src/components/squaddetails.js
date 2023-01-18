@@ -61,7 +61,8 @@ const Squaddetail = () => {
           ? teamPlayers[0].teamId.name + ' SQUAD'
           : 'ICL SQUAD'}
       </h1>
-      <Row>
+
+      <Row style={{ justifyContent: 'space-evenly' }}>
         {teamPlayers.map((player) => (
           <Col md="6" sm="12">
             <Card

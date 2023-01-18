@@ -662,25 +662,20 @@ const Auction = () => {
         )}
         <Row>
           {mappedData.previousAuctions.length != 0 &&
-            auctionEnded &&
-            playerStatus === 'sold' &&
-            completedflag == false && (
+            (auctionEnded || completedflag == true) &&
+            playerStatus === 'sold' && (
               <div style={{ color: 'white' }}>
+                {mappedData.previousAuctions.length[0]}
                 <Showmodal
                   status="sold"
                   showpop="true"
-                  data={
-                    mappedData.previousAuctions[
-                      mappedData.previousAuctions.length - 1
-                    ]
-                  }
+                  data={mappedData.previousAuctions[0]}
                   setauctionflag={setChanged}
                 />
               </div>
             )}
-          {auctionEnded &&
-            playerStatus === 'unsold' &&
-            completedflag == false && (
+          {(auctionEnded || completedflag == true) &&
+            playerStatus === 'unsold' && (
               <div style={{ color: 'white' }}>
                 <Showmodal
                   status="unsold"
