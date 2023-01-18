@@ -117,6 +117,7 @@ const Auction = () => {
   const [openSnackbar, setOpenSnackbar] = useState(true)
   const [vertical, setVertical] = useState('top')
   const [horizontal, setHorizontal] = useState('center')
+  const [completedflag, setCompletedFlag] = useState(false)
 
   function setChanged() {
     // console.log('called from child')
@@ -198,7 +199,7 @@ const Auction = () => {
       const teamId = bid.teamId
       const team = teams.find((team) => team._id === bid.teamId)
       const player = players.find((player) => player._id === playerId)
-      previousAuctions.push({
+      previousAuctions.unshift({
         playerName: player.name,
         playerImage: player.imageUrl,
         teamName: team.name,
@@ -366,6 +367,7 @@ const Auction = () => {
           setRoundEndcount(payload.data.round)
 
         case 'ACCOUNT_AUCTION_COMPLETED':
+          setCompletedFlag(true)
 
         case 'PLAYER_AUCTION_ENDED':
           setAuctionEnded(true)
@@ -661,7 +663,8 @@ const Auction = () => {
         <Row>
           {mappedData.previousAuctions.length != 0 &&
             auctionEnded &&
-            playerStatus === 'sold' && (
+            playerStatus === 'sold' &&
+            completedflag == false && (
               <div style={{ color: 'white' }}>
                 <Showmodal
                   status="sold"
@@ -675,16 +678,18 @@ const Auction = () => {
                 />
               </div>
             )}
-          {auctionEnded && playerStatus === 'unsold' && (
-            <div style={{ color: 'white' }}>
-              <Showmodal
-                status="unsold"
-                showpop="true"
-                data={previousPlayerData}
-                setauctionflag={setChanged}
-              />
-            </div>
-          )}
+          {auctionEnded &&
+            playerStatus === 'unsold' &&
+            completedflag == false && (
+              <div style={{ color: 'white' }}>
+                <Showmodal
+                  status="unsold"
+                  showpop="true"
+                  data={previousPlayerData}
+                  setauctionflag={setChanged}
+                />
+              </div>
+            )}
           {roundEnd && roundEndcount && (
             <Snackbar
               anchorOrigin={{ vertical, horizontal }}
