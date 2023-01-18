@@ -119,6 +119,23 @@ const Auction = () => {
   const [horizontal, setHorizontal] = useState('center')
   const [completedflag, setCompletedFlag] = useState(false)
 
+  const remainingPlayers =
+    mappedData &&
+    mappedData.teamStats &&
+    mappedData.teamStats[TEAM_ID] &&
+    !isNaN(PLAYERS_PER_TEAM)
+      ? PLAYERS_PER_TEAM - mappedData.teamStats[TEAM_ID].total - 1
+      : null
+
+  const getMaxAllowableBid = () => {
+    // base amount should be reserved for all remaining players excluding current plyer i.e [(remainingPlayers minus 1 ) times BASE-AMOUNT]
+    if (!mappedData || isNaN(remainingPlayers) || isNaN(DEFAULT_BID_AMOUNT)) {
+      console.log('max-allowable-bid --  INFIINITY')
+      return Number.MAX_SAFE_INTEGER
+    }
+    return mappedData.remBudget - (remainingPlayers - 1) * DEFAULT_BID_AMOUNT
+  }
+
   function setChanged() {
     // console.log('called from child')
     setRoundEnd(false)
@@ -130,6 +147,7 @@ const Auction = () => {
     mappedData.state === 'progress' &&
     mappedData.remBudget >= nextBidAmount &&
     mappedData.teamStats[TEAM_ID].total < PLAYERS_PER_TEAM - 1 &&
+    (!nextBidAmount || nextBidAmount <= getMaxAllowableBid()) &&
     (!mappedData.lastBid || mappedData.lastBid.teamId !== TEAM_ID)
 
   // set default amount for upcoming bid
