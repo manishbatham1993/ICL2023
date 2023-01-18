@@ -17,6 +17,14 @@ const PlayerForm = (props) => {
   const imageRef = useRef()
   const genderRef = useRef()
   const ratingRef = useRef()
+  const teamIdRef = useRef()
+  const auctionStatusRef = useRef()
+
+  const accountId =
+    props.data && props.data.accountId && props.data.accountId._id
+  const accountTeams = props.teams.filter(
+    (team) => accountId && team.accountId && team.accountId._id === accountId
+  )
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
@@ -32,6 +40,10 @@ const PlayerForm = (props) => {
     playerFormData.append('gender', genderRef.current.value)
     playerFormData.append('rating', ratingRef.current.value)
     if (props.isEdit) playerFormData.append('playerId', props.data._id)
+    // auctionData
+    if (props.isEdit) playerFormData.append('teamId', teamIdRef.current.value)
+    if (props.isEdit)
+      playerFormData.append('auctionStatus', auctionStatusRef.current.value)
 
     const config = {
       headers: {
@@ -178,6 +190,45 @@ const PlayerForm = (props) => {
       <div className={classes.input}>
         <label htmlFor="image">Image</label>
         <input id="image" type="file" ref={imageRef} />
+      </div>
+      <hr />
+      <div className={classes.input}>
+        <label htmlFor="teamId">Team</label>
+        <select id="teamId" ref={teamIdRef} disabled={!accountId}>
+          <option value={''}>null</option>
+          {accountTeams.map((team) => (
+            <option
+              value={team._id}
+              selected={
+                props.isEdit &&
+                props.data &&
+                props.data.teamId &&
+                props.data.teamId === team._id
+              }
+            >
+              {team.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="auctionStatus">Auction Status</label>
+        <select id="auctionStatus" ref={auctionStatusRef} disabled={!accountId}>
+          <option value={''}>null</option>
+          {props.auctionStatusList.map((status) => (
+            <option
+              value={status}
+              selected={
+                props.isEdit &&
+                props.data &&
+                props.data.auctionStatus &&
+                status === props.data.auctionStatus
+              }
+            >
+              {status}
+            </option>
+          ))}
+        </select>
       </div>
       <button type="submit">Save</button>
     </form>

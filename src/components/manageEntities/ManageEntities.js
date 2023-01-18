@@ -201,6 +201,7 @@ export default function ManageEntities() {
             isEdit={isEdit}
             data={data}
             accounts={accounts}
+            teams={teams}
             skills={['Batsman', 'Bowler', 'All Rounder']}
             levels={[
               'Basic',
@@ -210,6 +211,7 @@ export default function ManageEntities() {
               'State Level',
             ]}
             gender={['Male', 'Female']}
+            auctionStatusList={['OWNER', 'SOLD', 'UNSOLD']}
             onCloseOverlay={closeModalHandler}
             onRefresh={refreshAllData}
           />
