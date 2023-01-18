@@ -482,7 +482,7 @@ const Auction = () => {
                         sx={{
                           width: 250,
                           height: 250,
-                          fontSize: '1rem',
+                          fontSize: '5rem',
                         }}
                       />
                     )}
@@ -738,14 +738,36 @@ const Auction = () => {
                     Object.values(mappedData.previousAuctions).map((data) => (
                       <div className="sold-player">
                         <div>
-                          <Avatar
+                          {/* <Avatar
                             className="center"
                             alt={data.playerName}
                             src={`${BASE_URL}/${data.playerImage}`}
                             sx={{ width: 50, height: 50 }}
                           >
-                            V
-                          </Avatar>
+                          </Avatar> */}
+                          {data.playerImage ? (
+                            <Avatar
+                              className="center"
+                              alt={data.playerName}
+                              src={`${BASE_URL}/${data.playerImage}`}
+                              sx={{
+                                width: 50,
+                                height: 50,
+                                // fontSize: '5rem',
+                              }}
+                            />
+                          ) : (
+                            <Avatar
+                              className="center"
+                              alt={data.playerName}
+                              src={`${BASE_URL}/static/account_logo/default.png`}
+                              sx={{
+                                width: 50,
+                                height: 50,
+                                // fontSize: '1rem',
+                              }}
+                            />
+                          )}
                         </div>
                         <div style={{ width: '50%' }}>
                           <div className="sold-player-name">

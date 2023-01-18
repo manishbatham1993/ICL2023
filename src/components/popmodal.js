@@ -55,12 +55,35 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
                   style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div>
-                    <Avatar
+                    {/* <Avatar
                       className="center"
                       alt={data.playerName}
                       src={`${BASE_URL}/${data.playerImage}`}
                       sx={{ width: 150, height: 150, fontSize: '5rem' }}
-                    />
+                    /> */}
+                    {data.playerImage ? (
+                      <Avatar
+                        className="center"
+                        alt={data.playerName}
+                        src={`${BASE_URL}/${data.playerImage}`}
+                        sx={{
+                          width: 150,
+                          height: 150,
+                          fontSize: '5rem',
+                        }}
+                      />
+                    ) : (
+                      <Avatar
+                        className="center"
+                        alt={data.playerName}
+                        src={`${BASE_URL}/static/account_logo/default.png`}
+                        sx={{
+                          width: 150,
+                          height: 150,
+                          fontSize: '5rem',
+                        }}
+                      />
+                    )}
                     <p className="name" style={{ color: 'white' }}>
                       {data.playerName}
                     </p>
@@ -91,12 +114,35 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
               <>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                   <div>
-                    <Avatar
+                    {/* <Avatar
                       className="center"
                       alt={data.name}
                       src={`${BASE_URL}/${data.imageUrl}`}
                       sx={{ width: 150, height: 150, fontSize: '5rem' }}
-                    />
+                    /> */}
+                    {data.imageUrl ? (
+                      <Avatar
+                        className="center"
+                        alt={data.playerName}
+                        src={`${BASE_URL}/${data.imageUrl}`}
+                        sx={{
+                          width: 150,
+                          height: 150,
+                          fontSize: '5rem',
+                        }}
+                      />
+                    ) : (
+                      <Avatar
+                        className="center"
+                        alt={data.name}
+                        src={`${BASE_URL}/static/account_logo/default.png`}
+                        sx={{
+                          width: 150,
+                          height: 150,
+                          // fontSize: '1rem',
+                        }}
+                      />
+                    )}
                     <p className="name" style={{ color: 'white' }}>
                       {data.name}
                     </p>
