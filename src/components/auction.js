@@ -90,6 +90,16 @@ const Auction = () => {
   const { DEFAULT_BID_AMOUNT, BID_INCREASE, PLAYERS_PER_TEAM } =
     entityCtx.configurations
   const TEAM_ID = authCtx.user ? authCtx.user.teamId : null
+  const CURRENT_TEAM =
+    entityCtx && entityCtx.teams && TEAM_ID
+      ? entityCtx.teams.find((team) => team._id === TEAM_ID)
+      : null
+  const OWNER_IS_PLAYING =
+    CURRENT_TEAM && CURRENT_TEAM.teamOwner && CURRENT_TEAM.teamOwner.isPlaying
+      ? true
+      : false
+  console.log('current-team', CURRENT_TEAM)
+  console.log('owner-is-playing', OWNER_IS_PLAYING)
 
   const COLORS = [
     { c1: '#0078BC', c2: '#17479E' },
@@ -124,7 +134,10 @@ const Auction = () => {
     mappedData.teamStats &&
     mappedData.teamStats[TEAM_ID] &&
     !isNaN(PLAYERS_PER_TEAM)
-      ? PLAYERS_PER_TEAM - mappedData.teamStats[TEAM_ID].total - 1
+      ? PLAYERS_PER_TEAM -
+        mappedData.teamStats[TEAM_ID].total -
+        1 -
+        (OWNER_IS_PLAYING ? 1 : 0)
       : null
 
   const getMaxAllowableBid = () => {
@@ -146,7 +159,7 @@ const Auction = () => {
     mappedData &&
     mappedData.state === 'progress' &&
     mappedData.remBudget >= nextBidAmount &&
-    mappedData.teamStats[TEAM_ID].total < PLAYERS_PER_TEAM - 1 &&
+    remainingPlayers > 0 &&
     (!nextBidAmount || nextBidAmount <= getMaxAllowableBid()) &&
     (!mappedData.lastBid || mappedData.lastBid.teamId !== TEAM_ID)
 
@@ -208,6 +221,7 @@ const Auction = () => {
           allRounders: 0,
           total: 0,
           budget: auctionData.budget[team._id],
+          isPlaying: team.teamOwner && team.teamOwner.isPlaying ? true : false,
         }
       })
     const previousAuctions = []
@@ -736,7 +750,7 @@ const Auction = () => {
               className="overflow card-height"
               style={{
                 maxHeight: '500px',
-                minHeight: '500px',
+                minHeight: '730px',
               }}
             >
               <CardHeader>
@@ -821,7 +835,7 @@ const Auction = () => {
               className="card-height"
               style={{
                 maxHeight: '500px',
-                minHeight: '500px',
+                minHeight: '730px',
               }}
             >
               <CardHeader>
@@ -886,7 +900,10 @@ const Auction = () => {
                           <li className="m-0 px-1">
                             <span className="rm-name">Need Players</span>
                             <span className="rm-fund">
-                              {PLAYERS_PER_TEAM - 1 - data.total}
+                              {PLAYERS_PER_TEAM -
+                                1 -
+                                data.total -
+                                (data.isPlaying ? 1 : 0)}
                             </span>
                           </li>
                         </ul>
