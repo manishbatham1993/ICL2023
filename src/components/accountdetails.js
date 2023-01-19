@@ -57,7 +57,8 @@ const Accountdetail = (props) => {
     : []
 
   accountPlayers.forEach(function (player) {
-    player.teamname = player.teamId.name
+    player.teamname =
+      player.teamId && player.teamId.name ? player.teamId.name : '-'
   })
   // / console.log('playerdetails', players)
   console.log('accountPlayers', accountPlayers)
