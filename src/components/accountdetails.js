@@ -45,14 +45,22 @@ const Accountdetail = (props) => {
   const accounts = entityCtx.accounts
   const teams = entityCtx.teams
   const players = entityCtx.players
-
   const account = accounts.find((account) => account._id === id)
   const accountTeams = teams
     ? teams.filter((team) => team.accountId._id === id)
     : []
-  const accountPlayers = players
+  // console.log('players', players)
+  // console.log('playerdetails', players)
+  var accountPlayers
+  accountPlayers = players
     ? players.filter((player) => player.accountId._id === id)
     : []
+
+  accountPlayers.forEach(function (player) {
+    player.teamname = player.teamId.name
+  })
+  // / console.log('playerdetails', players)
+  console.log('accountPlayers', accountPlayers)
 
   const teamOwners = teams
     .filter((team) => team.teamOwner)
@@ -63,7 +71,7 @@ const Accountdetail = (props) => {
   const soldPlayers = accountPlayers.filter(
     (player) => player.auctionStatus && player.auctionStatus === 'SOLD'
   )
-  console.log('accountplayer', accountPlayers)
+  // console.log('accountplayer', accountPlayers)
   const unsoldPlayers = accountPlayers.filter(
     (player) => !player.auctionStatus || player.auctionStatus === 'UNSOLD'
   )
@@ -122,6 +130,7 @@ const Accountdetail = (props) => {
   }
   const [order, setorder] = useState('ASC')
   const [sortdata, setsortdata] = useState()
+
   const sorting = (col) => {
     if (order === 'ASC') {
       const sorted = [...accountPlayers].sort((a, b) =>
@@ -261,7 +270,9 @@ const Accountdetail = (props) => {
                         <th onClick={() => sorting('name')}>
                           <SortIcon></SortIcon>Player Name
                         </th>
-                        <th>Team</th>
+                        <th onClick={() => sorting('teamname')}>
+                          <SortIcon></SortIcon>Team
+                        </th>
                         <th onClick={() => sorting('gender')}>
                           <SortIcon></SortIcon>Gender
                         </th>
@@ -277,6 +288,7 @@ const Accountdetail = (props) => {
                     <tbody>
                       {(sortdata ? sortdata : accountPlayers).map((player) => (
                         <tr key={player.name}>
+                          {console.log('player-data', player)}
                           <td>
                             {/* <Avatar
                               className="center"
