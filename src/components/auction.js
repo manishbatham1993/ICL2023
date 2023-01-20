@@ -383,7 +383,7 @@ const Auction = () => {
           setOpenSnackbar(true)
           setRoundEnd(true)
           setRoundEndcount(payload.data.round)
-
+          setCompletedFlag(false)
         case 'ACCOUNT_AUCTION_COMPLETED':
           setCompletedFlag(true)
 
