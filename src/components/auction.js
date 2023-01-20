@@ -42,11 +42,26 @@ import {
 } from 'reactstrap'
 import { ManageHistorySharp, PriceChange } from '@mui/icons-material'
 
+const COLORS = [
+  { c1: '#0078BC', c2: '#17479E' },
+  { c1: '#1C1C1C', c2: '#0B4973' },
+  { c1: '#D71920', c2: '#84171B' },
+  { c1: '#FCCA06', c2: '#F25C19' },
+  { c1: '#1C1C1C', c2: '#0B4973' },
+  { c1: '#D71920', c2: '#84171B' },
+  { c1: '#EA1A85', c2: '#001D48' },
+  { c1: '#6A6A6A', c2: '#1C1C1C' },
+  { c1: '#F26522', c2: '#ED1A37' },
+  { c1: '#A72056', c2: '#FFCC00' },
+]
+
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
 
 // AUCTION_SCHEMA : {
-//   state: (null/'ready'/'progress'/'completed'/)
+//   state: (null/'ready'/'progress'/'completed'/'pause')
+//   round: <roundNumber>
+//   accountId: null,
 //   teams: [<teamId>],
 //   budget: {teamId: <budget>}
 //   remainingPlayers : [<playerId>]
@@ -56,30 +71,12 @@ const socket = io(BASE_URL)
 //   currentPlayer: {
 //     id : <playerId>
 //     bidAmount: <currentAmount>
-//     bids : [<teamId>]
+//     bids : [<bidId>]
 //     clock: <clock>
 //   }
+//   prevPlayer: <id>
 //   bids : [
-//     {playerId : <playerId>, teamId: <teamId>, amount: <amount> }
-//   ]
-// }
-
-// AUCTION_SCHEMA : {
-//   state: (null/'ready'/'progress'/'completed'/)
-//   teams: [<teamId>],
-//   budget: {teamId: <budget>}
-//   remainingPlayers : [<playerId>]
-//   unsoldPlayers: [<playerId>]
-//   soldPlayers: [<playerId>],
-//   playerLastBid: {playerId: <bidindex>},
-//   currentPlayer: {
-//     id : <playerId>
-//     bidAmount: <currentAmount>
-//     bids : [<teamId>]
-//     clock: <clock>
-//   }
-//   bids : [
-//     {playerId : <playerId>, teamId: <teamId>, amount: <amount> }
+//     {playerId : <playerId>, teamId: <teamId>, amount: <amount>, timestamp: <timestamp> }
 //   ]
 // }
 
@@ -98,22 +95,7 @@ const Auction = () => {
     CURRENT_TEAM && CURRENT_TEAM.teamOwner && CURRENT_TEAM.teamOwner.isPlaying
       ? true
       : false
-  console.log('current-team', CURRENT_TEAM)
-  console.log('owner-is-playing', OWNER_IS_PLAYING)
 
-  const COLORS = [
-    { c1: '#0078BC', c2: '#17479E' },
-    { c1: '#1C1C1C', c2: '#0B4973' },
-    { c1: '#D71920', c2: '#84171B' },
-    { c1: '#FCCA06', c2: '#F25C19' },
-    { c1: '#1C1C1C', c2: '#0B4973' },
-    { c1: '#D71920', c2: '#84171B' },
-    { c1: '#EA1A85', c2: '#001D48' },
-    { c1: '#6A6A6A', c2: '#1C1C1C' },
-    { c1: '#F26522', c2: '#ED1A37' },
-    { c1: '#A72056', c2: '#FFCC00' },
-  ]
-  //console.log('---------auction--------')
   const [auctionData, setAuctionData] = useState()
   const [mappedData, setMappedData] = useState()
   const [teams, setTeams] = useState([])
@@ -130,19 +112,26 @@ const Auction = () => {
   const [completedflag, setCompletedFlag] = useState(false)
 
   const remainingPlayers =
+    TEAM_ID &&
     mappedData &&
     mappedData.teamStats &&
     mappedData.teamStats[TEAM_ID] &&
     !isNaN(PLAYERS_PER_TEAM)
       ? PLAYERS_PER_TEAM -
-        mappedData.teamStats[TEAM_ID].total -
-        1 -
-        (OWNER_IS_PLAYING ? 1 : 0)
+        (OWNER_IS_PLAYING ? 1 : 0) -
+        mappedData.teamStats[TEAM_ID].total
       : null
 
+  console.log('remaining-players: ', remainingPlayers)
+
   const getMaxAllowableBid = () => {
-    // base amount should be reserved for all remaining players excluding current plyer i.e [(remainingPlayers minus 1 ) times BASE-AMOUNT]
-    if (!mappedData || isNaN(remainingPlayers) || isNaN(DEFAULT_BID_AMOUNT)) {
+    // base amount should be reserved for all remaining players excluding current player to be bought i.e [(remainingPlayers minus 1 ) times BASE_AMOUNT]
+    if (
+      !mappedData ||
+      isNaN(remainingPlayers) ||
+      isNaN(DEFAULT_BID_AMOUNT) ||
+      remainingPlayers <= 0
+    ) {
       console.log('max-allowable-bid --  INFIINITY')
       return Number.MAX_SAFE_INTEGER
     }
@@ -154,6 +143,7 @@ const Auction = () => {
     setRoundEnd(false)
     setAuctionEnded(false)
   }
+
   const canBid =
     TEAM_ID &&
     mappedData &&
@@ -901,7 +891,6 @@ const Auction = () => {
                             <span className="rm-name">Need Players</span>
                             <span className="rm-fund">
                               {PLAYERS_PER_TEAM -
-                                1 -
                                 data.total -
                                 (data.isPlaying ? 1 : 0)}
                             </span>
