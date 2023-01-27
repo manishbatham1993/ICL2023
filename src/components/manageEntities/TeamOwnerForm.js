@@ -17,6 +17,7 @@ const TeamOwnerForm = (props) => {
   const emailRef = useRef()
   const passwordRef = useRef()
   const budgetRef = useRef()
+  const isPlayingRef = useRef()
 
   const [selectedTeam, setSelectedTeam] = useState(null)
   const [selectedPlayer, setSelectedPlayer] = useState(null)
@@ -51,6 +52,7 @@ const TeamOwnerForm = (props) => {
       email: emailRef.current.value,
       password: passwordRef.current.value,
       budget: budgetRef.current.value,
+      isPlaying: isPlayingRef.current.value,
     }
 
     const config = {
@@ -138,6 +140,13 @@ const TeamOwnerForm = (props) => {
           required
           defaultValue={DEFAULT_BUDGET}
         />
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="isPlaying">Is Playing</label>
+        <select id="isPlaying" ref={isPlayingRef}>
+          <option value="false">No</option>
+          <option value="true">Yes</option>
+        </select>
       </div>
       <button type="submit">Set</button>
     </form>

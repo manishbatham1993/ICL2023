@@ -64,7 +64,7 @@ const Squaddetail = () => {
 
       <Row style={{ justifyContent: 'space-evenly' }}>
         {teamPlayers.map((player) => (
-          <Col md="6" sm="12">
+          <Col>
             <Card
               style={{
                 width: '21rem',
