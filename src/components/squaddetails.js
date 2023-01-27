@@ -61,6 +61,7 @@ const Squaddetail = () => {
           ? teamPlayers[0].teamId.name + ' SQUAD'
           : 'ICL SQUAD'}
       </h1>
+      {console.log(teamPlayers)}
 
       <Row style={{ justifyContent: 'space-evenly' }}>
         {teamPlayers.map((player) => (
@@ -77,6 +78,24 @@ const Squaddetail = () => {
                 <div className="block block-one" />
                 <div className="block block-two" />
                 <div className="block block-three" />
+                {console.log(player)}
+                {player.auctionStatus == 'OWNER' ? (
+                  <button
+                    className="btn-icon btn-round btn-success"
+                    style={{
+                      position: 'absolute',
+                      top: '10px',
+                      right: '10px',
+                      padding: '6px 12px',
+                      fontWeight: '700',
+                      fontSize: '16px',
+                    }}
+                  >
+                    C
+                  </button>
+                ) : (
+                  ''
+                )}
                 <div className="block block-four" />
                 {/* <Avatar
                   className="center"
