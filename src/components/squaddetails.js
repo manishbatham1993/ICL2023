@@ -78,8 +78,7 @@ const Squaddetail = () => {
                 <div className="block block-one" />
                 <div className="block block-two" />
                 <div className="block block-three" />
-                {console.log(player)}
-                {player.isCaptain == 'CAPTAIN' ? (
+                {player.isCaptain ? (
                   <button
                     className="btn-icon btn-round btn-success"
                     style={{

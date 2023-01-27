@@ -19,6 +19,7 @@ const PlayerForm = (props) => {
   const ratingRef = useRef()
   const teamIdRef = useRef()
   const auctionStatusRef = useRef()
+  const isCaptainRef = useRef()
 
   const accountId =
     props.data && props.data.accountId && props.data.accountId._id
@@ -39,6 +40,7 @@ const PlayerForm = (props) => {
     playerFormData.append('image', imageRef.current.files[0])
     playerFormData.append('gender', genderRef.current.value)
     playerFormData.append('rating', ratingRef.current.value)
+    playerFormData.append('isCaptain', isCaptainRef.current.value)
     if (props.isEdit) playerFormData.append('playerId', props.data._id)
     // auctionData
     if (props.isEdit) playerFormData.append('teamId', teamIdRef.current.value)
@@ -177,6 +179,15 @@ const PlayerForm = (props) => {
             props.isEdit && props.data.rating ? props.data.rating : ''
           }
         />
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="isCaptain">Captain</label>
+        <select id="isCaptain" ref={isCaptainRef}>
+          <option value="false">No</option>
+          <option value="true" selected={props?.data?.isCaptain}>
+            Yes
+          </option>
+        </select>
       </div>
       <div className={classes.input}>
         <label htmlFor="bio">Bio</label>
