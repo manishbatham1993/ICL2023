@@ -118,16 +118,16 @@ function ResponsiveAppBar() {
                   Players
                 </Link>
               </MenuItem>
-              {authCtx.isLoggedIn && (
-                <MenuItem key="Teams" onClick={handleCloseNavMenu}>
-                  <Link
-                    to="/Teams"
-                    style={{ color: 'black', textDecoration: 'none' }}
-                  >
-                    Teams
-                  </Link>
-                </MenuItem>
-              )}
+              {/* {authCtx.isLoggedIn && ( */}
+              <MenuItem key="Teams" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/Teams"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Teams
+                </Link>
+              </MenuItem>
+              {/* )} */}
               {/* {authCtx.isLoggedIn && ( */}
               <MenuItem key="Auction" onClick={handleCloseNavMenu}>
                 <Link
@@ -168,7 +168,6 @@ function ResponsiveAppBar() {
                 src={Logo}
               />
             </Link>
-
             <Link
               to="overview"
               style={{ color: 'white', textDecoration: 'none' }}
@@ -193,20 +192,17 @@ function ResponsiveAppBar() {
                 Players
               </Button>
             </Link>
-            {authCtx.isLoggedIn && (
-              <Link
-                to="teams"
-                style={{ color: 'white', textDecoration: 'none' }}
+            {/* {authCtx.isLoggedIn && ( */}
+            <Link to="teams" style={{ color: 'white', textDecoration: 'none' }}>
+              <Button
+                key="Teams"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                <Button
-                  key="Teams"
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  Teams
-                </Button>
-              </Link>
-            )}
+                Teams
+              </Button>
+            </Link>
+            {/* // )} */}
             {/* {authCtx.isLoggedIn && ( */}
             <Link
               to="auction"
@@ -235,6 +231,15 @@ function ResponsiveAppBar() {
                 </Button>
               </Link>
             )}
+            <Link to="rules" style={{ color: 'white', textDecoration: 'none' }}>
+              <Button
+                key="rules"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Rules
+              </Button>
+            </Link>
           </Box>
           {authCtx.isLoggedIn ? (
             <Box sx={{ flexGrow: 0 }}>

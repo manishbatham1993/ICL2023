@@ -20,7 +20,8 @@ import Allplayer from './components/Allplayer'
 import TeamDetail from './components/teamdetail'
 import { Route, Routes } from 'react-router'
 import Modal from './UI/Modal'
-
+import { RuleSharp } from '@mui/icons-material'
+import Rules from './components/manageEntities/Rules'
 function App() {
   const authCtx = useContext(AuthContext)
 
@@ -66,11 +67,14 @@ function App() {
           path="/accountlist"
           element={authCtx.isLoggedIn ? <AccountList /> : <SignIn />}
         />
-        <Route
+        {/* <Route
           path="/Teams"
           element={authCtx.isLoggedIn ? <TeamDetail /> : <SignIn />}
-        />
+        /> */}
+        <Route path="/Teams" element={<TeamDetail />} />
+
         <Route path="/overview" element={<Overview />} />
+        <Route path="/rules" element={<Rules />} />
         <Route path="/accountdetail/:id" element={<Accountdetail />} />
         <Route path="/squaddetail/:id" element={<Squaddetail />} />
         <Route path="/Auction" element={<Auction />} />
