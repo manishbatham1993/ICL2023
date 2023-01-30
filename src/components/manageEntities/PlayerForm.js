@@ -13,7 +13,7 @@ const PlayerForm = (props) => {
   const emailRef = useRef()
   const skillRef = useRef()
   const levelRef = useRef()
-  const bioRef = useRef()
+  const phoneNumberRef = useRef()
   const imageRef = useRef()
   const genderRef = useRef()
   const ratingRef = useRef()
@@ -36,7 +36,7 @@ const PlayerForm = (props) => {
     playerFormData.append('email', emailRef.current.value)
     playerFormData.append('skill', skillRef.current.value)
     playerFormData.append('level', levelRef.current.value)
-    playerFormData.append('bio', bioRef.current.value)
+    playerFormData.append('phoneNumber', phoneNumberRef.current.value)
     playerFormData.append('image', imageRef.current.files[0])
     playerFormData.append('gender', genderRef.current.value)
     playerFormData.append('rating', ratingRef.current.value)
@@ -190,12 +190,14 @@ const PlayerForm = (props) => {
         </select>
       </div>
       <div className={classes.input}>
-        <label htmlFor="bio">Bio</label>
+        <label htmlFor="phoneNumber">phoneNumber</label>
         <input
-          id="bio"
+          id="phoneNumber"
           type="text"
-          ref={bioRef}
-          defaultValue={props.isEdit && props.data.bio ? props.data.bio : ''}
+          ref={phoneNumberRef}
+          defaultValue={
+            props.isEdit && props.data.phoneNumber ? props.data.phoneNumber : ''
+          }
         />
       </div>
       <div className={classes.input}>
