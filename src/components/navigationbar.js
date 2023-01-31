@@ -137,6 +137,14 @@ function ResponsiveAppBar() {
                   Auction
                 </Link>
               </MenuItem>
+              <MenuItem key="topbuys" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/topbuys"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Top Buys
+                </Link>
+              </MenuItem>
               {/* )} */}
               {authCtx.role === 'admin' && (
                 <MenuItem key="Manage" onClick={handleCloseNavMenu}>
@@ -240,6 +248,18 @@ function ResponsiveAppBar() {
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Auction
+              </Button>
+            </Link>
+            <Link
+              to="topbuys"
+              style={{ color: 'white', textDecoration: 'none' }}
+            >
+              <Button
+                key="topbuys"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Top Buys
               </Button>
             </Link>
             {/* )} */}

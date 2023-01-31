@@ -14,6 +14,7 @@ import Overview from './components/overview'
 import ManageEntities from './components/manageEntities/ManageEntities'
 import Countdown from './components/countdown'
 import Accountdetail from './components/accountdetails'
+import TopBuys from './components/TopBuys'
 import Squaddetail from './components/squaddetails'
 import AlertCongratulationSlide from './components/modal'
 import Allplayer from './components/Allplayer'
@@ -78,6 +79,7 @@ function App() {
         <Route path="/overview" element={<Overview />} />
         <Route path="/rules" element={<Rules />} />
         <Route path="/accountdetail/:id" element={<Accountdetail />} />
+        <Route path="/topbuys" element={<TopBuys />} />
         <Route path="/squaddetail/:id" element={<Squaddetail />} />
         <Route path="/Auction" element={<Auction />} />
         <Route path="/manage" element={manageElement} />
