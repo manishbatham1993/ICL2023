@@ -22,6 +22,7 @@ import { Route, Routes } from 'react-router'
 import Modal from './UI/Modal'
 import { RuleSharp } from '@mui/icons-material'
 import Rules from './components/manageEntities/Rules'
+import Fixtures from './components/Fixtures'
 function App() {
   const authCtx = useContext(AuthContext)
 
@@ -72,6 +73,7 @@ function App() {
           element={authCtx.isLoggedIn ? <TeamDetail /> : <SignIn />}
         /> */}
         <Route path="/Teams" element={<TeamDetail />} />
+        <Route path="/fixtures" element={<Fixtures />} />
 
         <Route path="/overview" element={<Overview />} />
         <Route path="/rules" element={<Rules />} />
