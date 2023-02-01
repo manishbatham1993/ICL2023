@@ -53,11 +53,8 @@ function App() {
     <div className="App">
       <ResponsiveAppBar />
       <Routes>
-        <Route path="/" element={<Countdown />} />
-        {/* <Route
-          path="Players"
-          element={authCtx.isLoggedIn ? <Allplayer /> : <SignIn />}
-        /> */}
+        <Route path="/" element={<TeamDetail />} />
+        <Route path="/countdown" element={<Countdown />} />
         <Route path="players" element={<Allplayer />} />
         <Route path="Signin" element={<SignIn />} />
 
@@ -69,10 +66,6 @@ function App() {
           path="/accountlist"
           element={authCtx.isLoggedIn ? <AccountList /> : <SignIn />}
         />
-        {/* <Route
-          path="/Teams"
-          element={authCtx.isLoggedIn ? <TeamDetail /> : <SignIn />}
-        /> */}
         <Route path="/Teams" element={<TeamDetail />} />
         <Route path="/fixtures" element={<Fixtures />} />
 
