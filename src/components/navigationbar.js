@@ -286,20 +286,18 @@ function ResponsiveAppBar() {
                 Rules
               </Button>
             </Link>
-            {authCtx.role === 'admin' && (
-              <Link
-                to="fixtures"
-                style={{ color: 'white', textDecoration: 'none' }}
+            <Link
+              to="fixtures"
+              style={{ color: 'white', textDecoration: 'none' }}
+            >
+              <Button
+                key="fixtures"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                <Button
-                  key="fixtures"
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  Fixtures
-                </Button>
-              </Link>
-            )}
+                Fixtures
+              </Button>
+            </Link>
           </Box>
           {authCtx.isLoggedIn ? (
             <Box sx={{ flexGrow: 0 }}>

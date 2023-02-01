@@ -16,6 +16,7 @@ const ConfigForm = (props) => {
   const auctionIntervalInSecRef = useRef()
   const yearRef = useRef()
   const countdownRef = useRef()
+  const fixtureRoundsRef = useRef()
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
@@ -27,6 +28,7 @@ const ConfigForm = (props) => {
       AUCTION_INTERVAL_IN_SEC: auctionIntervalInSecRef.current.value,
       YEAR: yearRef.current.value,
       COUNTDOWN: countdownRef.current.value,
+      FIXTURE_ROUNDS: fixtureRoundsRef.current.value,
     }
     const config = {
       headers: {
@@ -129,6 +131,19 @@ const ConfigForm = (props) => {
           ref={countdownRef}
           defaultValue={
             props.configurations.COUNTDOWN ? props.configurations.COUNTDOWN : ''
+          }
+        />
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="fixtureRounds">FIXTURE_ROUNDS</label>
+        <input
+          id="fixtureRounds"
+          type="Number"
+          ref={fixtureRoundsRef}
+          defaultValue={
+            props.configurations.FIXTURE_ROUNDS
+              ? props.configurations.FIXTURE_ROUNDS
+              : ''
           }
         />
       </div>

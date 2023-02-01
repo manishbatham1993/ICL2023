@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import axios from 'axios'
 import AuthContext from '../store/auth-context'
+import EntityContext from '../store/entity-context'
 
 import './overview.css'
 import './Fixtures.css'
@@ -60,29 +61,26 @@ const classes = {
 }
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
-
 const Fixtures = () => {
   const authCtx = useContext(AuthContext)
+  const entityCtx = useContext(EntityContext)
+
   const fixtureDataRef = useRef()
+
   const [fixtures, setFixtures] = useState([])
-  let round1, round2, round3, round4, round5
-  round1 = fixtures.filter((fixture) => fixture.round === 1)
-  round2 = fixtures.filter((fixture) => fixture.round === 2)
-  round3 = fixtures.filter((fixture) => fixture.round === 3)
-  round4 = fixtures.filter((fixture) => fixture.round === 4)
-  round5 = fixtures.filter((fixture) => fixture.round === 5)
+  const FIXTURE_ROUNDS = entityCtx ? entityCtx.configurations.FIXTURE_ROUNDS : 0
+
+  const rounds = [...Array(FIXTURE_ROUNDS || 0).keys()].map((i) => i + 1)
 
   useEffect(() => {
     axios.get(BASE_URL + '/api/v1/fixture').then((res) => {
       const fixtures = res?.data?.fixtures
       if (fixtures) setFixtures(fixtures)
-      console.log('fixtures', fixtures)
     })
   }, [])
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
-    console.log('hello')
 
     const formData = new FormData()
     formData.append('csv', fixtureDataRef.current.files[0])
@@ -96,7 +94,6 @@ const Fixtures = () => {
     axios
       .post(BASE_URL + '/api/v1/fixture/upload', formData, config)
       .then((res) => {
-        console.log('res', res.data)
         window.location.reload()
       })
   }
@@ -106,7 +103,7 @@ const Fixtures = () => {
       {authCtx.role === 'admin' && (
         <Box sx={classes.form}>
           <form onSubmit={formSubmitHandler}>
-            <input id="image" type="file" ref={fixtureDataRef} />
+            <input id="image" type="file" ref={fixtureDataRef} required />
             <Button variant="primary" style={classes.button}>
               Upload Fixtures
             </Button>
@@ -125,7 +122,7 @@ const Fixtures = () => {
         </Box>
       )}
       <div className="content mainContent container">
-        <Tab.Container id="left-tabs-example" defaultActiveKey="tab2">
+        <Tab.Container id="left-tabs-example" defaultActiveKey="round1">
           <Row>
             <Nav
               fill
@@ -133,121 +130,83 @@ const Fixtures = () => {
               className=""
               style={{ flex: 'auto', marginBottom: '40px' }}
             >
-              <Nav.Item>
-                <Nav.Link eventKey="tab1">Round1</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="tab2">Round2</Nav.Link>
-              </Nav.Item>
+              {rounds.map((i) => (
+                <Nav.Item>
+                  <Nav.Link eventKey={`round${i}`}>Round{i}</Nav.Link>
+                </Nav.Item>
+              ))}
             </Nav>
           </Row>
           <Row>
             <Col>
               <Tab.Content>
-                <Tab.Pane eventKey="tab1">
-                  <Box sx={classes.box}>
-                    <Box sx={classes.details}>
-                      <Button
-                        variant="contained"
-                        color="info"
-                        style={classes.button}
-                      >
-                        Match 1
-                      </Button>
+                {rounds.map((i) => (
+                  <Tab.Pane eventKey={`round${i}`}>
+                    {fixtures
+                      .filter((fixture) => fixture.round === i)
+                      .map((match) => (
+                        <Box sx={classes.box}>
+                          <Box sx={classes.details}>
+                            <Button
+                              variant="contained"
+                              color="info"
+                              style={classes.button}
+                            >
+                              Match {match.match}
+                            </Button>
 
-                      <Typography variant="h5" style={{ color: 'yellow' }}>
-                        Sunday, 4th Feb 2022
-                      </Typography>
-                      <Typography variant="h5" style={{ color: 'yellow' }}>
-                        4:00 PM
-                      </Typography>
+                            <Typography
+                              variant="h5"
+                              style={{ color: 'yellow' }}
+                            >
+                              {match.date}
+                            </Typography>
+                            <Typography
+                              variant="h5"
+                              style={{ color: 'yellow' }}
+                            >
+                              {match.time}
+                            </Typography>
 
-                      <Button
-                        variant="contained"
-                        style={classes.button}
-                        size="lg"
-                      >
-                        Ground : Ranbhumi
-                      </Button>
-                    </Box>
-                    <Card style={classes.card}>
-                      <Avatar
-                        className="center"
-                        src={`anupama-shamshers.jfif`}
-                        sx={classes.avatar}
-                      />
-                      <Typography variant="h5">North Star Smashers</Typography>
-                    </Card>
+                            <Button
+                              variant="contained"
+                              style={classes.button}
+                              size="lg"
+                            >
+                              Ground: {match.ground}
+                            </Button>
+                          </Box>
+                          <Card style={classes.card}>
+                            <Avatar
+                              className="center"
+                              src={`${BASE_URL}/${match.teamA?.imageUrl}`}
+                              sx={classes.avatar}
+                            />
+                            <Typography variant="h5">
+                              {match.teamA?.name}
+                            </Typography>
+                          </Card>
 
-                    <Typography
-                      variant="h4"
-                      style={{ margin: 'auto', fontWeight: 'bold' }}
-                    >
-                      V/S
-                    </Typography>
-                    <Card style={classes.card}>
-                      <Avatar
-                        className="center"
-                        src={`spartans- Shinja.jpg`}
-                        sx={classes.avatar}
-                      />
-
-                      <Typography variant="h5">Nort Star Spartans</Typography>
-                    </Card>
-                  </Box>
-
-                  <Box sx={classes.box}>
-                    <Box sx={classes.details}>
-                      <Button
-                        variant="contained"
-                        color="info"
-                        style={classes.button}
-                      >
-                        Match 1
-                      </Button>
-
-                      <Typography variant="h5" style={{ color: 'yellow' }}>
-                        Sunday, 4th Feb 2022
-                      </Typography>
-                      <Typography variant="h5" style={{ color: 'yellow' }}>
-                        4:00 PM
-                      </Typography>
-
-                      <Button
-                        variant="contained"
-                        style={classes.button}
-                        size="lg"
-                      >
-                        Ground : Ranbhumi
-                      </Button>
-                    </Box>
-                    <Card style={classes.card}>
-                      <Avatar
-                        className="center"
-                        src={`anupama-shamshers.jfif`}
-                        sx={classes.avatar}
-                      />
-                      <Typography variant="h5">North Star Smashers</Typography>
-                    </Card>
-
-                    <Typography
-                      variant="h4"
-                      style={{ margin: 'auto', fontWeight: 'bold' }}
-                    >
-                      V/S
-                    </Typography>
-                    <Card style={classes.card}>
-                      <Avatar
-                        className="center"
-                        src={`spartans- Shinja.jpg`}
-                        sx={classes.avatar}
-                      />
-
-                      <Typography variant="h5">Nort Star Spartans</Typography>
-                    </Card>
-                  </Box>
-                </Tab.Pane>
-                <Tab.Pane eventKey="tab2"></Tab.Pane>
+                          <Typography
+                            variant="h4"
+                            style={{ margin: 'auto', fontWeight: 'bold' }}
+                          >
+                            V/S
+                          </Typography>
+                          <Card style={classes.card}>
+                            <Avatar
+                              className="center"
+                              src={`${BASE_URL}/${match.teamB?.imageUrl}`}
+                              sx={classes.avatar}
+                            />
+                            <Typography variant="h5">
+                              {match.teamB?.name}
+                            </Typography>
+                          </Card>
+                        </Box>
+                      ))}
+                  </Tab.Pane>
+                ))}
               </Tab.Content>
             </Col>
           </Row>

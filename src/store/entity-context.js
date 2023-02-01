@@ -70,6 +70,9 @@ export const EntityContextProvider = (props) => {
           COUNTDOWN: dbConfigurations.COUNTDOWN
             ? dbConfigurations.COUNTDOWN
             : '2023-01-01T00:00',
+          FIXTURE_ROUNDS: dbConfigurations.FIXTURE_ROUNDS
+            ? parseInt(dbConfigurations.FIXTURE_ROUNDS)
+            : 0,
         }))
       }
     })
