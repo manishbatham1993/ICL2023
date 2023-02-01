@@ -21,7 +21,7 @@ const classes = {
   },
   box: {
     display: 'flex',
-    margin: '2rem 0',
+    margin: '1rem 0',
     padding: '1rem',
     boxShadow: 2,
     borderRadius: 2,
@@ -31,7 +31,7 @@ const classes = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    gap: '1.5rem',
+    gap: '0.5rem',
     width: '65%',
   },
   container: {
@@ -51,12 +51,63 @@ const classes = {
     // background: 'transparent',
     boxShadow: 'none',
     width: '40%',
+    margin: 0,
   },
   avatar: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
     fontSize: '5rem',
     marginBottom: '1rem',
+  },
+}
+
+const mobileClasses = {
+  form: {
+    margin: '2rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  box: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    margin: '1rem 0',
+    padding: '1rem',
+    boxShadow: 2,
+    borderRadius: 2,
+    background: '#27293d',
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: '0.5rem',
+    // width: '65%',
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    background: 'grey',
+    borderRadius: '7rem',
+    color: 'black',
+    height: '4rem',
+  },
+  button: {
+    textTransform: 'uppercase',
+    margin: '0 auto',
+    maxWidth: '80%',
+  },
+  card: {
+    // background: 'transparent',
+    boxShadow: 'none',
+    margin: 0,
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    fontSize: '5rem',
+    // marginBottom: '1rem',
   },
 }
 
@@ -98,6 +149,139 @@ const Fixtures = () => {
       })
   }
 
+  // for mobile
+  if (window.innerWidth <= 768) {
+    return (
+      <React.Fragment>
+        {authCtx.role === 'admin' && (
+          <Box sx={mobileClasses.form}>
+            <form onSubmit={formSubmitHandler}>
+              <input id="image" type="file" ref={fixtureDataRef} required />
+              <Button
+                variant="primary"
+                style={{
+                  textTransform: 'uppercase',
+                  marginLeft: '1rem',
+                  width: '90%',
+                }}
+                size="sm"
+              >
+                Upload Fixtures
+              </Button>
+            </form>
+            <form method="GET" action={`${BASE_URL}/api/v1/fixture/csv`}>
+              <Button
+                variant="primary"
+                style={{
+                  textTransform: 'uppercase',
+                  marginLeft: '1rem',
+                  width: '90%',
+                }}
+                size="sm"
+              >
+                Download Fixtures
+              </Button>
+            </form>
+          </Box>
+        )}
+        <div className="content mainContent container">
+          <Tab.Container id="left-tabs-example" defaultActiveKey="round1">
+            <Row>
+              <Nav
+                fill
+                variant="pills"
+                className=""
+                style={{ flex: 'auto', marginBottom: '40px' }}
+              >
+                {rounds.map((i) => (
+                  <Nav.Item>
+                    <Nav.Link eventKey={`round${i}`}>Round{i}</Nav.Link>
+                  </Nav.Item>
+                ))}
+              </Nav>
+            </Row>
+            <Row>
+              <Col>
+                <Tab.Content>
+                  {rounds.map((i) => (
+                    <Tab.Pane eventKey={`round${i}`}>
+                      {fixtures
+                        .filter((fixture) => fixture.round === i)
+                        .map((match) => (
+                          <Box sx={mobileClasses.box}>
+                            <Box sx={mobileClasses.details}>
+                              <Button
+                                variant="contained"
+                                color="info"
+                                style={mobileClasses.button}
+                                size="sm"
+                              >
+                                Match {match.match}
+                              </Button>
+
+                              <Typography
+                                variant="h8"
+                                style={{ color: 'yellow' }}
+                              >
+                                {match.date}
+                              </Typography>
+                              <Typography
+                                variant="h8"
+                                style={{ color: 'yellow' }}
+                              >
+                                {match.time}
+                              </Typography>
+
+                              <Button
+                                variant="contained"
+                                style={mobileClasses.button}
+                                size="sm"
+                              >
+                                Ground: {match.ground}
+                              </Button>
+                            </Box>
+                            <Box>
+                              <Card style={mobileClasses.card}>
+                                <Avatar
+                                  className="center"
+                                  src={`${BASE_URL}/${match.teamA?.imageUrl}`}
+                                  sx={mobileClasses.avatar}
+                                />
+                                <Typography variant="h8" color="white">
+                                  {match.teamA?.name}
+                                </Typography>
+                              </Card>
+
+                              <Typography
+                                variant="h6"
+                                style={{ margin: 'auto', fontWeight: 'bold' }}
+                                color="grey"
+                              >
+                                V/S
+                              </Typography>
+                              <Card style={mobileClasses.card}>
+                                <Avatar
+                                  className="center"
+                                  src={`${BASE_URL}/${match.teamB?.imageUrl}`}
+                                  sx={mobileClasses.avatar}
+                                />
+                                <Typography variant="h8" color="white">
+                                  {match.teamB?.name}
+                                </Typography>
+                              </Card>
+                            </Box>
+                          </Box>
+                        ))}
+                    </Tab.Pane>
+                  ))}
+                </Tab.Content>
+              </Col>
+            </Row>
+          </Tab.Container>
+        </div>
+      </React.Fragment>
+    )
+  }
   return (
     <React.Fragment>
       {authCtx.role === 'admin' && (
@@ -151,18 +335,19 @@ const Fixtures = () => {
                               variant="contained"
                               color="info"
                               style={classes.button}
+                              size="sm"
                             >
                               Match {match.match}
                             </Button>
 
                             <Typography
-                              variant="h5"
+                              variant="h6"
                               style={{ color: 'yellow' }}
                             >
                               {match.date}
                             </Typography>
                             <Typography
-                              variant="h5"
+                              variant="h6"
                               style={{ color: 'yellow' }}
                             >
                               {match.time}
@@ -171,7 +356,7 @@ const Fixtures = () => {
                             <Button
                               variant="contained"
                               style={classes.button}
-                              size="lg"
+                              size="sm"
                             >
                               Ground: {match.ground}
                             </Button>
@@ -182,7 +367,7 @@ const Fixtures = () => {
                               src={`${BASE_URL}/${match.teamA?.imageUrl}`}
                               sx={classes.avatar}
                             />
-                            <Typography variant="h5">
+                            <Typography variant="h6">
                               {match.teamA?.name}
                             </Typography>
                           </Card>
@@ -199,7 +384,7 @@ const Fixtures = () => {
                               src={`${BASE_URL}/${match.teamB?.imageUrl}`}
                               sx={classes.avatar}
                             />
-                            <Typography variant="h5">
+                            <Typography variant="h6">
                               {match.teamB?.name}
                             </Typography>
                           </Card>

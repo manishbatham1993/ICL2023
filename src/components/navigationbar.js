@@ -146,6 +146,22 @@ function ResponsiveAppBar() {
                 </Link>
               </MenuItem>
               {/* )} */}
+              <MenuItem key="rules" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/rules"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Rules
+                </Link>
+              </MenuItem>
+              <MenuItem key="fixtures" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/fixtures"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Fixtures
+                </Link>
+              </MenuItem>
               {authCtx.role === 'admin' && (
                 <MenuItem key="Manage" onClick={handleCloseNavMenu}>
                   <Link
@@ -155,32 +171,6 @@ function ResponsiveAppBar() {
                     Manage
                   </Link>
                 </MenuItem>
-              )}
-              <Link
-                to="rules"
-                style={{ color: 'white', textDecoration: 'none' }}
-              >
-                <Button
-                  key="rules"
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  Rules
-                </Button>
-              </Link>
-              {authCtx.role === 'admin' && (
-                <Link
-                  to="fixtures"
-                  style={{ color: 'white', textDecoration: 'none' }}
-                >
-                  <Button
-                    key="fixtures"
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                  >
-                    Fixtures
-                  </Button>
-                </Link>
               )}
             </Menu>
           </Box>
@@ -263,20 +253,6 @@ function ResponsiveAppBar() {
               </Button>
             </Link>
             {/* )} */}
-            {authCtx.role === 'admin' && (
-              <Link
-                to="manage"
-                style={{ color: 'white', textDecoration: 'none' }}
-              >
-                <Button
-                  key="Manage"
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  Manage
-                </Button>
-              </Link>
-            )}
             <Link to="rules" style={{ color: 'white', textDecoration: 'none' }}>
               <Button
                 key="rules"
@@ -298,6 +274,21 @@ function ResponsiveAppBar() {
                 Fixtures
               </Button>
             </Link>
+
+            {authCtx.role === 'admin' && (
+              <Link
+                to="manage"
+                style={{ color: 'white', textDecoration: 'none' }}
+              >
+                <Button
+                  key="Manage"
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  Manage
+                </Button>
+              </Link>
+            )}
           </Box>
           {authCtx.isLoggedIn ? (
             <Box sx={{ flexGrow: 0 }}>
