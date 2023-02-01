@@ -3,12 +3,9 @@ import axios from 'axios'
 import AuthContext from '../store/auth-context'
 import EntityContext from '../store/entity-context'
 
-import './overview.css'
-import './Fixtures.css'
-
 import Nav from 'react-bootstrap/Nav'
 import Tab from 'react-bootstrap/Tab'
-import { Button, Row, Col, Container, Card } from 'reactstrap'
+import { Button, Row, Col, Card } from 'reactstrap'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
@@ -34,17 +31,22 @@ const classes = {
     gap: '0.5rem',
     width: '65%',
   },
-  container: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    background: 'grey',
-    borderRadius: '7rem',
-    color: 'black',
-    height: '4rem',
+  date: {
+    color: 'yellow',
+    textTransform: 'none',
+  },
+  time: {
+    color: 'yellow',
+    textTransform: 'none',
+  },
+  wonButton: {
+    borderRadius: 50,
+    width: 'fit-content',
+    padding: '0.4rem 1.4rem',
+    margin: 'auto',
   },
   button: {
-    textTransform: 'uppercase',
+    textTransform: 'none',
     margin: '0 auto',
   },
   card: {
@@ -93,10 +95,23 @@ const mobileClasses = {
     color: 'black',
     height: '4rem',
   },
+  date: {
+    color: 'yellow',
+    textTransform: 'none',
+  },
+  time: {
+    color: 'yellow',
+    textTransform: 'none',
+  },
+  wonButton: {
+    borderRadius: 50,
+    width: 'fit-content',
+    padding: '0 1rem',
+    margin: 'auto',
+  },
   button: {
-    textTransform: 'uppercase',
+    textTransform: 'none',
     margin: '0 auto',
-    maxWidth: '80%',
   },
   card: {
     // background: 'transparent',
@@ -160,7 +175,6 @@ const Fixtures = () => {
               <Button
                 variant="primary"
                 style={{
-                  textTransform: 'uppercase',
                   marginLeft: '1rem',
                   width: '90%',
                 }}
@@ -173,7 +187,6 @@ const Fixtures = () => {
               <Button
                 variant="primary"
                 style={{
-                  textTransform: 'uppercase',
                   marginLeft: '1rem',
                   width: '90%',
                 }}
@@ -221,13 +234,13 @@ const Fixtures = () => {
 
                               <Typography
                                 variant="h8"
-                                style={{ color: 'yellow' }}
+                                style={mobileClasses.date}
                               >
                                 {match.date}
                               </Typography>
                               <Typography
                                 variant="h8"
-                                style={{ color: 'yellow' }}
+                                style={mobileClasses.time}
                               >
                                 {match.time}
                               </Typography>
@@ -250,6 +263,15 @@ const Fixtures = () => {
                                 <Typography variant="h8" color="white">
                                   {match.teamA?.name}
                                 </Typography>
+                                {match?.result?._id === match?.teamA?._id && (
+                                  <Button
+                                    sx="sm"
+                                    color="danger"
+                                    style={mobileClasses.wonButton}
+                                  >
+                                    WON
+                                  </Button>
+                                )}
                               </Card>
 
                               <Typography
@@ -268,6 +290,15 @@ const Fixtures = () => {
                                 <Typography variant="h8" color="white">
                                   {match.teamB?.name}
                                 </Typography>
+                                {match?.result?._id === match?.teamB?._id && (
+                                  <Button
+                                    sx="sm"
+                                    color="danger"
+                                    style={mobileClasses.wonButton}
+                                  >
+                                    WON
+                                  </Button>
+                                )}
                               </Card>
                             </Box>
                           </Box>
@@ -340,16 +371,10 @@ const Fixtures = () => {
                               Match {match.match}
                             </Button>
 
-                            <Typography
-                              variant="h6"
-                              style={{ color: 'yellow' }}
-                            >
+                            <Typography variant="h6" style={classes.date}>
                               {match.date}
                             </Typography>
-                            <Typography
-                              variant="h6"
-                              style={{ color: 'yellow' }}
-                            >
+                            <Typography variant="h6" style={classes.time}>
                               {match.time}
                             </Typography>
 
@@ -370,6 +395,15 @@ const Fixtures = () => {
                             <Typography variant="h6">
                               {match.teamA?.name}
                             </Typography>
+                            {match?.result?._id === match?.teamA?._id && (
+                              <Button
+                                sx="sm"
+                                color="danger"
+                                style={classes.wonButton}
+                              >
+                                WON
+                              </Button>
+                            )}
                           </Card>
 
                           <Typography
@@ -387,6 +421,15 @@ const Fixtures = () => {
                             <Typography variant="h6">
                               {match.teamB?.name}
                             </Typography>
+                            {match?.result?._id === match?.teamB?._id && (
+                              <Button
+                                sx="sm"
+                                color="danger"
+                                style={classes.wonButton}
+                              >
+                                WON
+                              </Button>
+                            )}
                           </Card>
                         </Box>
                       ))}
