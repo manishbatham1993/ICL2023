@@ -134,6 +134,9 @@ const Fixtures = () => {
   const fixtureDataRef = useRef()
 
   const [fixtures, setFixtures] = useState([])
+  fixtures.sort((a, b) => {
+    return a.match - b.match
+  })
   const FIXTURE_ROUNDS = entityCtx ? entityCtx.configurations.FIXTURE_ROUNDS : 0
 
   const rounds = [...Array(FIXTURE_ROUNDS || 0).keys()].map((i) => i + 1)
