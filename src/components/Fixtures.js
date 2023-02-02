@@ -137,14 +137,21 @@ const Fixtures = () => {
   fixtures.sort((a, b) => {
     return a.match - b.match
   })
-  const FIXTURE_ROUNDS = entityCtx ? entityCtx.configurations.FIXTURE_ROUNDS : 0
 
-  const rounds = [...Array(FIXTURE_ROUNDS || 0).keys()].map((i) => i + 1)
+  const roundMapping = new Map()
+  fixtures.forEach((fixture) => {
+    const round = fixture.round
+    if (!roundMapping.has(round)) roundMapping.set(round, [])
+    roundMapping.get(round).push(fixture)
+  })
 
+  const keys = [...roundMapping.keys()]
   useEffect(() => {
     axios.get(BASE_URL + '/api/v1/fixture').then((res) => {
       const fixtures = res?.data?.fixtures
-      if (fixtures) setFixtures(fixtures)
+      if (fixtures) {
+        setFixtures(fixtures)
+      }
     })
   }, [])
 
@@ -166,8 +173,8 @@ const Fixtures = () => {
         window.location.reload()
       })
   }
-
   // for mobile
+
   if (window.innerWidth <= 768) {
     return (
       <React.Fragment>
@@ -200,30 +207,29 @@ const Fixtures = () => {
             </form>
           </Box>
         )}
-        <div className="content mainContent container">
-          <Tab.Container id="left-tabs-example" defaultActiveKey="round1">
-            <Row>
-              <Nav
-                fill
-                variant="pills"
-                className=""
-                style={{ flex: 'auto', marginBottom: '40px' }}
-              >
-                {rounds.map((i) => (
-                  <Nav.Item>
-                    <Nav.Link eventKey={`round${i}`}>Round{i}</Nav.Link>
-                  </Nav.Item>
-                ))}
-              </Nav>
-            </Row>
-            <Row>
-              <Col>
-                <Tab.Content>
-                  {rounds.map((i) => (
-                    <Tab.Pane eventKey={`round${i}`}>
-                      {fixtures
-                        .filter((fixture) => fixture.round === i)
-                        .map((match) => (
+        {keys.length > 0 && (
+          <div className="content mainContent container">
+            <Tab.Container id="left-tabs-example" defaultActiveKey={keys[0]}>
+              <Row>
+                <Nav
+                  fill
+                  variant="pills"
+                  className=""
+                  style={{ flex: 'auto', marginBottom: '40px' }}
+                >
+                  {keys.map((key) => (
+                    <Nav.Item>
+                      <Nav.Link eventKey={key}>{key}</Nav.Link>
+                    </Nav.Item>
+                  ))}
+                </Nav>
+              </Row>
+              <Row>
+                <Col>
+                  <Tab.Content>
+                    {keys.map((key) => (
+                      <Tab.Pane eventKey={key}>
+                        {roundMapping.get(key).map((match) => (
                           <Box sx={mobileClasses.box}>
                             <Box sx={mobileClasses.details}>
                               <Button
@@ -260,21 +266,22 @@ const Fixtures = () => {
                               <Card style={mobileClasses.card}>
                                 <Avatar
                                   className="center"
-                                  src={`${BASE_URL}/${match.teamA?.imageUrl}`}
+                                  src={`${BASE_URL}/${match.teamAData?.imageUrl}`}
                                   sx={mobileClasses.avatar}
                                 />
                                 <Typography variant="h8" color="white">
-                                  {match.teamA?.name}
+                                  {match.teamA}
                                 </Typography>
-                                {match?.result?._id === match?.teamA?._id && (
-                                  <Button
-                                    sx="sm"
-                                    color="danger"
-                                    style={mobileClasses.wonButton}
-                                  >
-                                    WON
-                                  </Button>
-                                )}
+                                {match.teamA &&
+                                  match.result === match.teamA && (
+                                    <Button
+                                      sx="sm"
+                                      color="danger"
+                                      style={mobileClasses.wonButton}
+                                    >
+                                      WON
+                                    </Button>
+                                  )}
                               </Card>
 
                               <Typography
@@ -287,32 +294,34 @@ const Fixtures = () => {
                               <Card style={mobileClasses.card}>
                                 <Avatar
                                   className="center"
-                                  src={`${BASE_URL}/${match.teamB?.imageUrl}`}
+                                  src={`${BASE_URL}/${match.teamBData?.imageUrl}`}
                                   sx={mobileClasses.avatar}
                                 />
                                 <Typography variant="h8" color="white">
-                                  {match.teamB?.name}
+                                  {match.teamB}
                                 </Typography>
-                                {match?.result?._id === match?.teamB?._id && (
-                                  <Button
-                                    sx="sm"
-                                    color="danger"
-                                    style={mobileClasses.wonButton}
-                                  >
-                                    WON
-                                  </Button>
-                                )}
+                                {match.teamB &&
+                                  match.result === match.teamB && (
+                                    <Button
+                                      sx="sm"
+                                      color="danger"
+                                      style={mobileClasses.wonButton}
+                                    >
+                                      WON
+                                    </Button>
+                                  )}
                               </Card>
                             </Box>
                           </Box>
                         ))}
-                    </Tab.Pane>
-                  ))}
-                </Tab.Content>
-              </Col>
-            </Row>
-          </Tab.Container>
-        </div>
+                      </Tab.Pane>
+                    ))}
+                  </Tab.Content>
+                </Col>
+              </Row>
+            </Tab.Container>
+          </div>
+        )}
       </React.Fragment>
     )
   }
@@ -339,30 +348,29 @@ const Fixtures = () => {
           </form>
         </Box>
       )}
-      <div className="content mainContent container">
-        <Tab.Container id="left-tabs-example" defaultActiveKey="round1">
-          <Row>
-            <Nav
-              fill
-              variant="pills"
-              className=""
-              style={{ flex: 'auto', marginBottom: '40px' }}
-            >
-              {rounds.map((i) => (
-                <Nav.Item>
-                  <Nav.Link eventKey={`round${i}`}>Round{i}</Nav.Link>
-                </Nav.Item>
-              ))}
-            </Nav>
-          </Row>
-          <Row>
-            <Col>
-              <Tab.Content>
-                {rounds.map((i) => (
-                  <Tab.Pane eventKey={`round${i}`}>
-                    {fixtures
-                      .filter((fixture) => fixture.round === i)
-                      .map((match) => (
+      {keys.length > 0 && (
+        <div className="content mainContent container">
+          <Tab.Container id="left-tabs-example" defaultActiveKey={keys[0]}>
+            <Row>
+              <Nav
+                fill
+                variant="pills"
+                className=""
+                style={{ flex: 'auto', marginBottom: '40px' }}
+              >
+                {keys.map((key) => (
+                  <Nav.Item>
+                    <Nav.Link eventKey={key}>{key}</Nav.Link>
+                  </Nav.Item>
+                ))}
+              </Nav>
+            </Row>
+            <Row>
+              <Col>
+                <Tab.Content>
+                  {keys.map((key) => (
+                    <Tab.Pane eventKey={key}>
+                      {roundMapping.get(key).map((match) => (
                         <Box sx={classes.box}>
                           <Box sx={classes.details}>
                             <Button
@@ -392,13 +400,11 @@ const Fixtures = () => {
                           <Card style={classes.card}>
                             <Avatar
                               className="center"
-                              src={`${BASE_URL}/${match.teamA?.imageUrl}`}
+                              src={`${BASE_URL}/${match.teamAData?.imageUrl}`}
                               sx={classes.avatar}
                             />
-                            <Typography variant="h6">
-                              {match.teamA?.name}
-                            </Typography>
-                            {match?.result?._id === match?.teamA?._id && (
+                            <Typography variant="h6">{match.teamA}</Typography>
+                            {match.teamA && match.teamA === match.result && (
                               <Button
                                 sx="sm"
                                 color="danger"
@@ -418,13 +424,11 @@ const Fixtures = () => {
                           <Card style={classes.card}>
                             <Avatar
                               className="center"
-                              src={`${BASE_URL}/${match.teamB?.imageUrl}`}
+                              src={`${BASE_URL}/${match.teamBData?.imageUrl}`}
                               sx={classes.avatar}
                             />
-                            <Typography variant="h6">
-                              {match.teamB?.name}
-                            </Typography>
-                            {match?.result?._id === match?.teamB?._id && (
+                            <Typography variant="h6">{match.teamB}</Typography>
+                            {match.teamB && match.teamB === match.result && (
                               <Button
                                 sx="sm"
                                 color="danger"
@@ -436,13 +440,14 @@ const Fixtures = () => {
                           </Card>
                         </Box>
                       ))}
-                  </Tab.Pane>
-                ))}
-              </Tab.Content>
-            </Col>
-          </Row>
-        </Tab.Container>
-      </div>
+                    </Tab.Pane>
+                  ))}
+                </Tab.Content>
+              </Col>
+            </Row>
+          </Tab.Container>
+        </div>
+      )}
     </React.Fragment>
   )
 }
