@@ -38,20 +38,9 @@ import {
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
 const Allplayer = () => {
-  const [rows, setRows] = React.useState([])
+  const entityCtx = useContext(EntityContext)
+  const rows = entityCtx.players
 
-  function get_data() {
-    const api = BASE_URL + '/api/v1/player'
-    axios.get(api, {}).then((res) => {
-      console.log('data', res.data.players)
-      setRows(res.data.players)
-      // console.log(rows);
-    })
-  }
-
-  React.useEffect(() => {
-    get_data()
-  }, [])
   const [filteredResults, setFilteredResults] = useState([])
   const [searchInput, setSearchInput] = useState('')
   const searchItems = (searchValue) => {

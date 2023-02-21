@@ -10,6 +10,7 @@ const AccountForm = (props) => {
   // initialize references
   const nameRef = useRef()
   const totalCountRef = useRef()
+  const locationRef = useRef()
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
@@ -17,6 +18,7 @@ const AccountForm = (props) => {
     const payload = {
       name: nameRef.current.value,
       totalCount: totalCountRef.current.value,
+      location: locationRef.current.value,
     }
     if (props.isEdit) payload.accountId = props.data._id
 
@@ -64,6 +66,17 @@ const AccountForm = (props) => {
           ref={totalCountRef}
           defaultValue={
             props.isEdit && props.data.totalCount ? props.data.totalCount : ''
+          }
+        />
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="location">Location</label>
+        <input
+          id="location"
+          type="text"
+          ref={locationRef}
+          defaultValue={
+            props.isEdit && props.data.location ? props.data.location : ''
           }
         />
       </div>

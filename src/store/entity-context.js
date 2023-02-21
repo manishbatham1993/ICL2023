@@ -7,22 +7,28 @@ const EntityContext = React.createContext({
   teams: [],
   players: [],
   accounts: [],
+  locations: [],
+  currentLocation: '',
 })
 
 export const EntityContextProvider = (props) => {
   const [accounts, setAccounts] = useState([])
   const [players, setPlayers] = useState([])
   const [teams, setTeams] = useState([])
+  const [locations, setLocations] = useState([])
+  const [currentLocation, setCurrentLocation] = useState('')
+
   const [configurations, setConfigurations] = useState({
     DEFAULT_BUDGET: 60000,
     DEFAULT_BID_AMOUNT: 5000,
     BID_INCREASE: 500,
     PLAYERS_PER_TEAM: 10,
     YEAR: '2023',
+    DEFAULT_LOCATION: '',
   })
 
   const updateAccounts = () => {
-    const api = BASE_URL + '/api/v1/account'
+    const api = BASE_URL + '/api/v1/account?location=' + currentLocation
     axios.get(api).then((res) => {
       if (res.data.status === 'ok') {
         setAccounts(res.data.accounts)
@@ -30,18 +36,28 @@ export const EntityContextProvider = (props) => {
     })
   }
   const updatePlayers = () => {
-    const api = BASE_URL + '/api/v1/player'
+    const api = BASE_URL + '/api/v1/player?location=' + currentLocation
     axios.get(api).then((res) => {
       if (res.data.status === 'ok') {
         setPlayers(res.data.players)
       }
     })
   }
+
   const updateTeams = () => {
-    const api = BASE_URL + '/api/v1/team'
+    const api = BASE_URL + '/api/v1/team?location=' + currentLocation
     axios.get(api).then((res) => {
       if (res.data.status === 'ok') {
         setTeams(res.data.teams)
+      }
+    })
+  }
+
+  const updateLocations = () => {
+    const api = BASE_URL + '/api/v1/location'
+    axios.get(api).then((res) => {
+      if (res.data.status === 'ok') {
+        setLocations(res.data.locations)
       }
     })
   }
@@ -51,7 +67,6 @@ export const EntityContextProvider = (props) => {
     axios.get(api).then((res) => {
       if (res.data.status === 'ok') {
         const dbConfigurations = res.data.configurations
-        console.log('db-configurations', dbConfigurations)
         setConfigurations((prev) => ({
           ...prev,
           DEFAULT_BUDGET: dbConfigurations.DEFAULT_BUDGET
@@ -73,24 +88,35 @@ export const EntityContextProvider = (props) => {
           FIXTURE_ROUNDS: dbConfigurations.FIXTURE_ROUNDS
             ? parseInt(dbConfigurations.FIXTURE_ROUNDS)
             : 0,
+          DEFAULT_LOCATION: dbConfigurations.DEFAULT_LOCATION
+            ? dbConfigurations.DEFAULT_LOCATION
+            : 'Pune',
         }))
       }
     })
   }
 
   useEffect(() => {
+    updateConfigurations()
+    updateLocations()
+  }, [])
+
+  useEffect(() => {
     updateAccounts()
     updatePlayers()
     updateTeams()
-    updateConfigurations()
-  }, [])
+  }, [currentLocation])
 
   const contextValue = {
     accounts,
     teams,
     players,
+    locations,
+    currentLocation,
+    setCurrentLocation,
     configurations,
   }
+
   return (
     <EntityContext.Provider value={contextValue}>
       {props.children}

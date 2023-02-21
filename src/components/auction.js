@@ -95,11 +95,11 @@ const Auction = () => {
       ? true
       : false
 
-  //console.log('---------auction--------')
+  const teams = entityCtx.teams
+  const players = entityCtx.players
+
   const [auctionData, setAuctionData] = useState()
   const [mappedData, setMappedData] = useState()
-  const [teams, setTeams] = useState([])
-  const [players, setPlayers] = useState([])
   const [nextBidAmount, setNextBidAmount] = useState()
   const [auctionEnded, setAuctionEnded] = useState(false)
   const [playerStatus, setPlayerStatus] = useState()
@@ -250,21 +250,10 @@ const Auction = () => {
   }
 
   const updateData = () => {
-    axios
-      .get(BASE_URL + '/api/v1/auction/data')
-      .then((res) => {
-        if (res.data.status === 'ok') {
-          setAuctionData(res.data.data)
-        }
-      })
-      .catch((err) => {
-        //console.log('err', err)
-      })
-    axios.get(BASE_URL + '/api/v1/team').then((res) => {
-      setTeams(res.data.teams)
-    })
-    axios.get(BASE_URL + '/api/v1/player').then((res) => {
-      setPlayers(res.data.players)
+    axios.get(BASE_URL + '/api/v1/auction/data').then((res) => {
+      if (res.data.status === 'ok') {
+        setAuctionData(res.data.data)
+      }
     })
   }
 

@@ -1,4 +1,5 @@
-import * as React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+
 import PropTypes from 'prop-types'
 import { alpha } from '@mui/material/styles'
 import Box from '@mui/material/Box'
@@ -23,6 +24,7 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import { visuallyHidden } from '@mui/utils'
 import axios from 'axios'
 import Avatar from '@mui/material/Avatar'
+import EntityContext from '../store/entity-context'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
@@ -186,25 +188,16 @@ EnhancedTableToolbar.propTypes = {
 }
 
 export default function EnhancedTable() {
-  const [order, setOrder] = React.useState('asc')
-  const [orderBy, setOrderBy] = React.useState('calories')
-  const [selected, setSelected] = React.useState([])
-  const [page, setPage] = React.useState(0)
-  const [dense, setDense] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
-  const [rows, setRows] = React.useState([])
+  const entityCtx = useContext(EntityContext)
 
-  function get_data() {
-    const api = BASE_URL + '/api/v1/player'
-    axios.get(api, {}).then((res) => {
-      console.log('data', res.data.players)
-      setRows(res.data.players)
-      // console.log(rows);
-    })
-  }
-  React.useEffect(() => {
-    get_data()
-  }, [])
+  const [order, setOrder] = useState('asc')
+  const [orderBy, setOrderBy] = useState('calories')
+  const [selected, setSelected] = useState([])
+  const [page, setPage] = useState(0)
+  const [dense, setDense] = useState(false)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const rows = EntityContext?.players
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
