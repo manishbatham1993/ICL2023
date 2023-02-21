@@ -1,54 +1,31 @@
-import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
-import io from 'socket.io-client'
-import '../index.css'
+import React, { useContext } from 'react'
 import EntityContext from '../store/entity-context'
-import CircleTimer from './CircleTimer'
-import Image from 'react-bootstrap/Image'
+import '../index.css'
 import './overview.css'
 import Avatar from '@mui/material/Avatar'
-
-import Nav from 'react-bootstrap/Nav'
-import Table from 'react-bootstrap/Table'
-import Tab from 'react-bootstrap/Tab'
 
 // reactstrap components
 import {
   Button,
-  ButtonGroup,
   Card,
-  CardHeader,
   CardBody,
   CardTitle,
-  Label,
-  FormGroup,
-  Input,
   Row,
   Col,
-  UncontrolledTooltip,
-  CardText,
-  CardFooter,
-  Badge,
-  Progress,
   CardSubtitle,
-  image,
+  CardText,
 } from 'reactstrap'
-import { height } from '@mui/system'
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || ''
-const socket = io(BASE_URL)
 const Overview = () => {
   const entityCtx = useContext(EntityContext)
-  const teams = entityCtx.teams
-  const players = entityCtx.players
-  const accounts = entityCtx.accounts
+  const { accounts } = entityCtx
 
   return (
     <div className="content mainContent container">
       <h1 style={{ marginTop: '30px' }}>ACCOUNTS</h1>
       <Row>
         {accounts.map((account) => (
-          <Col md="5" sm="6" lg="4">
+          <Col key={account?._id} md="5" sm="6" lg="4">
             <Card
               style={{
                 // width: '18rem',
@@ -84,8 +61,6 @@ const Overview = () => {
                   }}
                   imgProps={{
                     style: {
-                      // maxHeight: '100%',
-                      // maxWidth: '100%',
                       objectFit: 'contain',
                     },
                   }}

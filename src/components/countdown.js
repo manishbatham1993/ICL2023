@@ -1,4 +1,4 @@
-import react, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import EntityContext from '../store/entity-context'
 

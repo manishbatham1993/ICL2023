@@ -1,12 +1,11 @@
 import React, { useContext } from 'react'
 import EntityContext from '../store/entity-context'
 import './overview.css'
+import { Row, Col } from 'reactstrap'
 import Nav from 'react-bootstrap/Nav'
 import Table from 'react-bootstrap/Table'
 import Tab from 'react-bootstrap/Tab'
 import Avatar from '@mui/material/Avatar'
-
-import { Row, Col } from 'reactstrap'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
@@ -16,8 +15,6 @@ const string_text = 'No player data...'
 
 const TopBuys = (props) => {
   const entityCtx = useContext(EntityContext)
-  const accounts = entityCtx.accounts
-  const teams = entityCtx.teams
   const players = entityCtx.players
 
   const soldPlayers = players.filter(
@@ -82,7 +79,7 @@ const TopBuys = (props) => {
                     <tbody>
                       {topBuys.length != 0 ? (
                         topBuys.map((player) => (
-                          <tr>
+                          <tr key={player?._id}>
                             <td>
                               {player.imageUrl ? (
                                 <Avatar

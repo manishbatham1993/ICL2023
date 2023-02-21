@@ -1,61 +1,39 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import io from 'socket.io-client'
-import EntityContext from '../store/entity-context'
-import IncrementDecrement from './IncrementDecrement'
-import CircleTimer from './CircleTimer'
-import Image from 'react-bootstrap/Image'
 import './overview.css'
 import './squaddetails.css'
-import Nav from 'react-bootstrap/Nav'
-import Table from 'react-bootstrap/Table'
-import Tab from 'react-bootstrap/Tab'
 import Avatar from '@mui/material/Avatar'
 
 // reactstrap components
 import {
   Button,
-  ButtonGroup,
   Card,
-  CardHeader,
   CardBody,
   CardTitle,
-  Label,
-  FormGroup,
-  Input,
   Row,
   Col,
-  UncontrolledTooltip,
-  CardText,
-  CardFooter,
-  Badge,
-  Progress,
   CardSubtitle,
-  image,
 } from 'reactstrap'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
-const socket = io(BASE_URL)
+
 const Allplayer = () => {
   const [rows, setRows] = React.useState([])
 
   function get_data() {
     const api = BASE_URL + '/api/v1/player'
     axios.get(api, {}).then((res) => {
-      console.log('data', res.data.players)
       setRows(res.data.players)
-      // console.log(rows);
     })
   }
 
   React.useEffect(() => {
     get_data()
   }, [])
+
   const [filteredResults, setFilteredResults] = useState([])
   const [searchInput, setSearchInput] = useState('')
   const searchItems = (searchValue) => {
-    // console.log(searchValue)
     setSearchInput(searchValue)
     if (searchInput !== '') {
       const filteredData = rows.filter((item) => {
@@ -102,6 +80,7 @@ const Allplayer = () => {
             .map((player) => {
               return (
                 <Card
+                  key={player?._id}
                   style={{
                     width: '21rem',
                     paddingTop: '20px',
@@ -195,6 +174,7 @@ const Allplayer = () => {
               .sort((a, b) => (a.name > b.name ? 1 : -1))
               .map((player) => (
                 <Card
+                  key={player?._id}
                   style={{
                     width: '21rem',
                     paddingTop: '20px',

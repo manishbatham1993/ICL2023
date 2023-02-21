@@ -1,8 +1,11 @@
 import './signin.css'
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { alpha, styled } from '@mui/material/styles'
+import axios from 'axios'
 import AuthContext from '../store/auth-context'
+import logo from './ICL_Logo.svg'
+
+import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -10,9 +13,6 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
-import logo from './ICL_Logo.svg'
-import { Typography } from '@mui/material'
-import axios from 'axios'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
@@ -43,20 +43,16 @@ const CssTextField = styled(TextField)({
   },
 })
 
-function SignIn1() {
+function SignIn() {
   const authCtx = useContext(AuthContext)
   const navigate = useNavigate()
 
   const handleSubmit = (event) => {
     event.preventDefault()
     const formBody = new FormData(event.currentTarget)
-    console.log({
-      email: formBody.get('email'),
-      password: formBody.get('password'),
-    })
+
     const api = BASE_URL + '/api/v1/auth/login'
     axios.post(api, formBody).then((res) => {
-      console.log('res', res)
       if (res.data.status === 'ok') {
         authCtx.login(res.data.token)
         navigate('/', { replace: true })
@@ -117,4 +113,4 @@ function SignIn1() {
   )
 }
 
-export default SignIn1
+export default SignIn

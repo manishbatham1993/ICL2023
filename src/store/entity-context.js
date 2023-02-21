@@ -51,7 +51,6 @@ export const EntityContextProvider = (props) => {
     axios.get(api).then((res) => {
       if (res.data.status === 'ok') {
         const dbConfigurations = res.data.configurations
-        console.log('db-configurations', dbConfigurations)
         setConfigurations((prev) => ({
           ...prev,
           DEFAULT_BUDGET: dbConfigurations.DEFAULT_BUDGET

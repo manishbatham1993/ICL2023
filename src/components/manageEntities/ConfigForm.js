@@ -39,7 +39,6 @@ const ConfigForm = (props) => {
     // POST request to backend and then close the overlay and refresh the accounts
     const api = BASE_URL + '/api/v1/admin/config/update'
     axios.post(api, payload, config).then((res) => {
-      console.log('res', res.data)
       props.onCloseOverlay()
       props.onRefresh()
     })

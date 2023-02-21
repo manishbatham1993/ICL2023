@@ -1,51 +1,41 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import io from 'socket.io-client'
+import AuthContext from '../../store/auth-context'
+import EntityContext from '../../store/entity-context'
+import IncrementDecrement from './IncrementDecrement'
+import CircleTimer from '../CircleTimer'
+import './auction.css'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import AuthContext from '../store/auth-context'
-import EntityContext from '../store/entity-context'
-import IncrementDecrement from './IncrementDecrement'
-import CircleTimer from './CircleTimer'
 import Avatar from '@mui/material/Avatar'
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'
-import './auction.css'
-import Showmodal from './popmodal'
+import Showmodal from '../popmodal'
 import IconButton from '@mui/material/IconButton'
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar'
-import Toast from 'react-bootstrap/Toast'
 import CloseIcon from '@mui/icons-material/Close'
-import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm'
 
 // reactstrap components
-import {
-  Button,
-  ButtonGroup,
-  // Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  Label,
-  FormGroup,
-  Input,
-  Table,
-  // Row,
-  // Col,
-  UncontrolledTooltip,
-  CardText,
-  CardFooter,
-  Badge,
-  Progress,
-} from 'reactstrap'
-import { ManageHistorySharp, PriceChange } from '@mui/icons-material'
+import { Button, CardHeader, CardBody, CardTitle } from 'reactstrap'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const socket = io(BASE_URL)
+const COLORS = [
+  { c1: '#0078BC', c2: '#17479E' },
+  { c1: '#1C1C1C', c2: '#0B4973' },
+  { c1: '#D71920', c2: '#84171B' },
+  { c1: '#FCCA06', c2: '#F25C19' },
+  { c1: '#1C1C1C', c2: '#0B4973' },
+  { c1: '#D71920', c2: '#84171B' },
+  { c1: '#EA1A85', c2: '#001D48' },
+  { c1: '#6A6A6A', c2: '#1C1C1C' },
+  { c1: '#F26522', c2: '#ED1A37' },
+  { c1: '#A72056', c2: '#FFCC00' },
+]
 
-// AUCTION_SCHEMA : {
+// AUCTION_SCHEMA :
 //   state: (null/'ready'/'progress'/'completed'/'pause')
 //   round: <roundNumber>
 //   accountId: null,
@@ -65,19 +55,6 @@ const socket = io(BASE_URL)
 //   bids : [
 //     {playerId : <playerId>, teamId: <teamId>, amount: <amount>, timestamp: <timestamp> }
 //   ]
-// }
-const COLORS = [
-  { c1: '#0078BC', c2: '#17479E' },
-  { c1: '#1C1C1C', c2: '#0B4973' },
-  { c1: '#D71920', c2: '#84171B' },
-  { c1: '#FCCA06', c2: '#F25C19' },
-  { c1: '#1C1C1C', c2: '#0B4973' },
-  { c1: '#D71920', c2: '#84171B' },
-  { c1: '#EA1A85', c2: '#001D48' },
-  { c1: '#6A6A6A', c2: '#1C1C1C' },
-  { c1: '#F26522', c2: '#ED1A37' },
-  { c1: '#A72056', c2: '#FFCC00' },
-]
 
 const Auction = () => {
   const authCtx = useContext(AuthContext)
@@ -95,7 +72,6 @@ const Auction = () => {
       ? true
       : false
 
-  //console.log('---------auction--------')
   const [auctionData, setAuctionData] = useState()
   const [mappedData, setMappedData] = useState()
   const [teams, setTeams] = useState([])
@@ -124,14 +100,12 @@ const Auction = () => {
   const getMaxAllowableBid = () => {
     // base amount should be reserved for all remaining players excluding current plyer i.e [(remainingPlayers minus 1 ) times BASE-AMOUNT]
     if (!mappedData || isNaN(remainingPlayers) || isNaN(DEFAULT_BID_AMOUNT)) {
-      console.log('max-allowable-bid --  INFIINITY')
       return Number.MAX_SAFE_INTEGER
     }
     return mappedData.remBudget - (remainingPlayers - 1) * DEFAULT_BID_AMOUNT
   }
 
   function setChanged() {
-    // console.log('called from child')
     setRoundEnd(false)
     setAuctionEnded(false)
   }
@@ -149,8 +123,7 @@ const Auction = () => {
     auctionData && auctionData.currentPlayer
       ? auctionData.currentPlayer.bidAmount
       : null
-  //
-  // console.log('prevdata', auctionData.currentPlayer.id)
+
   useEffect(() => {
     setNextBidAmount(defaultNextBidAmount)
   }, [defaultNextBidAmount])
@@ -231,7 +204,6 @@ const Auction = () => {
             teamStats[teamId].allRounders += 1
             break
           default:
-          //console.log('skill', player.skill, 'not present')
         }
       }
       teamStats[bid.teamId].total += 1
@@ -250,16 +222,11 @@ const Auction = () => {
   }
 
   const updateData = () => {
-    axios
-      .get(BASE_URL + '/api/v1/auction/data')
-      .then((res) => {
-        if (res.data.status === 'ok') {
-          setAuctionData(res.data.data)
-        }
-      })
-      .catch((err) => {
-        //console.log('err', err)
-      })
+    axios.get(BASE_URL + '/api/v1/auction/data').then((res) => {
+      if (res.data.status === 'ok') {
+        setAuctionData(res.data.data)
+      }
+    })
     axios.get(BASE_URL + '/api/v1/team').then((res) => {
       setTeams(res.data.teams)
     })
@@ -282,96 +249,31 @@ const Auction = () => {
 
     // make bid
     const api = BASE_URL + '/api/v1/auction/bid'
-    axios.post(api, payload, config).then((res) => {
-      //console.log('posting-bid', res)
-    })
+    axios.post(api, payload, config).then((res) => {})
   }
 
   // update data and initialize socket functions
   useEffect(() => {
-    // console.log('--------use-effect---------')
     updateData()
     socket.on('connect', () => {
-      // console.log('socket connected')
       // console.log(mappedData.previousAuctions)
     })
     socket.on('disconnect', () => {
-      //console.log('socket disconnected')
+      // console.log('socket disconnected')
     })
-    // socket.on('event', (payload) => {
-    //   // console.log('event:', payload.type, payload.data)
-    //   // console.log(payload.data.playerLastBid)
-    //   // PLAYER AUCTION COMPLETED
-
-    //   setAuctionData(payload.data)
-    //   // switch (payload.state) {
-    //   //   // case 'AUCTION_INITIALIZED':
-    //   //   //   break;
-    //   //   // case 'TIMER_UPDATED':
-    //   //   //   break;
-    //   //   // case 'BID':
-    //   //   //   break;
-    //   //   case 'AUCTION_ENDED': // single player is sold/unsold
-    //   //     // alert('player sold')
-    //   //     break
-    //   //   case 'ROUND_ENDED':
-    //   //     break
-    //   //   case 'ACCOUNT_AUCTION_COMPLETE':
-    //   //     break
-    //   // }
-    //   if (payload.type === 'AUCTION_ENDED') {
-    //     //
-    //     // playerinformation:{
-    //     //   playername:name;
-    //     //   playerstatus:sold/unsold;
-    //     //   if(sold):
-    //     //   playerteam:teamname;
-    //     //   bid:Price;
-    //     //   playerimage:imageurl
-    //     // }
-    //     // autionend:{
-    //     //   round:Number;
-    //     //   if(auctionend_completely)
-    //     //   round:auctionended
-    //     // }
-    //     // console.log('test', payload)
-    //     // console.log(mappedData, 'mappdedata')
-    //   }
-    //   if ((payload.type = 'TIMER_UPDATED' && payload.data.clock === 0)) {
-    //     console.log(payload)
-    //     console.log(payload.data.currentPlayer)
-    //   }
-    // })
     socket.on('event', (payload) => {
       console.log('event:', payload)
       setAuctionData(payload.data)
-
-      // setAuctionData(payload.data)
-
-      // const showPopup = () => {
       const playerId = payload.data.prevPlayer
-      //   console.log(playerId, 'playerid')
       const BASE_URL = process.env.REACT_APP_BASE_URL || ''
       if (playerId != 'undefined') {
         axios.get(BASE_URL + `/api/v1/player/${playerId}`).then((res) => {
           if (res.data.status === 'ok') {
             const player = res.data.player
             setPreviousPlayerData(player)
-
-            //         const teamdata = player.teamId
-            //           ? teams.find((team) => team._id === player.teamId)
-            //           : 'UNSOLD'
-            //         // console.log('prev-player', player)
-            //         // console.log(
-            //         //   'prev-team',
-
-            //         //   teams.find((team) => team._id === player.teamId)
-            //         // )
-            //         console.log(player, teamdata)
           }
         })
       }
-      // }
 
       switch (payload.type) {
         case 'ROUND_ENDED':
@@ -390,9 +292,8 @@ const Auction = () => {
 
           break
       }
-      // console.log(payload.data)
-      // console.log(mappedData.previousAuctions)
     })
+
     return () => {
       socket.off('connect')
       socket.off('disconnect')
@@ -403,7 +304,6 @@ const Auction = () => {
   useEffect(() => {
     if (teams.length > 0 && players.length > 0 && auctionData) {
       updateMappedData()
-      // console.log(mappedData && mappedData.previousAuctions)
     }
   }, [teams, players, auctionData])
 
@@ -415,25 +315,11 @@ const Auction = () => {
     }
   }
 
-  function NeededPlayers(props) {
-    if (props.players) {
-      return 9 - props.players
-    } else {
-      return 9
-    }
-  }
-
   const handleClose = (event) => {
-    // if (reason === 'clickaway') {
-    //   return
-    // }
     setOpenSnackbar(false)
   }
   const action = (
     <React.Fragment>
-      {/* <Button color="secondary" size="small" onClick={handleClose}>
-        UNDO
-      </Button> */}
       <IconButton
         size="small"
         aria-label="close"
@@ -444,13 +330,6 @@ const Auction = () => {
       </IconButton>
     </React.Fragment>
   )
-
-  // const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  //   props,
-  //   ref,
-  // ) {
-  //   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  // });
 
   return (
     mappedData && (
@@ -465,19 +344,6 @@ const Auction = () => {
                     <div className="block block-two" />
                     <div className="block block-three" />
                     <div className="block block-four" />
-                    {/* <a href="#" onClick={(e) => e.preventDefault()}> */}
-                    {/* {//console.log(mappedData.currentPlayer.image, 'abcd')} */}
-                    {/* <img
-                        alt="..."
-                        className="avatar"
-                        src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
-                      /> */}
-                    {/* <Avatar
-                      className="center"
-                      alt={mappedData.currentPlayer.name}
-                      src={`${BASE_URL}/${mappedData.currentPlayer.image}`}
-                      sx={{ width: 250, height: 250, fontSize: '5rem' }}
-                    /> */}
                     {mappedData.currentPlayer.image ? (
                       <Avatar
                         className="center"
@@ -634,7 +500,7 @@ const Auction = () => {
                   ) : (
                     mappedData.bidHistory.map((history, index, elements) => {
                       return (
-                        <div className="bid-history-section">
+                        <div key={index} className="bid-history-section">
                           <div>
                             <Avatar
                               className="center"
@@ -748,64 +614,59 @@ const Auction = () => {
                   {mappedData.previousAuctions.length == 0 ? (
                     <p>No Player Auctioned</p>
                   ) : (
-                    Object.values(mappedData.previousAuctions).map((data) => (
-                      <div className="sold-player">
-                        <div>
-                          {/* <Avatar
-                            className="center"
-                            alt={data.playerName}
-                            src={`${BASE_URL}/${data.playerImage}`}
-                            sx={{ width: 50, height: 50 }}
-                          >
-                          </Avatar> */}
-                          {data.playerImage ? (
+                    Object.values(mappedData.previousAuctions).map(
+                      (data, i) => (
+                        <div key={i} className="sold-player">
+                          <div>
+                            {data.playerImage ? (
+                              <Avatar
+                                className="center"
+                                alt={data.playerName}
+                                src={`${BASE_URL}/${data.playerImage}`}
+                                sx={{
+                                  width: 50,
+                                  height: 50,
+                                }}
+                              />
+                            ) : (
+                              <Avatar
+                                className="center"
+                                alt={data.playerName}
+                                src={`${BASE_URL}/static/account_logo/default.png`}
+                                sx={{
+                                  width: 50,
+                                  height: 50,
+                                }}
+                              />
+                            )}
+                          </div>
+                          <div style={{ width: '50%' }}>
+                            <div className="sold-player-name">
+                              {data.playerName}
+                            </div>
+                            <div className="uppercase">
+                              Sold To {data.teamName}
+                            </div>
+                          </div>
+                          <div>
                             <Avatar
                               className="center"
-                              alt={data.playerName}
-                              src={`${BASE_URL}/${data.playerImage}`}
-                              sx={{
-                                width: 50,
-                                height: 50,
-                                // fontSize: '5rem',
-                              }}
-                            />
-                          ) : (
-                            <Avatar
-                              className="center"
-                              alt={data.playerName}
-                              src={`${BASE_URL}/static/account_logo/default.png`}
-                              sx={{
-                                width: 50,
-                                height: 50,
-                                // fontSize: '1rem',
-                              }}
-                            />
-                          )}
-                        </div>
-                        <div style={{ width: '50%' }}>
-                          <div className="sold-player-name">
-                            {data.playerName}
+                              alt={data.teamName}
+                              src={`${BASE_URL}/${data.teamImage}`}
+                              sx={{ width: 50, height: 50 }}
+                            >
+                              {data.teamName[0]}
+                            </Avatar>
                           </div>
-                          <div className="uppercase">
-                            Sold To {data.teamName}
+                          <div>
+                            <div>Sold For</div>
+                            <div className="sold-player-name">
+                              {data.amount}
+                            </div>
                           </div>
                         </div>
-                        <div>
-                          <Avatar
-                            className="center"
-                            alt={data.teamName}
-                            src={`${BASE_URL}/${data.teamImage}`}
-                            sx={{ width: 50, height: 50 }}
-                          >
-                            {data.teamName[0]}
-                          </Avatar>
-                        </div>
-                        <div>
-                          <div>Sold For</div>
-                          <div className="sold-player-name">{data.amount}</div>
-                        </div>
-                      </div>
-                    ))
+                      )
+                    )
                   )}
                 </Row>
               </CardBody>
@@ -832,6 +693,7 @@ const Auction = () => {
                 <Row style={{ justifyContent: 'center' }}>
                   {Object.values(mappedData.teamStats).map((data, index) => (
                     <div
+                      key={index}
                       className="team-stats-card"
                       style={{
                         background: `linear-gradient(180deg, ${
@@ -844,15 +706,6 @@ const Auction = () => {
                         }`,
                       }}
                     >
-                      {/* <Avatar
-                        style={{ fontSize: '45px' }}
-                        className="center"
-                        alt={data.teamName}
-                        src={`${BASE_URL}/${data.teamImage}`}
-                        sx={{ width: 100, height: 100 }}
-                      >
-                        {data.teamName[0]}
-                      </Avatar> */}
                       <div className="team-name">{data.teamName}</div>
                       <div className="fund-remaining">
                         <span className="rm-name">Remaining Funds</span>

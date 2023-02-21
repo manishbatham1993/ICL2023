@@ -131,7 +131,6 @@ export default function ManageEntities() {
     }
     const api = `${BASE_URL}/api/v1/admin/${entityName}/${entityId}`
     axios.delete(api, config).then((res) => {
-      console.log('DELETE - res', res.data)
       if (res.data.status === 'ok') {
         switch (entityName) {
           case 'account':
@@ -159,7 +158,6 @@ export default function ManageEntities() {
   }
 
   useEffect(() => {
-    console.log('-----use-effect----------')
     refreshAccounts()
     refreshTeams()
     refreshPlayers()
@@ -308,8 +306,8 @@ export default function ManageEntities() {
             </Button>
             <br></br>
             <br></br>
-            {accounts.map((account) => (
-              <>
+            {accounts.map((account, i) => (
+              <React.Fragment key={i}>
                 <Button
                   variant="contained"
                   onClick={initializeAuction.bind(null, account._id)}
@@ -318,7 +316,7 @@ export default function ManageEntities() {
                 </Button>
                 <br></br>
                 <br></br>
-              </>
+              </React.Fragment>
             ))}
             <Button variant="contained" onClick={startAuction}>
               start timer

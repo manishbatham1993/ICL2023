@@ -1,4 +1,9 @@
-import * as React from 'react'
+import React from 'react'
+import { useState, useContext } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import AuthContext from '../store/auth-context'
+import Logo from './ICL_Logo.svg'
+
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -11,15 +16,8 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
-import AdbIcon from '@mui/icons-material/Adb'
-import AuthContext from '../store/auth-context'
-import { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
-import Logo from './ICL_Logo.svg'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
-const pages = ['Teams', 'Auction']
 const profile = ['Logout']
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
@@ -321,8 +319,8 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {profile.map((menu) => (
-                  <Button onClick={handleCloseUserMenu}>
+                {profile.map((menu, i) => (
+                  <Button key={i} onClick={handleCloseUserMenu}>
                     <Link
                       style={{ color: 'black', textDecoration: 'none' }}
                       onClick={logoutHandler}

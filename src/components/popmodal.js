@@ -8,10 +8,8 @@ import Icon from './iconstamp'
 import { Col, Row } from 'react-bootstrap'
 
 function Showmodal({ status, showpop = false, data, setauctionflag }) {
-  console.log(data)
   const BASE_URL = process.env.REACT_APP_BASE_URL || ''
   const [show, setShow] = useState({ showpop })
-  // console.log(setauctionflag)
   const handleClose = () => (setShow(false), setauctionflag())
   const handleShow = () => setShow({ showpop })
   return (

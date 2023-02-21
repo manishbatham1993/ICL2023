@@ -33,7 +33,6 @@ const AccountForm = (props) => {
         : '/api/v1/admin/account/add')
     // POST request to backend and then close the overlay and refresh the accounts
     axios.post(api, payload, config).then((res) => {
-      console.log('res', res.data)
       props.onCloseOverlay()
       props.onRefresh()
     })

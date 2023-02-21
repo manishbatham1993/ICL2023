@@ -71,8 +71,10 @@ export default function Entity({
                     </TableCell>
                     <TableCell align="center">{row._id}</TableCell>
 
-                    {additionalColums.map((col) => (
-                      <TableCell align="center">{row[col]}</TableCell>
+                    {additionalColums.map((col, i) => (
+                      <TableCell key={i} align="center">
+                        {row[col]}
+                      </TableCell>
                     ))}
 
                     <TableCell align="center">

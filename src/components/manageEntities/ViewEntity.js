@@ -10,7 +10,7 @@ const ViewEntity = (props) => {
       <ul>
         {Object.entries(props.data).map(([key, value]) => {
           return (
-            <li>
+            <li key={key}>
               <div className={classes.key}>{key}</div>
               <div className={classes.value}>{JSON.stringify(value)}</div>
             </li>

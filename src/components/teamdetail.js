@@ -1,55 +1,27 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
-import io from 'socket.io-client'
-
 import EntityContext from '../store/entity-context'
-import IncrementDecrement from './IncrementDecrement'
-import CircleTimer from './CircleTimer'
-import Image from 'react-bootstrap/Image'
 import './overview.css'
+import './Auction/auction.css'
 import Avatar from '@mui/material/Avatar'
-
-import Nav from 'react-bootstrap/Nav'
-import Table from 'react-bootstrap/Table'
-import Tab from 'react-bootstrap/Tab'
-import './auction.css'
 
 // reactstrap components
 import {
   Button,
-  ButtonGroup,
   Card,
-  CardHeader,
   CardBody,
   CardTitle,
-  Label,
-  FormGroup,
-  Input,
-  Row,
-  Col,
-  UncontrolledTooltip,
   CardText,
-  CardFooter,
-  Badge,
-  Progress,
   CardSubtitle,
-  image,
 } from 'reactstrap'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
-const socket = io(BASE_URL)
-
-// constants
-const BASE_PRICE = 1000
 
 const TeamDetail = (props) => {
-  const { id } = useParams()
   const entityCtx = useContext(EntityContext)
   const teams = entityCtx.teams
   const players = entityCtx.players
 
-  console.log('entities', entityCtx)
   const teamStats = []
   for (let team of teams) {
     const teamId = team._id
@@ -97,8 +69,9 @@ const TeamDetail = (props) => {
             justifyContent: 'space-evenly',
           }}
         >
-          {teamStats.map((team) => (
+          {teamStats.map((team, i) => (
             <Card
+              key={i}
               style={{
                 width: '21rem',
                 paddingTop: '20px',

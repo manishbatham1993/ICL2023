@@ -63,10 +63,7 @@ const TeamOwnerForm = (props) => {
 
     // POST request to backend and then close the overlay and refresh the accounts
     const api = BASE_URL + '/api/v1/admin/teamowner/patch'
-    console.log('api', api)
-    console.log('PAYLOAD', payload)
     axios.post(api, payload, config).then((res) => {
-      console.log('res', res.data)
       props.onCloseOverlay()
       props.onRefresh()
     })

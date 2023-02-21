@@ -179,7 +179,6 @@ export default function AccountList() {
   function get_data() {
     const api = BASE_URL + '/api/v1/account'
     axios.get(api, {}).then((res) => {
-      console.log('data', res.data)
       setRows(res.data.accounts)
     })
   }

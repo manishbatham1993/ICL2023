@@ -1,40 +1,25 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
-import io from 'socket.io-client'
 import EntityContext from '../store/entity-context'
 import './overview.css'
 import Nav from 'react-bootstrap/Nav'
 import Table from 'react-bootstrap/Table'
 import Tab from 'react-bootstrap/Tab'
 import Avatar from '@mui/material/Avatar'
-// reactstrap components
-import ImportExportIcon from '@mui/icons-material/ImportExport'
 import SortIcon from '@mui/icons-material/Sort'
 
 import {
   Button,
-  ButtonGroup,
   Card,
-  CardHeader,
   CardBody,
   CardTitle,
-  Label,
-  FormGroup,
-  Input,
   Row,
   Col,
-  UncontrolledTooltip,
   CardText,
-  CardFooter,
-  Badge,
-  Progress,
   CardSubtitle,
-  image,
 } from 'reactstrap'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
-const socket = io(BASE_URL)
 
 // constants
 const BASE_PRICE = 5000
@@ -49,8 +34,7 @@ const Accountdetail = (props) => {
   const accountTeams = teams
     ? teams.filter((team) => team.accountId._id === id)
     : []
-  // console.log('players', players)
-  // console.log('playerdetails', players)
+
   var accountPlayers
   accountPlayers = players
     ? players.filter((player) => player.accountId._id === id)
@@ -60,29 +44,17 @@ const Accountdetail = (props) => {
     player.teamname =
       player.teamId && player.teamId.name ? player.teamId.name : '-'
   })
-  // / console.log('playerdetails', players)
-  console.log('accountPlayers', accountPlayers)
 
   const teamOwners = teams
     .filter((team) => team.teamOwner)
     .map((team) => team.teamOwner.playerId)
 
-  // const teamOwnerIds = teamOwners.map((to) => (to._id ? to._id : ''))
-
   const soldPlayers = accountPlayers.filter(
     (player) => player.auctionStatus && player.auctionStatus === 'SOLD'
   )
-  // console.log('accountplayer', accountPlayers)
   const unsoldPlayers = accountPlayers.filter(
     (player) => !player.auctionStatus || player.auctionStatus === 'UNSOLD'
   )
-
-  // const topBuys = [...soldPlayers]
-  //   .sort(
-  //     (a, b) => a.lastBid && b.lastBid && a.lastBid.amount > b.lastBid.amount
-  //   )
-  //   .slice(0, 2)
-  console.log('sold_player', soldPlayers)
   const topBuys = [...soldPlayers]
     .filter((player) => player.lastBid && player.lastBid.amount)
     .sort((a, b) =>
@@ -93,7 +65,6 @@ const Accountdetail = (props) => {
         : -1
     )
     .slice(0, 2)
-  console.log('topbuys', topBuys)
 
   const teamStats = []
   for (let team of accountTeams) {
@@ -189,8 +160,8 @@ const Accountdetail = (props) => {
                 <Tab.Pane eventKey="tab1">
                   <Row md="12">
                     {teamStats.length != 0 ? (
-                      teamStats.map((team) => (
-                        <Col md="4">
+                      teamStats.map((team, i) => (
+                        <Col md="4" key={i}>
                           <Card
                             style={{
                               width: '18rem',
@@ -288,20 +259,8 @@ const Accountdetail = (props) => {
                     </thead>
                     <tbody>
                       {(sortdata ? sortdata : accountPlayers).map((player) => (
-                        <tr key={player.name}>
-                          {console.log('player-data', player)}
+                        <tr key={player?._id}>
                           <td>
-                            {/* <Avatar
-                              className="center"
-                              alt={player.name}
-                              src={`${BASE_URL}/${player.imageUrl}`}
-                              sx={{
-                                width: 75,
-                                height: 75,
-                                fontSize: '1rem',
-                              }}
-                            /> */}
-
                             {player.imageUrl ? (
                               <Avatar
                                 className="center"
@@ -368,7 +327,7 @@ const Accountdetail = (props) => {
                     <tbody>
                       {soldPlayers.length != 0 ? (
                         soldPlayers.map((player) => (
-                          <tr>
+                          <tr key={player?._id}>
                             <td>
                               {player.imageUrl ? (
                                 <Avatar
@@ -417,8 +376,6 @@ const Accountdetail = (props) => {
                 </Tab.Pane>
                 {/* unsold players */}
                 <Tab.Pane eventKey="tab4">
-                  {/* {console.log(unsoldPlayers, "testmanish123")} */}
-
                   <Table
                     striped
                     hover
@@ -442,7 +399,7 @@ const Accountdetail = (props) => {
                     <tbody>
                       {unsoldPlayers.length != 0 ? (
                         unsoldPlayers.map((player) => (
-                          <tr>
+                          <tr key={player?._id}>
                             <td>
                               {player.imageUrl ? (
                                 <Avatar
@@ -507,7 +464,7 @@ const Accountdetail = (props) => {
                     <tbody>
                       {topBuys.length != 0 ? (
                         topBuys.map((player) => (
-                          <tr>
+                          <tr key={player?._id}>
                             <td>
                               {player.imageUrl ? (
                                 <Avatar

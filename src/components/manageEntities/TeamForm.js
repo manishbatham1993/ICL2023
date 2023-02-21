@@ -30,14 +30,12 @@ const TeamForm = (props) => {
       BASE_URL +
       (props.isEdit ? '/api/v1/admin/team/edit' : '/api/v1/admin/team/add')
     axios.post(api, teamFormData, config).then((res) => {
-      console.log('res', res.data)
       // close overlay and refresh the teams
       props.onCloseOverlay()
       props.onRefresh()
     })
   }
 
-  // console.log('test')
   return (
     <form className={classes.form} onSubmit={formSubmitHandler}>
       {props.isEdit && props.data && (
@@ -51,6 +49,7 @@ const TeamForm = (props) => {
         <select id="accountId" ref={accountIdRef}>
           {props.accounts.map((account) => (
             <option
+              key={account._id}
               value={account._id}
               selected={
                 props.isEdit &&

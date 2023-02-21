@@ -29,25 +29,8 @@ function descendingComparator(a, b, orderBy) {
   return 0
 }
 
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy)
-}
-
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index])
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0])
-    if (order !== 0) {
-      return order
-    }
-    return a[1] - b[1]
-  })
-  return stabilizedThis.map((el) => el[0])
-}
 
 const headCells = [
   {
@@ -185,7 +168,6 @@ export default function Teamowners() {
   function get_data() {
     const api = BASE_URL + '/api/v1/team'
     axios.get(api, {}).then((res) => {
-      // console.log('data', res.data)
       setRows(res.data.teams)
     })
   }
@@ -251,24 +233,10 @@ export default function Teamowners() {
             rowCount={rows.length}
           />
           <TableBody>
-            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.sort(getComparator(order, orderBy)).slice() */}
-            {/* {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) */}
-            {rows.map((row, index) => {
-              const isItemSelected = isSelected(row.name)
+            {rows.map((row, i) => {
               const labelId = `enhanced-table-checkbox-${index}`
-{console.log("row",row)}
               return (
-                <TableRow
-                  hover
-                  // onClick={(event) => handleClick(event, row.name)}
-                  // role="checkbox"
-                  // // aria-checked={isItemSelected}
-                  // // tabIndex={-1}
-                  // key={row.name}
-                  // selected={isItemSelected}
-                >
+                <TableRow key={i} hover>
                   <TableCell>
                     <Avatar
                       alt={row.name}
@@ -290,15 +258,17 @@ export default function Teamowners() {
                       : ''}
                   </TableCell>
                   <TableCell align="right">
-                    {/* {row.playerId ? row.playerId.name : ''} */}
-                    {row.teamOwner && row.teamOwner.playerId && row.teamOwner.playerId.name?row.teamOwner.playerId.name:'-'}
+                    {row.teamOwner &&
+                    row.teamOwner.playerId &&
+                    row.teamOwner.playerId.name
+                      ? row.teamOwner.playerId.name
+                      : '-'}
                   </TableCell>
                 </TableRow>
               )
             })}
           </TableBody>
         </Table>
-        {/* </TableContainer> */}
       </Paper>
     </Box>
   )

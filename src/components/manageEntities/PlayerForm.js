@@ -57,7 +57,6 @@ const PlayerForm = (props) => {
       BASE_URL +
       (props.isEdit ? '/api/v1/admin/player/edit' : '/api/v1/admin/player/add')
     axios.post(api, playerFormData, config).then((res) => {
-      console.log('res', res.data)
       // close overlay and refresh players
       props.onCloseOverlay()
       props.onRefresh()
@@ -77,6 +76,7 @@ const PlayerForm = (props) => {
         <select id="accountId" ref={accountIdRef}>
           {props.accounts.map((account) => (
             <option
+              key={account?._id}
               value={account._id}
               selected={
                 props.isEdit &&
@@ -114,6 +114,7 @@ const PlayerForm = (props) => {
         <select id="gender" ref={genderRef}>
           {props.gender.map((gender) => (
             <option
+              key={gender}
               value={gender}
               selected={
                 props.isEdit &&
@@ -143,6 +144,7 @@ const PlayerForm = (props) => {
         <select id="skill" ref={skillRef}>
           {props.skills.map((skill) => (
             <option
+              key={skill}
               value={skill}
               selected={
                 props.isEdit && props.data.skill && skill === props.data.skill
@@ -158,6 +160,7 @@ const PlayerForm = (props) => {
         <select id="level" ref={levelRef}>
           {props.levels.map((level) => (
             <option
+              key={level}
               value={level}
               selected={
                 props.isEdit && props.data.level && level === props.data.level
@@ -211,6 +214,7 @@ const PlayerForm = (props) => {
           <option value={''}>null</option>
           {accountTeams.map((team) => (
             <option
+              key={team?._id}
               value={team._id}
               selected={
                 props.isEdit &&
@@ -228,8 +232,9 @@ const PlayerForm = (props) => {
         <label htmlFor="auctionStatus">Auction Status</label>
         <select id="auctionStatus" ref={auctionStatusRef} disabled={!accountId}>
           <option value={''}>null</option>
-          {props.auctionStatusList.map((status) => (
+          {props.auctionStatusList.map((status, i) => (
             <option
+              key={i}
               value={status}
               selected={
                 props.isEdit &&

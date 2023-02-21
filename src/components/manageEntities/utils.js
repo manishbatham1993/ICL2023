@@ -11,10 +11,7 @@ const initializeAuction = (accountId) => {
 
   axios
     .post(BASE_URL + '/api/v1/auction/initialize', { accountId }, config)
-    .then((res) => {
-      console.log('------auction-started----------')
-      console.log('store', res.data.data)
-    })
+    .then((res) => {})
     .catch((err) => {
       if (err.response && err.response.data && err.response.data.msg) {
         alert(err.response.data.msg)
@@ -31,8 +28,7 @@ const startAuction = () => {
   axios
     .post(BASE_URL + '/api/v1/auction/start', {}, config)
     .then((res) => {
-      console.log('------auction-started----------')
-      console.log('store', res.data.data)
+      // console.log('auction-started')
     })
     .catch((err) => {
       if (err.response && err.response.data && err.response.data.msg) {
@@ -51,7 +47,6 @@ const pauseAuction = () => {
     .post(BASE_URL + '/api/v1/auction/pause', {}, config)
     .then((res) => {
       console.log('auction-pause/resume')
-      console.log('res: ', res)
     })
     .catch((err) => {
       if (err.response && err.response.data && err.response.data.msg) {
@@ -74,7 +69,6 @@ const endAuction = () => {
       .post(BASE_URL + '/api/v1/auction/end', {}, config)
       .then((res) => {
         console.log('auction-ended')
-        console.log('res:', res)
       })
       .catch((err) => {
         if (err.response && err.response.data && err.response.data.msg) {
@@ -98,7 +92,6 @@ const clearAuction = () => {
       .post(BASE_URL + '/api/v1/auction/clear', {}, config)
       .then((res) => {
         console.log('auction-cleared')
-        console.log('res:', res)
       })
       .catch((err) => {
         if (err.response && err.response.data && err.response.data.msg) {

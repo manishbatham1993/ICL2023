@@ -218,7 +218,7 @@ const Fixtures = () => {
                   style={{ flex: 'auto', marginBottom: '40px' }}
                 >
                   {keys.map((key) => (
-                    <Nav.Item>
+                    <Nav.Item key={key}>
                       <Nav.Link eventKey={key}>{key}</Nav.Link>
                     </Nav.Item>
                   ))}
@@ -229,8 +229,8 @@ const Fixtures = () => {
                   <Tab.Content>
                     {keys.map((key) => (
                       <Tab.Pane eventKey={key}>
-                        {roundMapping.get(key).map((match) => (
-                          <Box sx={mobileClasses.box}>
+                        {roundMapping.get(key).map((match, i) => (
+                          <Box key={i} sx={mobileClasses.box}>
                             <Box sx={mobileClasses.details}>
                               <Button
                                 variant="contained"
@@ -359,7 +359,7 @@ const Fixtures = () => {
                 style={{ flex: 'auto', marginBottom: '40px' }}
               >
                 {keys.map((key) => (
-                  <Nav.Item>
+                  <Nav.Item key={key}>
                     <Nav.Link eventKey={key}>{key}</Nav.Link>
                   </Nav.Item>
                 ))}
@@ -369,9 +369,9 @@ const Fixtures = () => {
               <Col>
                 <Tab.Content>
                   {keys.map((key) => (
-                    <Tab.Pane eventKey={key}>
-                      {roundMapping.get(key).map((match) => (
-                        <Box sx={classes.box}>
+                    <Tab.Pane key={key} eventKey={key}>
+                      {roundMapping.get(key).map((match, i) => (
+                        <Box key={i} sx={classes.box}>
                           <Box sx={classes.details}>
                             <Button
                               variant="contained"
