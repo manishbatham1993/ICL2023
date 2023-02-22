@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
+import EntityContext from '../store/entity-context'
+
 import './overview.css'
 import './squaddetails.css'
 import Avatar from '@mui/material/Avatar'
@@ -18,18 +19,8 @@ import {
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
 const Allplayer = () => {
-  const [rows, setRows] = React.useState([])
-
-  function get_data() {
-    const api = BASE_URL + '/api/v1/player'
-    axios.get(api, {}).then((res) => {
-      setRows(res.data.players)
-    })
-  }
-
-  React.useEffect(() => {
-    get_data()
-  }, [])
+  const entityCtx = useContext(EntityContext)
+  const rows = entityCtx.players
 
   const [filteredResults, setFilteredResults] = useState([])
   const [searchInput, setSearchInput] = useState('')

@@ -1,7 +1,7 @@
-import React from 'react'
-import { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import AuthContext from '../store/auth-context'
+import EntityContext from '../store/entity-context'
 import Logo from './ICL_Logo.svg'
 
 import AppBar from '@mui/material/AppBar'
@@ -16,11 +16,41 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 const profile = ['Logout']
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+
+const LocationList = () => {
+  const entityCtx = useContext(EntityContext)
+  const { locations, currentLocation, setCurrentLocation } = entityCtx
+
+  const handleChange = (event) => {
+    setCurrentLocation(event.target.value)
+  }
+
+  const defaultLocation = entityCtx?.configurations?.DEFAULT_LOCATION
+  useEffect(() => {
+    setCurrentLocation(defaultLocation)
+  }, [defaultLocation])
+
+  return (
+    <Select
+      value={currentLocation}
+      onChange={handleChange}
+      sx={{ color: 'white', margin: '1rem' }}
+      variant="standard"
+    >
+      {locations.map((location, i) => (
+        <MenuItem key={i} value={location}>
+          {location}
+        </MenuItem>
+      ))}
+    </Select>
+  )
+}
 
 function ResponsiveAppBar() {
   const navigate = useNavigate()
@@ -288,6 +318,7 @@ function ResponsiveAppBar() {
               </Link>
             )}
           </Box>
+          <LocationList />
           {authCtx.isLoggedIn ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="">

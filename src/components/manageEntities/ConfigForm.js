@@ -17,6 +17,7 @@ const ConfigForm = (props) => {
   const yearRef = useRef()
   const countdownRef = useRef()
   const fixtureRoundsRef = useRef()
+  const defaultLocationRef = useRef()
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
@@ -29,6 +30,7 @@ const ConfigForm = (props) => {
       YEAR: yearRef.current.value,
       COUNTDOWN: countdownRef.current.value,
       FIXTURE_ROUNDS: fixtureRoundsRef.current.value,
+      DEFAULT_LOCATION: defaultLocationRef.current.value,
     }
     const config = {
       headers: {
@@ -142,6 +144,19 @@ const ConfigForm = (props) => {
           defaultValue={
             props.configurations.FIXTURE_ROUNDS
               ? props.configurations.FIXTURE_ROUNDS
+              : ''
+          }
+        />
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="defaultLocation">DEFAULT_LOCATION</label>
+        <input
+          id="defaultLocation"
+          type="text"
+          ref={defaultLocationRef}
+          defaultValue={
+            props.configurations.DEFAULT_LOCATION
+              ? props.configurations.DEFAULT_LOCATION
               : ''
           }
         />

@@ -72,10 +72,10 @@ const Auction = () => {
       ? true
       : false
 
-  const [auctionData, setAuctionData] = useState()
-  const [mappedData, setMappedData] = useState()
   const [teams, setTeams] = useState([])
   const [players, setPlayers] = useState([])
+  const [auctionData, setAuctionData] = useState()
+  const [mappedData, setMappedData] = useState()
   const [nextBidAmount, setNextBidAmount] = useState()
   const [auctionEnded, setAuctionEnded] = useState(false)
   const [playerStatus, setPlayerStatus] = useState()
@@ -224,7 +224,7 @@ const Auction = () => {
   const updateData = () => {
     axios.get(BASE_URL + '/api/v1/auction/data').then((res) => {
       if (res.data.status === 'ok') {
-        setAuctionData(res.data.data)
+        setAuctionData(res?.data?.data)
       }
     })
     axios.get(BASE_URL + '/api/v1/team').then((res) => {
