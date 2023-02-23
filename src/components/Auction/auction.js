@@ -44,17 +44,14 @@ const COLORS = [
 //   remainingPlayers : [<playerId>]
 //   unsoldPlayers: [<playerId>]
 //   soldPlayers: [<playerId>],
-//   playerLastBid: {playerId: <bidindex>},
+//   playerLastBid: {playerId: <bidData> } // bidData: {teamId, amount, timestamp}
 //   currentPlayer: {
 //     id : <playerId>
 //     bidAmount: <currentAmount>
-//     bids : [<bidId>]
+//     bids : [<bidData>]
 //     clock: <clock>
 //   }
 //   prevPlayer: <id>
-//   bids : [
-//     {playerId : <playerId>, teamId: <teamId>, amount: <amount>, timestamp: <timestamp> }
-//   ]
 
 const Auction = () => {
   const authCtx = useContext(AuthContext)
@@ -149,20 +146,18 @@ const Auction = () => {
       ? auctionData.currentPlayer.bidAmount
       : null
     const bidHistory = auctionData.currentPlayer
-      ? auctionData.currentPlayer.bids //[0,1,2]
-          .map((bidId) => auctionData.bids[bidId]) //[{playerId, teamId, amount}]
-          .map((bid) => {
-            const player = players.find((player) => player._id === bid.playerId)
-            const team = teams.find((team) => team._id === bid.teamId)
-            return {
-              teamId: team._id,
-              teamName: team.name,
-              teamImage: team.imageUrl,
-              amount: bid.amount,
-            }
-          })
+      ? auctionData.currentPlayer.bids.map((bid) => {
+          const team = teams.find((team) => team._id === bid.teamId)
+          return {
+            teamId: team._id,
+            teamName: team.name,
+            teamImage: team.imageUrl,
+            amount: bid.amount,
+          }
+        })
       : []
     bidHistory.reverse()
+
     const lastBid = bidHistory.length > 0 ? bidHistory[0] : null
     const teamStats = {}
     auctionData.teams
@@ -180,28 +175,27 @@ const Auction = () => {
       })
     const previousAuctions = []
     auctionData.soldPlayers.forEach((playerId) => {
-      const bidId = auctionData.playerLastBid[playerId]
-      const bid = auctionData.bids[bidId]
-      const teamId = bid.teamId
+      const bid = auctionData.playerLastBid[playerId]
       const team = teams.find((team) => team._id === bid.teamId)
       const player = players.find((player) => player._id === playerId)
-      previousAuctions.unshift({
+      previousAuctions.push({
         playerName: player.name,
         playerImage: player.imageUrl,
         teamName: team.name,
         teamImage: team.imageUrl,
         amount: bid.amount,
       })
+      previousAuctions.reverse()
       if (player.skill) {
         switch (player.skill.toLowerCase()) {
           case 'batsman':
-            teamStats[teamId].batsman += 1
+            teamStats[bid.teamId].batsman += 1
             break
           case 'bowler':
-            teamStats[teamId].bowlers += 1
+            teamStats[bid.teamId].bowlers += 1
             break
           case 'all rounder':
-            teamStats[teamId].allRounders += 1
+            teamStats[bid.teamId].allRounders += 1
             break
           default:
         }
