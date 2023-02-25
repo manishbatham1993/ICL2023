@@ -1,3 +1,6 @@
+// ## TODO
+// ## set player csv filename from content disposition header
+
 import React, { useEffect, useState, useCallback } from 'react'
 import axios from 'axios'
 
@@ -14,6 +17,8 @@ import AccountForm from './AccountForm'
 import TeamForm from './TeamForm'
 import PlayerForm from './PlayerForm'
 import ConfigForm from './ConfigForm'
+import ImportPlayersForm from './ImportPlayerForm'
+import ExportPlayerForm from './ExportPlayerForm'
 
 import {
   initializeAuction,
@@ -32,6 +37,7 @@ export default function ManageEntities() {
   const [players, setPlayers] = useState([])
   const [accounts, setAccounts] = useState([])
   const [configurations, setConfigurations] = useState([])
+  const [locations, setLocations] = useState([])
 
   // declared states
   const [modal, setModal] = useState(null)
@@ -91,11 +97,20 @@ export default function ManageEntities() {
     })
   }, [])
 
+  const refreshLocations = useCallback(() => {
+    axios.get(BASE_URL + '/api/v1/location').then((res) => {
+      if (res.data.status === 'ok') {
+        setLocations(res.data.locations)
+      }
+    })
+  }, [])
+
   const refreshAllData = () => {
     refreshAccounts()
     refreshPlayers()
     refreshTeams()
     refreshConfigurations()
+    refreshLocations()
   }
 
   const viewHandler = (entityName, entityId) => {
@@ -162,7 +177,14 @@ export default function ManageEntities() {
     refreshTeams()
     refreshPlayers()
     refreshConfigurations()
-  }, [refreshAccounts, refreshTeams, refreshPlayers, refreshConfigurations])
+    refreshLocations()
+  }, [
+    refreshAccounts,
+    refreshTeams,
+    refreshPlayers,
+    refreshConfigurations,
+    refreshLocations,
+  ])
 
   return (
     <React.Fragment>
@@ -215,6 +237,28 @@ export default function ManageEntities() {
           />
         </Modal>
       )}
+
+      {/* import players */}
+      {modal === 'importPlayers' && (
+        <Modal onCloseOverlay={closeModalHandler}>
+          <ImportPlayersForm
+            locations={locations}
+            onCloseOverlay={closeModalHandler}
+            onRefresh={refreshAllData}
+          />
+        </Modal>
+      )}
+
+      {/* export players */}
+      {modal === 'exportPlayers' && (
+        <Modal onCloseOverlay={closeModalHandler}>
+          <ExportPlayerForm
+            locations={locations}
+            onCloseOverlay={closeModalHandler}
+          />
+        </Modal>
+      )}
+
       {/* set team owner form */}
       {modal === 'teamOwner' && (
         <Modal onCloseOverlay={closeModalHandler}>
@@ -262,6 +306,8 @@ export default function ManageEntities() {
           onClickEdit={openEditModalHandler.bind(null, 'player')}
           onClickView={viewHandler.bind(null, 'player')}
           onClickDelete={deleteHandler.bind(null, 'player')}
+          onClickImport={openModalHandler.bind(null, 'importPlayers')}
+          onClickExport={openModalHandler.bind(null, 'exportPlayers')}
           additionalColums={['accountName', 'teamName']}
         />
       </Box>
