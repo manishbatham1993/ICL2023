@@ -14,6 +14,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import AddIcon from '@mui/icons-material/Add'
 import PostAddIcon from '@mui/icons-material/PostAdd'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
+import AccountBoxIcon from '@mui/icons-material/AccountBox'
 
 export default function Entity({
   rows,
@@ -25,6 +26,7 @@ export default function Entity({
   onClickDelete,
   onClickImport,
   onClickExport,
+  onClickAssignTeamOwner,
   additionalColums = [],
 }) {
   return (
@@ -110,6 +112,18 @@ export default function Entity({
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
+                      {onClickAssignTeamOwner && (
+                        <Tooltip title="Assign Team Owner">
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              onClickAssignTeamOwner(row._id)
+                            }}
+                          >
+                            <AccountBoxIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                       <Tooltip title="Delete">
                         <IconButton
                           onClick={(e) => {

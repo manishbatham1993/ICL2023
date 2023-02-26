@@ -1,6 +1,5 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import axios from 'axios'
-import EntityContext from '../../store/entity-context'
 
 import classes from './form.module.css'
 
@@ -8,7 +7,8 @@ import classes from './form.module.css'
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
 const TeamOwnerForm = (props) => {
-  const entityCtx = useContext(EntityContext)
+  const team = props.team
+  const teamOwner = props.team?.teamOwner
 
   // initialize references
   const teamRef = useRef()
@@ -18,29 +18,31 @@ const TeamOwnerForm = (props) => {
   const budgetRef = useRef()
   const isPlayingRef = useRef()
 
-  const [selectedTeam, setSelectedTeam] = useState(null)
-  const [selectedPlayer, setSelectedPlayer] = useState(null)
+  const [selectedPlayer, setSelectedPlayer] = useState(teamOwner?.playerId)
 
-  const getLinkedPlayers = (teamId) => {
-    if (!teamId) return []
-    const team = props.teams.find((team) => team._id === teamId)
-    const accountId = team.accountId._id
-    return props.players
-      .filter((player) => player.accountId._id === accountId)
-      .sort((a, b) => {
-        if (a.name < b.name) return -1
-        else if (a.name > b.name) return 1
-        else return 0
-      })
-  }
+  const getAccountPlayers = useCallback(
+    (accountId) => {
+      return props.players
+        .filter((player) => player.accountId._id === accountId)
+        .sort((a, b) => {
+          if (a.name < b.name) return -1
+          else if (a.name > b.name) return 1
+          else return 0
+        })
+    },
+    [props.players]
+  )
 
-  const getLinkedEmail = (playerId) => {
-    if (!playerId) return ''
-    const player = props.players.find((player) => player._id === playerId)
-    return player.email
-  }
+  const getLinkedEmail = useCallback(
+    (playerId) => {
+      if (!playerId) return ''
+      const player = props.players.find((player) => player._id === playerId)
+      return player.email
+    },
+    [props.players]
+  )
 
-  const accountPlayers = getLinkedPlayers(selectedTeam)
+  const accountPlayers = getAccountPlayers(team?.accountId?._id)
   const playerEmail = getLinkedEmail(selectedPlayer)
 
   const formSubmitHandler = (e) => {
@@ -71,26 +73,11 @@ const TeamOwnerForm = (props) => {
   return (
     <form className={classes.form} onSubmit={formSubmitHandler}>
       <div className={classes.input}>
-        <label htmlFor="team">Team *</label>
-        <select
-          id="team"
-          ref={teamRef}
-          onChange={(e) => {
-            setSelectedTeam(e.target.value)
-            setSelectedPlayer(null)
-          }}
-          required
-        >
-          <option value="" selected>
-            -- Select --
+        <label htmlFor="team">Team</label>
+        <select id="team" ref={teamRef} value={team._id} disabled>
+          <option value={team._id} selected>
+            {team.name}
           </option>
-          {props.teams
-            .sort((a, b) => (a.accountName < b.accountName ? -1 : 1))
-            .map((team) => (
-              <option key={team._id} value={team._id}>
-                {team.name} ({team.accountName})
-              </option>
-            ))}
         </select>
       </div>
       <div className={classes.input}>
@@ -101,13 +88,12 @@ const TeamOwnerForm = (props) => {
           onChange={(e) => {
             setSelectedPlayer(e.target.value)
           }}
+          value={selectedPlayer}
           required
         >
-          <option value="" selected>
-            -- Select --
-          </option>
+          <option value="">-- Select --</option>
           {accountPlayers.map((player) => (
-            <option key={`${selectedTeam}-${player._id}`} value={player._id}>
+            <option key={`${player._id}`} value={player._id}>
               {player.name}
             </option>
           ))}
@@ -129,11 +115,21 @@ const TeamOwnerForm = (props) => {
       </div>
       <div className={classes.input}>
         <label htmlFor="budget">Budget *</label>
-        <input id="budget" type="number" ref={budgetRef} required />
+        <input
+          id="budget"
+          type="number"
+          ref={budgetRef}
+          defaultValue={teamOwner ? teamOwner.budget : ''}
+          required
+        />
       </div>
       <div className={classes.input}>
         <label htmlFor="isPlaying">Is Playing</label>
-        <select id="isPlaying" ref={isPlayingRef}>
+        <select
+          id="isPlaying"
+          ref={isPlayingRef}
+          defaultValue={teamOwner ? teamOwner.isPlaying : 'false'}
+        >
           <option value="false">No</option>
           <option value="true">Yes</option>
         </select>

@@ -180,6 +180,16 @@ export default function ManageEntities() {
     })
   }
 
+  const assignTeamOwnerHandler = (teamId) => {
+    const api = `${BASE_URL}/api/v1/team/${teamId}`
+    axios.get(api).then((res) => {
+      if (res.data.status === 'ok') {
+        setData(res.data.team)
+        setModal('teamOwner')
+      }
+    })
+  }
+
   const closeModalHandler = () => {
     setModal(null)
     setData(null)
@@ -278,13 +288,14 @@ export default function ManageEntities() {
       {modal === 'teamOwner' && (
         <Modal onCloseOverlay={closeModalHandler}>
           <TeamOwnerForm
-            teams={teams}
+            team={data}
             players={players}
             onCloseOverlay={closeModalHandler}
             onRefresh={refreshAllData}
           />
         </Modal>
       )}
+
       {/* set configurations */}
       {modal === 'config' && (
         <Modal onCloseOverlay={closeModalHandler}>
@@ -339,6 +350,7 @@ export default function ManageEntities() {
           onClickEdit={openEditModalHandler.bind(null, 'team')}
           onClickView={viewHandler.bind(null, 'team')}
           onClickDelete={deleteHandler.bind(null, 'team')}
+          onClickAssignTeamOwner={assignTeamOwnerHandler}
           additionalColums={['accountName', 'teamOwnerName', 'playerEmail']}
         />
         <Card
@@ -356,14 +368,6 @@ export default function ManageEntities() {
               onClick={openModalHandler.bind(null, 'config')}
             >
               Set Configurations
-            </Button>
-            <br></br>
-            <br></br>
-            <Button
-              variant="contained"
-              onClick={openModalHandler.bind(null, 'teamOwner')}
-            >
-              Set team owner
             </Button>
             <br></br>
             <br></br>
