@@ -1,8 +1,9 @@
 // ## TODO
 // ## set player csv filename from content disposition header
 
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
 import axios from 'axios'
+import EntityContext from '../../store/entity-context'
 
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
@@ -32,6 +33,9 @@ import {
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
 export default function ManageEntities() {
+  const entityCtx = useContext(EntityContext)
+  const currentLocation = entityCtx?.currentLocation
+
   // data fetched from backend api
   const [teams, setTeams] = useState([])
   const [players, setPlayers] = useState([])
@@ -46,48 +50,59 @@ export default function ManageEntities() {
   const [isView, setIsView] = useState(false)
 
   const refreshAccounts = useCallback(() => {
-    axios.get(BASE_URL + '/api/v1/account').then((res) => {
-      if (res.data.status === 'ok') {
-        setAccounts(res.data.accounts)
-      }
-    })
-  }, [])
+    if (!currentLocation) return
+    axios
+      .get(BASE_URL + '/api/v1/account?location=' + currentLocation)
+      .then((res) => {
+        if (res.data.status === 'ok') {
+          setAccounts(res.data.accounts)
+        }
+      })
+  }, [currentLocation])
 
   const refreshTeams = useCallback(() => {
-    axios.get(BASE_URL + '/api/v1/team').then((res) => {
-      if (res.data.status === 'ok') {
-        setTeams(
-          res.data.teams.map((team) => ({
-            ...team,
-            teamOwnerName:
-              team.teamOwner && team.teamOwner.playerId
-                ? team.teamOwner.playerId.name
-                : '-',
-            accountName:
-              team.accountId && team.accountId.name ? team.accountId.name : '-',
-            playerEmail:
-              team.teamOwner && team.teamOwner.playerId
-                ? team.teamOwner.playerId.email
-                : '-',
-          }))
-        )
-      }
-    })
-  }, [])
+    if (!currentLocation) return
+    axios
+      .get(BASE_URL + '/api/v1/team?location=' + currentLocation)
+      .then((res) => {
+        if (res.data.status === 'ok') {
+          setTeams(
+            res.data.teams.map((team) => ({
+              ...team,
+              teamOwnerName:
+                team.teamOwner && team.teamOwner.playerId
+                  ? team.teamOwner.playerId.name
+                  : '-',
+              accountName:
+                team.accountId && team.accountId.name
+                  ? team.accountId.name
+                  : '-',
+              playerEmail:
+                team.teamOwner && team.teamOwner.playerId
+                  ? team.teamOwner.playerId.email
+                  : '-',
+            }))
+          )
+        }
+      })
+  }, [currentLocation])
 
   const refreshPlayers = useCallback(() => {
-    axios.get(BASE_URL + '/api/v1/player').then((res) => {
-      if (res.data.status === 'ok') {
-        setPlayers(
-          res.data.players.map((player) => ({
-            ...player,
-            accountName: player.accountId ? player.accountId.name : '-',
-            teamName: player.teamId ? player.teamId.name : '-',
-          }))
-        )
-      }
-    })
-  }, [])
+    if (!currentLocation) return
+    axios
+      .get(BASE_URL + '/api/v1/player?location=' + currentLocation)
+      .then((res) => {
+        if (res.data.status === 'ok') {
+          setPlayers(
+            res.data.players.map((player) => ({
+              ...player,
+              accountName: player.accountId ? player.accountId.name : '-',
+              teamName: player.teamId ? player.teamId.name : '-',
+            }))
+          )
+        }
+      })
+  }, [currentLocation])
 
   const refreshConfigurations = useCallback(() => {
     axios.get(BASE_URL + '/api/v1/config').then((res) => {

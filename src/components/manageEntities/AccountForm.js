@@ -49,12 +49,25 @@ const AccountForm = (props) => {
         </div>
       )}
       <div className={classes.input}>
-        <label htmlFor="name">Name</label>
+        <label htmlFor="name">Name *</label>
         <input
           id="name"
           type="text"
           ref={nameRef}
           defaultValue={props.isEdit && props.data.name ? props.data.name : ''}
+          required
+        />
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="location">Location *</label>
+        <input
+          id="location"
+          type="text"
+          ref={locationRef}
+          defaultValue={
+            props.isEdit && props.data.location ? props.data.location : ''
+          }
+          required
         />
       </div>
       <div className={classes.input}>
@@ -65,17 +78,6 @@ const AccountForm = (props) => {
           ref={totalCountRef}
           defaultValue={
             props.isEdit && props.data.totalCount ? props.data.totalCount : ''
-          }
-        />
-      </div>
-      <div className={classes.input}>
-        <label htmlFor="location">Location</label>
-        <input
-          id="location"
-          type="text"
-          ref={locationRef}
-          defaultValue={
-            props.isEdit && props.data.location ? props.data.location : ''
           }
         />
       </div>
