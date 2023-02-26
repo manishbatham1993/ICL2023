@@ -82,3 +82,14 @@
   line-break: anywhere;
   color: #525f7f;
 }
+
+.upload_stats {
+  display: flex;
+  justify-content: center;
+  margin: 3rem;
+  color: black;
+}
+
+.upload_stats .progress_bar {
+  margin: 0 1rem;
+}
