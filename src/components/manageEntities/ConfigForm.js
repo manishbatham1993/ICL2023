@@ -22,14 +22,12 @@ const ConfigForm = (props) => {
   const formSubmitHandler = (e) => {
     e.preventDefault()
     const payload = {
-      DEFAULT_BUDGET: defaultBudgetRef.current.value,
       DEFAULT_BID_AMOUNT: defaultBidAmountRef.current.value,
       PLAYERS_PER_TEAM: playersPerTeamRef.current.value,
       BID_INCREASE: bidIncreaseRef.current.value,
       AUCTION_INTERVAL_IN_SEC: auctionIntervalInSecRef.current.value,
       YEAR: yearRef.current.value,
       COUNTDOWN: countdownRef.current.value,
-      FIXTURE_ROUNDS: fixtureRoundsRef.current.value,
       DEFAULT_LOCATION: defaultLocationRef.current.value,
     }
     const config = {
@@ -48,19 +46,6 @@ const ConfigForm = (props) => {
 
   return (
     <form className={classes.form} onSubmit={formSubmitHandler}>
-      <div className={classes.input}>
-        <label htmlFor="defaultBudget">DEFAULT_BUDGET</label>
-        <input
-          id="defaultBudget"
-          type="number"
-          ref={defaultBudgetRef}
-          defaultValue={
-            props.configurations.DEFAULT_BUDGET
-              ? props.configurations.DEFAULT_BUDGET
-              : ''
-          }
-        />
-      </div>
       <div className={classes.input}>
         <label htmlFor="defaultBidAmount">DEFAULT_BID_AMOUNT</label>
         <input
@@ -132,19 +117,6 @@ const ConfigForm = (props) => {
           ref={countdownRef}
           defaultValue={
             props.configurations.COUNTDOWN ? props.configurations.COUNTDOWN : ''
-          }
-        />
-      </div>
-      <div className={classes.input}>
-        <label htmlFor="fixtureRounds">FIXTURE_ROUNDS</label>
-        <input
-          id="fixtureRounds"
-          type="Number"
-          ref={fixtureRoundsRef}
-          defaultValue={
-            props.configurations.FIXTURE_ROUNDS
-              ? props.configurations.FIXTURE_ROUNDS
-              : ''
           }
         />
       </div>

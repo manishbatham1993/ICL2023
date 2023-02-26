@@ -19,7 +19,6 @@ export const EntityContextProvider = (props) => {
   const [currentLocation, setCurrentLocation] = useState('')
 
   const [configurations, setConfigurations] = useState({
-    DEFAULT_BUDGET: 60000,
     DEFAULT_BID_AMOUNT: 5000,
     BID_INCREASE: 500,
     PLAYERS_PER_TEAM: 10,
@@ -69,9 +68,6 @@ export const EntityContextProvider = (props) => {
         const dbConfigurations = res.data.configurations
         setConfigurations((prev) => ({
           ...prev,
-          DEFAULT_BUDGET: dbConfigurations.DEFAULT_BUDGET
-            ? parseInt(dbConfigurations.DEFAULT_BUDGET)
-            : prev.DEFAULT_BUDGET,
           DEFAULT_BID_AMOUNT: dbConfigurations.DEFAULT_BID_AMOUNT
             ? parseInt(dbConfigurations.DEFAULT_BID_AMOUNT)
             : prev.DEFAULT_BID_AMOUNT,
@@ -85,9 +81,6 @@ export const EntityContextProvider = (props) => {
           COUNTDOWN: dbConfigurations.COUNTDOWN
             ? dbConfigurations.COUNTDOWN
             : '2023-01-01T00:00',
-          FIXTURE_ROUNDS: dbConfigurations.FIXTURE_ROUNDS
-            ? parseInt(dbConfigurations.FIXTURE_ROUNDS)
-            : 0,
           DEFAULT_LOCATION: dbConfigurations.DEFAULT_LOCATION
             ? dbConfigurations.DEFAULT_LOCATION
             : '',

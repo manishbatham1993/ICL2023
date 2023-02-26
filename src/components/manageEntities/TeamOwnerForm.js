@@ -9,7 +9,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
 const TeamOwnerForm = (props) => {
   const entityCtx = useContext(EntityContext)
-  const { DEFAULT_BUDGET } = entityCtx.configurations
 
   // initialize references
   const teamRef = useRef()
@@ -129,14 +128,8 @@ const TeamOwnerForm = (props) => {
         <input id="password" type="text" ref={passwordRef} required />
       </div>
       <div className={classes.input}>
-        <label htmlFor="budget">Budget</label>
-        <input
-          id="budget"
-          type="number"
-          ref={budgetRef}
-          required
-          defaultValue={DEFAULT_BUDGET}
-        />
+        <label htmlFor="budget">Budget *</label>
+        <input id="budget" type="number" ref={budgetRef} required />
       </div>
       <div className={classes.input}>
         <label htmlFor="isPlaying">Is Playing</label>
