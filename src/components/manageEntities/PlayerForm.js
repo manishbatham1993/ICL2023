@@ -90,12 +90,13 @@ const PlayerForm = (props) => {
         </select>
       </div>
       <div className={classes.input}>
-        <label htmlFor="name">Name</label>
+        <label htmlFor="name">Name *</label>
         <input
           id="name"
           type="text"
           ref={nameRef}
           defaultValue={props.isEdit && props.data.name ? props.data.name : ''}
+          required
         />
       </div>
       <div className={classes.input}>
@@ -193,7 +194,7 @@ const PlayerForm = (props) => {
         </select>
       </div>
       <div className={classes.input}>
-        <label htmlFor="phoneNumber">phoneNumber</label>
+        <label htmlFor="phoneNumber">Phone Number</label>
         <input
           id="phoneNumber"
           type="text"
@@ -205,7 +206,7 @@ const PlayerForm = (props) => {
       </div>
       <div className={classes.input}>
         <label htmlFor="image">Image</label>
-        <input id="image" type="file" ref={imageRef} />
+        <input id="image" type="file" accept="images/*" ref={imageRef} />
       </div>
       <hr />
       <div className={classes.input}>

@@ -63,17 +63,18 @@ const TeamForm = (props) => {
         </select>
       </div>
       <div className={classes.input}>
-        <label htmlFor="name">Name</label>
+        <label htmlFor="name">Name *</label>
         <input
           id="name"
           type="text"
           ref={nameRef}
           defaultValue={props.isEdit && props.data.name ? props.data.name : ''}
+          required
         />
       </div>
       <div className={classes.input}>
         <label htmlFor="image">Image</label>
-        <input id="image" type="file" ref={imageRef} />
+        <input id="image" type="file" accept="images/*" ref={imageRef} />
       </div>
       <button type="submit">Save</button>
     </form>

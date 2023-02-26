@@ -181,7 +181,13 @@ const Fixtures = () => {
         {authCtx.role === 'admin' && (
           <Box sx={mobileClasses.form}>
             <form onSubmit={formSubmitHandler}>
-              <input id="image" type="file" ref={fixtureDataRef} required />
+              <input
+                id="image"
+                type="file"
+                accept=".csv"
+                ref={fixtureDataRef}
+                required
+              />
               <Button
                 variant="primary"
                 style={{
@@ -330,7 +336,13 @@ const Fixtures = () => {
       {authCtx.role === 'admin' && (
         <Box sx={classes.form}>
           <form onSubmit={formSubmitHandler}>
-            <input id="image" type="file" ref={fixtureDataRef} required />
+            <input
+              id="image"
+              type="file"
+              accept=".csv"
+              ref={fixtureDataRef}
+              required
+            />
             <Button variant="primary" style={classes.button}>
               Upload Fixtures
             </Button>

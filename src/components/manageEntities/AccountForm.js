@@ -11,16 +11,17 @@ const AccountForm = (props) => {
   const nameRef = useRef()
   const totalCountRef = useRef()
   const locationRef = useRef()
+  const imageRef = useRef()
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
 
-    const payload = {
-      name: nameRef.current.value,
-      totalCount: totalCountRef.current.value,
-      location: locationRef.current.value,
-    }
-    if (props.isEdit) payload.accountId = props.data._id
+    const accountFormData = new FormData()
+    accountFormData.append('name', nameRef.current.value)
+    accountFormData.append('totalCount', totalCountRef.current.value)
+    accountFormData.append('location', locationRef.current.value)
+    accountFormData.append('image', imageRef.current.files[0])
+    if (props.isEdit) accountFormData.append('accountId', props.data._id)
 
     const config = {
       headers: {
@@ -34,7 +35,7 @@ const AccountForm = (props) => {
         ? '/api/v1/admin/account/edit'
         : '/api/v1/admin/account/add')
     // POST request to backend and then close the overlay and refresh the accounts
-    axios.post(api, payload, config).then((res) => {
+    axios.post(api, accountFormData, config).then((res) => {
       props.onCloseOverlay()
       props.onRefresh()
     })
@@ -80,6 +81,10 @@ const AccountForm = (props) => {
             props.isEdit && props.data.totalCount ? props.data.totalCount : ''
           }
         />
+      </div>
+      <div className={classes.input}>
+        <label htmlFor="image">Image</label>
+        <input id="image" type="file" accept="images/*" ref={imageRef} />
       </div>
       <button type="submit">Save</button>
     </form>

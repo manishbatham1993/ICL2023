@@ -16,6 +16,8 @@ import {
   CardText,
 } from 'reactstrap'
 
+const BASE_URL = process.env.REACT_APP_BASE_URL
+
 const Overview = () => {
   const entityCtx = useContext(EntityContext)
   const { accounts } = entityCtx
@@ -52,7 +54,11 @@ const Overview = () => {
                     width: '200px',
                     height: '200px',
                   }}
-                  src={`static/account_logo/${account.name}.png`}
+                  src={
+                    account?.imageUrl
+                      ? `${BASE_URL}/${account.imageUrl}`
+                      : `${BASE_URL}/static/account_logo/${account.name}.png`
+                  }
                   sx={{
                     width: 200,
                     height: 200,
