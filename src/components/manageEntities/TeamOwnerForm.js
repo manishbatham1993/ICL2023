@@ -11,14 +11,14 @@ const TeamOwnerForm = (props) => {
   const teamOwner = props.team?.teamOwner
 
   // initialize references
-  const teamRef = useRef()
-  const playerRef = useRef()
   const emailRef = useRef()
   const passwordRef = useRef()
   const budgetRef = useRef()
   const isPlayingRef = useRef()
 
-  const [selectedPlayer, setSelectedPlayer] = useState(teamOwner?.playerId)
+  const [selectedPlayer, setSelectedPlayer] = useState(
+    teamOwner ? teamOwner?.playerId : ''
+  )
 
   const getAccountPlayers = useCallback(
     (accountId) => {
@@ -48,12 +48,12 @@ const TeamOwnerForm = (props) => {
   const formSubmitHandler = (e) => {
     e.preventDefault()
     const payload = {
-      teamId: teamRef.current.value,
-      playerId: playerRef.current.value,
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-      budget: budgetRef.current.value,
-      isPlaying: isPlayingRef.current.value,
+      teamId: team._id,
+      playerId: selectedPlayer,
+      email: emailRef?.current?.value,
+      password: passwordRef?.current?.value,
+      budget: budgetRef?.current?.value,
+      isPlaying: isPlayingRef?.current?.value,
     }
 
     const config = {
@@ -74,24 +74,20 @@ const TeamOwnerForm = (props) => {
     <form className={classes.form} onSubmit={formSubmitHandler}>
       <div className={classes.input}>
         <label htmlFor="team">Team</label>
-        <select id="team" ref={teamRef} value={team._id} disabled>
-          <option value={team._id} selected>
-            {team.name}
-          </option>
+        <select id="team" value={team._id} disabled>
+          <option value={team._id}>{team.name}</option>
         </select>
       </div>
       <div className={classes.input}>
         <label htmlFor="player">Player *</label>
         <select
           id="player"
-          ref={playerRef}
           onChange={(e) => {
             setSelectedPlayer(e.target.value)
           }}
           value={selectedPlayer}
-          required
         >
-          <option value="">-- Select --</option>
+          <option value="">-- None --</option>
           {accountPlayers.map((player) => (
             <option key={`${player._id}`} value={player._id}>
               {player.name}
@@ -99,41 +95,50 @@ const TeamOwnerForm = (props) => {
           ))}
         </select>
       </div>
-      <div className={classes.input}>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="text"
-          ref={emailRef}
-          value={playerEmail}
-          disabled
-        />
-      </div>
-      <div className={classes.input}>
-        <label htmlFor="password">Password *</label>
-        <input id="password" type="text" ref={passwordRef} required />
-      </div>
-      <div className={classes.input}>
-        <label htmlFor="budget">Budget *</label>
-        <input
-          id="budget"
-          type="number"
-          ref={budgetRef}
-          defaultValue={teamOwner ? teamOwner.budget : ''}
-          required
-        />
-      </div>
-      <div className={classes.input}>
-        <label htmlFor="isPlaying">Is Playing</label>
-        <select
-          id="isPlaying"
-          ref={isPlayingRef}
-          defaultValue={teamOwner ? teamOwner.isPlaying : 'false'}
-        >
-          <option value="false">No</option>
-          <option value="true">Yes</option>
-        </select>
-      </div>
+      {selectedPlayer && (
+        <div className={classes.input}>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="text"
+            ref={emailRef}
+            value={playerEmail}
+            disabled
+          />
+        </div>
+      )}
+      {selectedPlayer && (
+        <div className={classes.input}>
+          <label htmlFor="password">Password *</label>
+          <input id="password" type="text" ref={passwordRef} required />
+        </div>
+      )}
+      {selectedPlayer && (
+        <div className={classes.input}>
+          <label htmlFor="budget">Budget *</label>
+          <input
+            id="budget"
+            type="number"
+            ref={budgetRef}
+            defaultValue={teamOwner ? teamOwner.budget : ''}
+            required
+          />
+        </div>
+      )}
+
+      {selectedPlayer && (
+        <div className={classes.input}>
+          <label htmlFor="isPlaying">Is Playing</label>
+          <select
+            id="isPlaying"
+            ref={isPlayingRef}
+            defaultValue={teamOwner ? teamOwner.isPlaying : 'false'}
+          >
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+        </div>
+      )}
       <button type="submit">Set</button>
     </form>
   )
