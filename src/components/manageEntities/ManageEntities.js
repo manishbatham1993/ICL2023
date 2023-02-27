@@ -154,30 +154,22 @@ export default function ManageEntities() {
   }
 
   const deleteHandler = (entityName, entityId) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    }
-    const api = `${BASE_URL}/api/v1/admin/${entityName}/${entityId}`
-    axios.delete(api, config).then((res) => {
-      if (res.data.status === 'ok') {
-        switch (entityName) {
-          case 'account':
-            refreshAllData()
-            break
-          case 'player':
-            refreshAllData()
-            break
-          case 'team':
-            refreshAllData()
-            break
-          default:
-            console.log('unknown entity name')
-            break
-        }
+    const confirm = window.confirm(
+      `Are you sure you want to Delete ${entityName} ? \nClick OK to CONFIRM`
+    )
+    if (confirm) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       }
-    })
+      const api = `${BASE_URL}/api/v1/admin/${entityName}/${entityId}`
+      axios.delete(api, config).then((res) => {
+        if (res.data.status === 'ok') {
+          refreshAllData()
+        }
+      })
+    }
   }
 
   const assignTeamOwnerHandler = (teamId) => {
@@ -188,6 +180,29 @@ export default function ManageEntities() {
         setModal('teamOwner')
       }
     })
+  }
+
+  const resetAuctionDataHandler = (accountId) => {
+    const confirm = window.confirm(
+      'Are you sure you want to Reset Auction ? \nAll Data related to Auction will be deleted. \nClick OK to CONFIRM'
+    )
+    if (confirm) {
+      const api = `${BASE_URL}/api/v1/admin/auction/reset`
+      const payload = {
+        accountId: accountId,
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      }
+      // POST request to backend and then close the overlay and refresh the accounts
+      axios.patch(api, payload, config).then((res) => {
+        if (res.data.status === 'ok') {
+          refreshAllData()
+        }
+      })
+    }
   }
 
   const closeModalHandler = () => {
@@ -323,6 +338,7 @@ export default function ManageEntities() {
           onClickEdit={openEditModalHandler.bind(null, 'account')}
           onClickView={viewHandler.bind(null, 'account')}
           onClickDelete={deleteHandler.bind(null, 'account')}
+          onClickReset={resetAuctionDataHandler}
         />
         <Entity
           rows={players}

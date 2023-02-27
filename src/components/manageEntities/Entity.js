@@ -15,6 +15,7 @@ import AddIcon from '@mui/icons-material/Add'
 import PostAddIcon from '@mui/icons-material/PostAdd'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
+import RestartAltIcon from '@mui/icons-material/RestartAlt'
 
 export default function Entity({
   rows,
@@ -27,6 +28,7 @@ export default function Entity({
   onClickImport,
   onClickExport,
   onClickAssignTeamOwner,
+  onClickReset,
   additionalColums = [],
 }) {
   return (
@@ -112,6 +114,16 @@ export default function Entity({
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
+                      <Tooltip title="Delete">
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onClickDelete(row._id)
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
                       {onClickAssignTeamOwner && (
                         <Tooltip title="Assign Team Owner">
                           <IconButton
@@ -124,16 +136,18 @@ export default function Entity({
                           </IconButton>
                         </Tooltip>
                       )}
-                      <Tooltip title="Delete">
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            onClickDelete(row._id)
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </Tooltip>
+                      {onClickReset && (
+                        <Tooltip title="Reset Auction">
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              onClickReset(row._id)
+                            }}
+                          >
+                            <RestartAltIcon />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                     </TableCell>
                   </TableRow>
                 )
