@@ -1,5 +1,11 @@
+html,
 body {
   margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -12,16 +18,28 @@ code {
     monospace;
 }
 
+#root {
+  min-height: 100%;
+  position: relative;
+}
+
+.main__content {
+  padding-bottom: 50px;
+  text-align: center;
+}
+
 .footer {
-  flex-shrink: 0;
+  position: absolute !important;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+}
+
+.footer {
   text-align: center;
   background-color: #006a56;
   color: white;
   padding: 24px 0px !important;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  position: fixed;
 }
 
 .content {
@@ -59,5 +77,3 @@ button:focus {
   padding: 8px;
   width: inherit;
 }
-
-

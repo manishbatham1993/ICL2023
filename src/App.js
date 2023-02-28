@@ -17,45 +17,34 @@ import Allplayer from './components/Allplayer'
 import TeamDetail from './components/teamdetail'
 import Rules from './components/manageEntities/Rules'
 import Fixtures from './components/Fixtures'
-// import EnhancedTable from './components/ListView/playerslist'
-// import AccountList from './components/ListView/accountslist'
-// import AlertCongratulationSlide from './components/modal'
 
 const App = () => {
   const authCtx = useContext(AuthContext)
 
   return (
-    <div className="App">
+    <React.Fragment>
       <ResponsiveAppBar />
-      <Routes>
-        <Route path="/" element={<Navigate to="/teams" replace />} />
-        <Route path="/countdown" element={<Countdown />} />
-        <Route path="/overview" element={<Overview />} />
-        <Route path="/players" element={<Allplayer />} />
-        <Route path="/Signin" element={<SignIn />} />
-        <Route path="/Teams" element={<TeamDetail />} />
-        <Route path="/Auction" element={<Auction />} />
-        <Route path="/topbuys" element={<TopBuys />} />
-        <Route path="/rules" element={<Rules />} />
-        <Route path="/fixtures" element={<Fixtures />} />
-        <Route path="/accountdetail/:id" element={<Accountdetail />} />
-        <Route path="/squaddetail/:id" element={<Squaddetail />} />
-        {authCtx?.role === 'admin' && (
-          <Route path="/manage" element={<ManageEntities />} />
-        )}
-
-        {/* <Route
-            path="/playerslist"
-            element={authCtx.isLoggedIn ? <EnhancedTable /> : <SignIn />}
-          />
-          <Route
-            path="/accountlist"
-            element={authCtx.isLoggedIn ? <AccountList /> : <SignIn />}
-          />
-        <Route path="/modal" element={<AlertCongratulationSlide />} /> */}
-      </Routes>
+      <div className="main__content">
+        <Routes>
+          <Route path="/" element={<Navigate to="/teams" replace />} />
+          <Route path="/countdown" element={<Countdown />} />
+          <Route path="/overview" element={<Overview />} />
+          <Route path="/players" element={<Allplayer />} />
+          <Route path="/Signin" element={<SignIn />} />
+          <Route path="/Teams" element={<TeamDetail />} />
+          <Route path="/Auction" element={<Auction />} />
+          <Route path="/topbuys" element={<TopBuys />} />
+          <Route path="/rules" element={<Rules />} />
+          <Route path="/fixtures" element={<Fixtures />} />
+          <Route path="/accountdetail/:id" element={<Accountdetail />} />
+          <Route path="/squaddetail/:id" element={<Squaddetail />} />
+          {authCtx?.role === 'admin' && (
+            <Route path="/manage" element={<ManageEntities />} />
+          )}
+        </Routes>
+      </div>
       <Footer />
-    </div>
+    </React.Fragment>
   )
 }
 

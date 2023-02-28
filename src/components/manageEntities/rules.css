@@ -1,50 +1,27 @@
-.card-div{
-    background: white;
-    border-radius: 15px;
-    padding: 12px;
+.card-div {
+  background: white;
+  border-radius: 15px;
+  padding: 12px;
 }
 
-.card-head{
-    color: #EE4923;
-    font-weight: 900;
-    text-align: center;
+.card-head {
+  color: #ee4923;
+  font-weight: 900;
+  text-align: center;
 }
-
-
 
 .match-rule {
-    text-align: center;
-    color: white;
+  text-align: center;
+  color: white;
 }
-.t-text{
-    /*text-transform: uppercase;*/
-    font-weight: bold;
+.t-text {
+  /*text-transform: uppercase;*/
+  font-weight: bold;
 }
-.p-text{
-    font-weight: bold !important;
-}
-
-/* p{
-    color: black !important;
-    font-weight: bold !important;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    background-color: #fff;
-} */
-
-/* body{
-
-    background-color: #1c3663 !important;
-    
-} */
-
-.footer
-{
-    position: relative !important;
+.p-text {
+  font-weight: bold !important;
 }
 
-.div-text
-{
-    text-align: initial !important;
+.div-text {
+  text-align: initial !important;
 }
