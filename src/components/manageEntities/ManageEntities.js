@@ -5,10 +5,8 @@ import React, { useEffect, useState, useCallback, useContext } from 'react'
 import axios from 'axios'
 import EntityContext from '../../store/entity-context'
 
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
+import Alert from '@mui/material/Alert'
 
 import Modal from '../../UI/Modal'
 import Entity from './Entity'
@@ -20,14 +18,7 @@ import PlayerForm from './PlayerForm'
 import ConfigForm from './ConfigForm'
 import ImportPlayersForm from './ImportPlayerForm'
 import ExportPlayerForm from './ExportPlayerForm'
-
-import {
-  initializeAuction,
-  startAuction,
-  pauseAuction,
-  endAuction,
-  clearAuction,
-} from './utils'
+import AuctionControls from './AuctionControls'
 
 // constants
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
@@ -48,6 +39,23 @@ export default function ManageEntities() {
   const [data, setData] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
   const [isView, setIsView] = useState(false)
+
+  // snackbar
+  const [snackbar, setSnackbar] = useState({
+    isOpen: false,
+    type: null,
+    message: null,
+    timer: null,
+  })
+
+  const setSnackbarHandler = (type, message, duration = 10) => {
+    //duration in seconds
+    clearTimeout(snackbar.timer)
+    let timer = setTimeout(() => {
+      setSnackbar((prev) => ({ ...prev, isOpen: false }))
+    }, duration * 1000)
+    setSnackbar({ isOpen: true, type, message, timer })
+  }
 
   const refreshAccounts = useCallback(() => {
     if (!currentLocation) return
@@ -324,102 +332,62 @@ export default function ManageEntities() {
         </Modal>
       )}
 
-      {/* show entities */}
-      <Box
-        sx={{
-          display: 'flex',
-        }}
-      >
-        <Entity
-          rows={accounts}
-          title={'Accounts'}
-          boxWidth={40}
-          onClickAdd={openModalHandler.bind(null, 'account')}
-          onClickEdit={openEditModalHandler.bind(null, 'account')}
-          onClickView={viewHandler.bind(null, 'account')}
-          onClickDelete={deleteHandler.bind(null, 'account')}
-          onClickReset={resetAuctionDataHandler}
-        />
-        <Entity
-          rows={players}
-          title={'Players'}
-          boxWidth={60}
-          onClickAdd={openModalHandler.bind(null, 'player')}
-          onClickEdit={openEditModalHandler.bind(null, 'player')}
-          onClickView={viewHandler.bind(null, 'player')}
-          onClickDelete={deleteHandler.bind(null, 'player')}
-          onClickImport={openModalHandler.bind(null, 'importPlayers')}
-          onClickExport={openModalHandler.bind(null, 'exportPlayers')}
-          additionalColums={['accountName', 'teamName']}
-        />
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-        }}
-      >
-        <Entity
-          rows={teams}
-          title={'Teams'}
-          boxWidth={85}
-          onClickAdd={openModalHandler.bind(null, 'team')}
-          onClickEdit={openEditModalHandler.bind(null, 'team')}
-          onClickView={viewHandler.bind(null, 'team')}
-          onClickDelete={deleteHandler.bind(null, 'team')}
-          onClickAssignTeamOwner={assignTeamOwnerHandler}
-          additionalColums={['accountName', 'teamOwnerName', 'playerEmail']}
-        />
-        <Card
-          sx={{
-            m: 2,
-            borderRadius: 2,
-            width: '15%',
-            height: 300,
-            overflowY: 'auto',
-          }}
-        >
-          <CardContent sx={{ mt: '2rem' }}>
-            <Button
-              variant="contained"
-              onClick={openModalHandler.bind(null, 'config')}
-            >
-              Set Configurations
-            </Button>
-            <br></br>
-            <br></br>
-            {accounts.map((account, i) => (
-              <React.Fragment key={i}>
-                <Button
-                  variant="contained"
-                  onClick={initializeAuction.bind(null, account._id)}
-                >
-                  {account.name}-auction
-                </Button>
-                <br></br>
-                <br></br>
-              </React.Fragment>
-            ))}
-            <Button variant="contained" onClick={startAuction}>
-              start timer
-            </Button>
-            <br></br>
-            <br></br>
-            <Button variant="contained" onClick={pauseAuction}>
-              pause / resume
-            </Button>
-            <br></br>
-            <br></br>
-            <Button variant="contained" onClick={endAuction}>
-              end auction
-            </Button>
-            <br></br>
-            <br></br>
-            <Button variant="contained" onClick={clearAuction}>
-              clear auction
-            </Button>
-          </CardContent>
-        </Card>
-      </Box>
+      {/* SnackBar */}
+      {snackbar?.isOpen && (
+        <Alert variant="filled" severity={snackbar.type}>
+          {snackbar.message}
+        </Alert>
+      )}
+
+      {/* controls */}
+      <AuctionControls
+        accounts={accounts}
+        onClickConfigurations={openModalHandler.bind(null, 'config')}
+        setSnackbar={setSnackbarHandler}
+      />
+
+      {/* entities */}
+      <div style={{ display: 'flex' }}>
+        <Box width="40%">
+          <Entity
+            rows={accounts}
+            title={'Accounts'}
+            onClickAdd={openModalHandler.bind(null, 'account')}
+            onClickEdit={openEditModalHandler.bind(null, 'account')}
+            onClickView={viewHandler.bind(null, 'account')}
+            onClickDelete={deleteHandler.bind(null, 'account')}
+            onClickReset={resetAuctionDataHandler}
+          />
+        </Box>
+
+        <Box flexGrow="1">
+          <Entity
+            rows={players}
+            title={'Players'}
+            onClickAdd={openModalHandler.bind(null, 'player')}
+            onClickEdit={openEditModalHandler.bind(null, 'player')}
+            onClickView={viewHandler.bind(null, 'player')}
+            onClickDelete={deleteHandler.bind(null, 'player')}
+            onClickImport={openModalHandler.bind(null, 'importPlayers')}
+            onClickExport={openModalHandler.bind(null, 'exportPlayers')}
+            additionalColums={['accountName', 'teamName']}
+          />
+        </Box>
+      </div>
+      <div>
+        <Box width="100%">
+          <Entity
+            rows={teams}
+            title={'Teams'}
+            onClickAdd={openModalHandler.bind(null, 'team')}
+            onClickEdit={openEditModalHandler.bind(null, 'team')}
+            onClickView={viewHandler.bind(null, 'team')}
+            onClickDelete={deleteHandler.bind(null, 'team')}
+            onClickAssignTeamOwner={assignTeamOwnerHandler}
+            additionalColums={['accountName', 'teamOwnerName', 'playerEmail']}
+          />
+        </Box>
+      </div>
     </React.Fragment>
   )
 }
