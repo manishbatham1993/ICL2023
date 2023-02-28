@@ -19,7 +19,6 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt'
 
 export default function Entity({
   rows,
-  boxWidth,
   title,
   onClickView,
   onClickAdd,
@@ -32,130 +31,140 @@ export default function Entity({
   additionalColums = [],
 }) {
   return (
-    <Box sx={{ width: `${boxWidth}%` }}>
-      <Paper
-        sx={{
-          m: 2,
+    <Paper
+      sx={{
+        mb: 2,
+        mr: 2,
+        borderRadius: 2,
+        height: 300,
+        overflow: 'hidden',
+        overflowY: 'scroll',
+        '&::-webkit-scrollbar': {
+          width: '1rem',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          background: '#888',
           borderRadius: 2,
-          height: 300,
-          overflowY: 'auto',
-        }}
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+          background: '#555',
+        },
+      }}
+    >
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
       >
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          {title}
-        </Typography>
+        {title}
+      </Typography>
 
-        {onClickAdd && (
-          <Tooltip title="Add">
-            <IconButton onClick={onClickAdd}>
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+      {onClickAdd && (
+        <Tooltip title="Add">
+          <IconButton onClick={onClickAdd}>
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      )}
 
-        {onClickImport && (
-          <Tooltip title="Import CSV">
-            <IconButton onClick={onClickImport}>
-              <PostAddIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+      {onClickImport && (
+        <Tooltip title="Import CSV">
+          <IconButton onClick={onClickImport}>
+            <PostAddIcon />
+          </IconButton>
+        </Tooltip>
+      )}
 
-        {onClickExport && (
-          <Tooltip title="Export CSV">
-            <IconButton onClick={onClickExport}>
-              <FileDownloadIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+      {onClickExport && (
+        <Tooltip title="Export CSV">
+          <IconButton onClick={onClickExport}>
+            <FileDownloadIcon />
+          </IconButton>
+        </Tooltip>
+      )}
 
-        <TableContainer>
-          <Table aria-labelledby="tableTitle">
-            <TableBody>
-              {rows.map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row._id}
-                    onClick={() => onClickView(row._id)}
+      <TableContainer>
+        <Table aria-labelledby="tableTitle">
+          <TableBody>
+            {rows.map((row, index) => {
+              const labelId = `enhanced-table-checkbox-${index}`
+              return (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={row._id}
+                  onClick={() => onClickView(row._id)}
+                >
+                  <TableCell
+                    align="center"
+                    component="th"
+                    id={labelId}
+                    scope="row"
                   >
-                    <TableCell
-                      align="center"
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                    >
-                      {row.name}
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="center">{row._id}</TableCell>
+
+                  {additionalColums.map((col, i) => (
+                    <TableCell key={i} align="center">
+                      {row[col]}
                     </TableCell>
-                    <TableCell align="center">{row._id}</TableCell>
+                  ))}
 
-                    {additionalColums.map((col, i) => (
-                      <TableCell key={i} align="center">
-                        {row[col]}
-                      </TableCell>
-                    ))}
-
-                    <TableCell align="center">
-                      <Tooltip title="Edit">
+                  <TableCell align="center">
+                    <Tooltip title="Edit">
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onClickEdit(row._id)
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete">
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onClickDelete(row._id)
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                    {onClickAssignTeamOwner && (
+                      <Tooltip title="Assign Team Owner">
                         <IconButton
                           onClick={(e) => {
                             e.stopPropagation()
-                            onClickEdit(row._id)
+                            onClickAssignTeamOwner(row._id)
                           }}
                         >
-                          <EditIcon />
+                          <AccountBoxIcon />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Delete">
+                    )}
+                    {onClickReset && (
+                      <Tooltip title="Reset Auction">
                         <IconButton
                           onClick={(e) => {
                             e.stopPropagation()
-                            onClickDelete(row._id)
+                            onClickReset(row._id)
                           }}
                         >
-                          <DeleteIcon />
+                          <RestartAltIcon />
                         </IconButton>
                       </Tooltip>
-                      {onClickAssignTeamOwner && (
-                        <Tooltip title="Assign Team Owner">
-                          <IconButton
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              onClickAssignTeamOwner(row._id)
-                            }}
-                          >
-                            <AccountBoxIcon />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      {onClickReset && (
-                        <Tooltip title="Reset Auction">
-                          <IconButton
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              onClickReset(row._id)
-                            }}
-                          >
-                            <RestartAltIcon />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </Box>
+                    )}
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   )
 }

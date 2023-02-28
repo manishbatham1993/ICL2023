@@ -5,10 +5,11 @@ import React, { useEffect, useState, useCallback, useContext } from 'react'
 import axios from 'axios'
 import EntityContext from '../../store/entity-context'
 
-import Button from '@mui/material/Button'
+// import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import { Button } from 'reactstrap'
 
 import Modal from '../../UI/Modal'
 import Entity from './Entity'
@@ -324,102 +325,73 @@ export default function ManageEntities() {
         </Modal>
       )}
 
-      {/* show entities */}
+      {/* controls */}
       <Box
         sx={{
+          width: '100%',
+          padding: 1,
           display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
-        <Entity
-          rows={accounts}
-          title={'Accounts'}
-          boxWidth={40}
-          onClickAdd={openModalHandler.bind(null, 'account')}
-          onClickEdit={openEditModalHandler.bind(null, 'account')}
-          onClickView={viewHandler.bind(null, 'account')}
-          onClickDelete={deleteHandler.bind(null, 'account')}
-          onClickReset={resetAuctionDataHandler}
-        />
-        <Entity
-          rows={players}
-          title={'Players'}
-          boxWidth={60}
-          onClickAdd={openModalHandler.bind(null, 'player')}
-          onClickEdit={openEditModalHandler.bind(null, 'player')}
-          onClickView={viewHandler.bind(null, 'player')}
-          onClickDelete={deleteHandler.bind(null, 'player')}
-          onClickImport={openModalHandler.bind(null, 'importPlayers')}
-          onClickExport={openModalHandler.bind(null, 'exportPlayers')}
-          additionalColums={['accountName', 'teamName']}
-        />
+        <Button onClick={openModalHandler.bind(null, 'config')}>
+          Set Configurations
+        </Button>
+        {accounts.map((account, i) => (
+          <React.Fragment key={i}>
+            <Button onClick={initializeAuction.bind(null, account._id)}>
+              {account.name}-auction
+            </Button>
+          </React.Fragment>
+        ))}
+        <Button onClick={startAuction}>start timer</Button>
+        <Button onClick={pauseAuction}>pause / resume</Button>
+        <Button onClick={endAuction}>end auction</Button>
+        <Button onClick={clearAuction}>clear auction</Button>
       </Box>
-      <Box
-        sx={{
-          display: 'flex',
-        }}
-      >
-        <Entity
-          rows={teams}
-          title={'Teams'}
-          boxWidth={85}
-          onClickAdd={openModalHandler.bind(null, 'team')}
-          onClickEdit={openEditModalHandler.bind(null, 'team')}
-          onClickView={viewHandler.bind(null, 'team')}
-          onClickDelete={deleteHandler.bind(null, 'team')}
-          onClickAssignTeamOwner={assignTeamOwnerHandler}
-          additionalColums={['accountName', 'teamOwnerName', 'playerEmail']}
-        />
-        <Card
-          sx={{
-            m: 2,
-            borderRadius: 2,
-            width: '15%',
-            height: 300,
-            overflowY: 'auto',
-          }}
-        >
-          <CardContent sx={{ mt: '2rem' }}>
-            <Button
-              variant="contained"
-              onClick={openModalHandler.bind(null, 'config')}
-            >
-              Set Configurations
-            </Button>
-            <br></br>
-            <br></br>
-            {accounts.map((account, i) => (
-              <React.Fragment key={i}>
-                <Button
-                  variant="contained"
-                  onClick={initializeAuction.bind(null, account._id)}
-                >
-                  {account.name}-auction
-                </Button>
-                <br></br>
-                <br></br>
-              </React.Fragment>
-            ))}
-            <Button variant="contained" onClick={startAuction}>
-              start timer
-            </Button>
-            <br></br>
-            <br></br>
-            <Button variant="contained" onClick={pauseAuction}>
-              pause / resume
-            </Button>
-            <br></br>
-            <br></br>
-            <Button variant="contained" onClick={endAuction}>
-              end auction
-            </Button>
-            <br></br>
-            <br></br>
-            <Button variant="contained" onClick={clearAuction}>
-              clear auction
-            </Button>
-          </CardContent>
-        </Card>
-      </Box>
+
+      {/* entities */}
+      <div style={{ display: 'flex' }}>
+        <Box width="40%">
+          <Entity
+            rows={accounts}
+            title={'Accounts'}
+            onClickAdd={openModalHandler.bind(null, 'account')}
+            onClickEdit={openEditModalHandler.bind(null, 'account')}
+            onClickView={viewHandler.bind(null, 'account')}
+            onClickDelete={deleteHandler.bind(null, 'account')}
+            onClickReset={resetAuctionDataHandler}
+          />
+        </Box>
+
+        <Box flexGrow="1">
+          <Entity
+            rows={players}
+            title={'Players'}
+            onClickAdd={openModalHandler.bind(null, 'player')}
+            onClickEdit={openEditModalHandler.bind(null, 'player')}
+            onClickView={viewHandler.bind(null, 'player')}
+            onClickDelete={deleteHandler.bind(null, 'player')}
+            onClickImport={openModalHandler.bind(null, 'importPlayers')}
+            onClickExport={openModalHandler.bind(null, 'exportPlayers')}
+            additionalColums={['accountName', 'teamName']}
+          />
+        </Box>
+      </div>
+      <div>
+        <Box width="100%">
+          <Entity
+            rows={teams}
+            title={'Teams'}
+            onClickAdd={openModalHandler.bind(null, 'team')}
+            onClickEdit={openEditModalHandler.bind(null, 'team')}
+            onClickView={viewHandler.bind(null, 'team')}
+            onClickDelete={deleteHandler.bind(null, 'team')}
+            onClickAssignTeamOwner={assignTeamOwnerHandler}
+            additionalColums={['accountName', 'teamOwnerName', 'playerEmail']}
+          />
+        </Box>
+      </div>
     </React.Fragment>
   )
 }
