@@ -96,22 +96,22 @@ export default function Entity({
                   onClick={() => onClickView(row._id)}
                 >
                   <TableCell
-                    align="center"
+                    align="left"
                     component="th"
                     id={labelId}
                     scope="row"
                   >
                     {row.name}
                   </TableCell>
-                  <TableCell align="center">{row._id}</TableCell>
+                  <TableCell align="left">{row._id}</TableCell>
 
                   {additionalColums.map((col, i) => (
-                    <TableCell key={i} align="center">
+                    <TableCell key={i} align="left">
                       {row[col]}
                     </TableCell>
                   ))}
 
-                  <TableCell align="center">
+                  <TableCell align="right">
                     <Tooltip title="Edit">
                       <IconButton
                         onClick={(e) => {
