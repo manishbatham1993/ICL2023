@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, NavLink } from 'react-router-dom'
 import AuthContext from '../store/auth-context'
 import EntityContext from '../store/entity-context'
 import Logo from './ICL_Logo.svg'
@@ -202,6 +202,7 @@ function ResponsiveAppBar() {
               )}
             </Menu>
           </Box>
+
           {/* This box is for desktop view */}
           <Box
             sx={{
@@ -244,7 +245,6 @@ function ResponsiveAppBar() {
                 Players
               </Button>
             </Link>
-            {/* {authCtx.isLoggedIn && ( */}
             <Link to="teams" style={{ color: 'white', textDecoration: 'none' }}>
               <Button
                 key="Teams"
@@ -254,8 +254,6 @@ function ResponsiveAppBar() {
                 Teams
               </Button>
             </Link>
-            {/* // )} */}
-            {/* {authCtx.isLoggedIn && ( */}
             <Link
               to="auction"
               style={{ color: 'white', textDecoration: 'none' }}
@@ -319,20 +317,29 @@ function ResponsiveAppBar() {
             )}
           </Box>
           <LocationList />
+
           {authCtx.isLoggedIn ? (
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt={authCtx.user === null ? 'No Name' : authCtx.user.email}
-                    src={`${BASE_URL}/${authCtx.imageUrl}`}
-                  />
-                  <Typography sx={{ padding: '15px' }}>
-                    {authCtx.user === null ? 'No Name' : authCtx.user.email}
-                  </Typography>
-                  <KeyboardArrowDownIcon sx={{ color: 'white' }} />
-                </IconButton>
-              </Tooltip>
+              <div style={{ display: 'flex', alignContent: 'center' }}>
+                <Avatar
+                  alt={authCtx.user?.email}
+                  src={`${BASE_URL}/${authCtx.user?.image}`}
+                />
+                <Button
+                  disableRipple
+                  sx={{
+                    textTransform: 'none',
+                    '&:hover': {
+                      background: 'rgb(0, 0, 0, 0.1)',
+                    },
+                    color: 'white',
+                  }}
+                  onClick={handleOpenUserMenu}
+                  endIcon={<KeyboardArrowDownIcon />}
+                >
+                  {authCtx?.user?.email}
+                </Button>
+              </div>
 
               <Menu
                 sx={{ mt: '55px' }}
