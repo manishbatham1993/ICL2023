@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
 import EntityContext from '../store/entity-context'
+import { createDebounceFunction } from '../utils/searchOptimization'
 
 import './overview.css'
 import './squaddetails.css'
 import Avatar from '@mui/material/Avatar'
+import Pagination from '@mui/material/Pagination'
 
 // reactstrap components
 import {
@@ -16,29 +18,76 @@ import {
   CardSubtitle,
 } from 'reactstrap'
 
+// constants
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+const ITEMS_PER_PAGE = 20
 
 const Allplayer = () => {
   const entityCtx = useContext(EntityContext)
-  const rows = entityCtx.players
+  const { players } = entityCtx
 
-  const [filteredResults, setFilteredResults] = useState([])
-  const [searchInput, setSearchInput] = useState('')
-  const searchItems = (searchValue) => {
-    setSearchInput(searchValue)
-    if (searchInput !== '') {
-      const filteredData = rows.filter((item) => {
-        return Object.values(item.name)
-          .join('')
-          .toLowerCase()
-          .includes(searchValue.toLowerCase())
-      })
-      setFilteredResults(filteredData)
-    }
-  }
+  const [filteredData, setFilteredData] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPageData, setCurrentPageData] = useState([])
+
+  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE)
+
+  // setting filtered data to players data at initial
+  useEffect(() => {
+    setFilteredData(players)
+  }, [players])
+
+  // setting page data on changing page
+  useEffect(() => {
+    if (filteredData.length === 0) return
+    const firstPageIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    const lastPageIndex = firstPageIndex + ITEMS_PER_PAGE
+    setCurrentPageData(filteredData.slice(firstPageIndex, lastPageIndex))
+  }, [filteredData, currentPage])
+
+  // function to set filteredata on changing input
+  const searchPlayerHandler = useCallback(
+    createDebounceFunction((searchInput) => {
+      // resetting page to 1
+      setCurrentPage(1)
+      // if user typed less than 3 chars then show all results
+      if (searchInput.length < 3) {
+        setFilteredData(players)
+        return
+      }
+      // otherwise show filtered results
+      const filteredData = players.filter((player) =>
+        player.name.toLowerCase().includes(searchInput.toLowerCase())
+      )
+      setFilteredData(filteredData)
+    }),
+    [createDebounceFunction, players]
+  )
 
   return (
     <div className="content mainContent container-fluid">
+      <Pagination
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          '& .MuiPaginationItem-root': {
+            color: 'white',
+            marginRight: 1,
+            '&.Mui-selected': {
+              backgroundColor: 'white',
+              color: 'black',
+            },
+            '&.Mui-selected:hover': {
+              backgroundColor: 'white',
+            },
+          },
+        }}
+        count={totalPages}
+        page={currentPage}
+        onChange={(event, pageNumber) => {
+          setCurrentPage(pageNumber)
+        }}
+      />
       <Row style={{ marginTop: '30px', marginLeft: 0, marginRight: 0 }}>
         <Col sm="12" lg="10" md="10">
           <h1
@@ -53,201 +102,110 @@ const Allplayer = () => {
           <input
             className="searchbox"
             type="search"
-            onChange={(e) => searchItems(e.target.value)}
+            onInput={(e) => {
+              searchPlayerHandler(e.target?.value)
+            }}
             placeholder="Search..."
           />
         </Col>
       </Row>
       <div
-        // className="squadSection row"
         style={{
           display: 'flex',
           justifyContent: 'space-evenly',
         }}
       >
-        {searchInput.length > 1 ? (
-          filteredResults
-            .sort((a, b) => (a.name > b.name ? 1 : -1))
-            .map((player) => {
-              return (
-                <Card
-                  key={player?._id}
-                  style={{
-                    width: '21rem',
-                    paddingTop: '20px',
-                    paddingBottom: '20px',
-                  }}
-                  className="card-user minheight"
+        <div
+          className="squadSection row"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-evenly',
+          }}
+        >
+          {currentPageData.map((player) => (
+            <Card
+              key={player?._id}
+              style={{
+                width: '21rem',
+                paddingTop: '20px',
+                paddingBottom: '20px',
+              }}
+              className="card-user minheight"
+            >
+              <div className="accountImage author">
+                <div className="block block-one" />
+                <div className="block block-two" />
+                <div className="block block-three" />
+                <div className="block block-four" />
+                {player.imageUrl ? (
+                  <Avatar
+                    className="center"
+                    alt={player.name}
+                    src={`${BASE_URL}/${player.imageUrl}`}
+                    sx={{ width: 200, height: 200, fontSize: '5rem' }}
+                  />
+                ) : (
+                  <Avatar
+                    className="center"
+                    alt={player.name}
+                    src={'static/account_logo/default.png'}
+                    sx={{ width: 200, height: 200, fontSize: '5rem' }}
+                  />
+                )}
+              </div>
+              <CardBody className="minheight">
+                <CardTitle
+                  tag="h5"
+                  className="playerName"
+                  style={{ fontWeight: 'bold' }}
                 >
-                  <div className="accountImage author">
-                    <div className="block block-one" />
-                    <div className="block block-two" />
-                    <div className="block block-three" />
-                    <div className="block block-four" />
-                    {player.imageUrl ? (
-                      <Avatar
-                        className="center"
-                        alt={player.name}
-                        src={`${BASE_URL}/${player.imageUrl}`}
-                        sx={{ width: 200, height: 200, fontSize: '5rem' }}
-                      />
-                    ) : (
-                      <Avatar
-                        className="center"
-                        alt={player.name}
-                        src={'static/account_logo/default.png'}
-                        sx={{ width: 200, height: 200, fontSize: '5rem' }}
-                      />
-                    )}
-                  </div>
-                  <CardBody className="minheight">
-                    <CardTitle
-                      tag="h5"
-                      className="playerName"
-                      style={{ fontWeight: 'bold' }}
-                    >
-                      {player.name}
-                    </CardTitle>
-                    <CardSubtitle
-                      className="mb-2 text-muted"
-                      tag="h6"
-                      style={{ fontSize: '15px' }}
-                    >
-                      {/* {player.teamId && player.teamId.name} */}
-                      {player.accountId.name}
-                    </CardSubtitle>
+                  {player.name}
+                </CardTitle>
+                <CardSubtitle
+                  className="mb-2 text-muted"
+                  tag="h6"
+                  style={{ fontSize: '15px' }}
+                >
+                  {/* {player.teamId && player.teamId.name} */}
+                  {player.accountId.name}
+                </CardSubtitle>
 
-                    <div
-                      style={{
-                        marginTop: '10px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <div>
-                        <p>SKILL</p>
-                        <Button
-                          className="btn-primary"
-                          style={{ textTransform: 'uppercase' }}
-                        >
-                          {player.skill}
-                        </Button>
-                      </div>
-                      <div>
-                        <p>RATING</p>
-                        <Button
-                          className="btn-success"
-                          style={{ textTransform: 'uppercase' }}
-                        >
-                          {player.rating}
-                        </Button>
-                      </div>
-                    </div>
+                <div
+                  style={{
+                    marginTop: '10px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div>
+                    <p>SKILL</p>
                     <Button
-                      className="btn-info"
+                      className="btn-primary"
                       style={{ textTransform: 'uppercase' }}
                     >
-                      LEVEL : {player.level}
+                      {player.skill}
                     </Button>
-                  </CardBody>
-                </Card>
-              )
-            })
-        ) : (
-          <div
-            className="squadSection row"
-            style={{
-              display: 'flex',
-              justifyContent: 'space-evenly',
-            }}
-          >
-            {rows
-              .sort((a, b) => (a.name > b.name ? 1 : -1))
-              .map((player) => (
-                <Card
-                  key={player?._id}
-                  style={{
-                    width: '21rem',
-                    paddingTop: '20px',
-                    paddingBottom: '20px',
-                  }}
-                  className="card-user minheight"
-                >
-                  <div className="accountImage author">
-                    <div className="block block-one" />
-                    <div className="block block-two" />
-                    <div className="block block-three" />
-                    <div className="block block-four" />
-                    {player.imageUrl ? (
-                      <Avatar
-                        className="center"
-                        alt={player.name}
-                        src={`${BASE_URL}/${player.imageUrl}`}
-                        sx={{ width: 200, height: 200, fontSize: '5rem' }}
-                      />
-                    ) : (
-                      <Avatar
-                        className="center"
-                        alt={player.name}
-                        src={'static/account_logo/default.png'}
-                        sx={{ width: 200, height: 200, fontSize: '5rem' }}
-                      />
-                    )}
                   </div>
-                  <CardBody className="minheight">
-                    <CardTitle
-                      tag="h5"
-                      className="playerName"
-                      style={{ fontWeight: 'bold' }}
-                    >
-                      {player.name}
-                    </CardTitle>
-                    <CardSubtitle
-                      className="mb-2 text-muted"
-                      tag="h6"
-                      style={{ fontSize: '15px' }}
-                    >
-                      {/* {player.teamId && player.teamId.name} */}
-                      {player.accountId.name}
-                    </CardSubtitle>
-
-                    <div
-                      style={{
-                        marginTop: '10px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <div>
-                        <p>SKILL</p>
-                        <Button
-                          className="btn-primary"
-                          style={{ textTransform: 'uppercase' }}
-                        >
-                          {player.skill}
-                        </Button>
-                      </div>
-                      <div>
-                        <p>RATING</p>
-                        <Button
-                          className="btn-success"
-                          style={{ textTransform: 'uppercase' }}
-                        >
-                          {player.rating}
-                        </Button>
-                      </div>
-                    </div>
+                  <div>
+                    <p>RATING</p>
                     <Button
-                      className="btn-info"
+                      className="btn-success"
                       style={{ textTransform: 'uppercase' }}
                     >
-                      LEVEL : {player.level}
+                      {player.rating}
                     </Button>
-                  </CardBody>
-                </Card>
-              ))}
-          </div>
-        )}
+                  </div>
+                </div>
+                <Button
+                  className="btn-info"
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  LEVEL : {player.level}
+                </Button>
+              </CardBody>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   )
