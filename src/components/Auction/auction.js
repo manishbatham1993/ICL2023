@@ -219,13 +219,9 @@ const Auction = () => {
     axios.get(BASE_URL + '/api/v1/auction/data').then((res) => {
       if (res.data.status === 'ok') {
         setAuctionData(res?.data?.data)
+        setTeams(res?.data?.teams)
+        setPlayers(res?.data?.players)
       }
-    })
-    axios.get(BASE_URL + '/api/v1/team').then((res) => {
-      setTeams(res.data.teams)
-    })
-    axios.get(BASE_URL + '/api/v1/player').then((res) => {
-      setPlayers(res.data.players)
     })
   }
 
