@@ -30,8 +30,8 @@ export const AuthContextProvider = (props) => {
           },
         })
         .then((res) => {
-          if (res.data.status === 'ok') {
-            setUser(res.data.user)
+          if (res.data?.status === 'ok') {
+            setUser(res.data?.user)
           }
         })
         .catch((err) => {

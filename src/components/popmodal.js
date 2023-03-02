@@ -7,21 +7,16 @@ import Confetti from 'react-confetti'
 import Icon from './iconstamp'
 import { Col, Row } from 'react-bootstrap'
 
-function Showmodal({ status, showpop = false, data, setauctionflag }) {
-  const BASE_URL = process.env.REACT_APP_BASE_URL || ''
-  const [show, setShow] = useState({ showpop })
-  const handleClose = () => (setShow(false), setauctionflag())
-  const handleShow = () => setShow({ showpop })
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+
+const PopupModal = ({ isOpen, player, onClose }) => {
+  if (!player || !player?.status) return <></> // error handling
   return (
     <>
-      {/* <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button> */}
-
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={isOpen} onHide={onClose}>
         <div className="modal-div">
           <Modal.Header style={{ justifyContent: 'center' }}>
-            {status === 'sold' && (
+            {player?.status === 'sold' && (
               <Modal.Title
                 style={{
                   fontSize: '40px',
@@ -32,7 +27,7 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
                 CONGRATULATIONS
               </Modal.Title>
             )}
-            {status === 'unsold' && (
+            {player?.status === 'unsold' && (
               <Modal.Title
                 style={{
                   fontSize: '40px',
@@ -46,44 +41,25 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
             )}
           </Modal.Header>
           <Modal.Body>
-            {status === 'sold' && (
+            {player?.status === 'sold' && (
               <>
                 <Confetti numberOfPieces={100} width={450} height={220} />
                 <div
                   style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div>
-                    {/* <Avatar
+                    <Avatar
                       className="center"
-                      alt={data.playerName}
-                      src={`${BASE_URL}/${data.playerImage}`}
-                      sx={{ width: 150, height: 150, fontSize: '5rem' }}
-                    /> */}
-                    {data.playerImage ? (
-                      <Avatar
-                        className="center"
-                        alt={data.playerName}
-                        src={`${BASE_URL}/${data.playerImage}`}
-                        sx={{
-                          width: 150,
-                          height: 150,
-                          fontSize: '5rem',
-                        }}
-                      />
-                    ) : (
-                      <Avatar
-                        className="center"
-                        alt={data.playerName}
-                        src={`${BASE_URL}/static/account_logo/default.png`}
-                        sx={{
-                          width: 150,
-                          height: 150,
-                          fontSize: '5rem',
-                        }}
-                      />
-                    )}
+                      alt={player?.name}
+                      src={`${BASE_URL}/${player.image}`}
+                      sx={{
+                        width: 150,
+                        height: 150,
+                        fontSize: '5rem',
+                      }}
+                    />
                     <p className="name" style={{ color: 'white' }}>
-                      {data.playerName}
+                      {player?.name}
                     </p>
                   </div>
 
@@ -93,56 +69,37 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
                   <div>
                     <Avatar
                       className="center"
-                      alt={data.teamName}
-                      src={`${BASE_URL}/${data.teamImage}`}
+                      alt={player?.teamName}
+                      src={`${BASE_URL}/${player?.teamImage}`}
                       sx={{ width: 150, height: 150, fontSize: '5rem' }}
                     />
                     <p className="name" style={{ color: 'white' }}>
-                      {data.teamName}
+                      {player?.teamName}
                     </p>
                   </div>
                 </div>
                 <div className="modal-price" style={{ color: 'white' }}>
-                  PRICE : {data.amount}
+                  PRICE : {player?.amount}
                 </div>
               </>
             )}
 
-            {status === 'unsold' && (
+            {player?.status === 'unsold' && (
               <>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                   <div>
-                    {/* <Avatar
+                    <Avatar
                       className="center"
-                      alt={data.name}
-                      src={`${BASE_URL}/${data.imageUrl}`}
-                      sx={{ width: 150, height: 150, fontSize: '5rem' }}
-                    /> */}
-                    {data.imageUrl ? (
-                      <Avatar
-                        className="center"
-                        alt={data.playerName}
-                        src={`${BASE_URL}/${data.imageUrl}`}
-                        sx={{
-                          width: 150,
-                          height: 150,
-                          fontSize: '5rem',
-                        }}
-                      />
-                    ) : (
-                      <Avatar
-                        className="center"
-                        alt={data.name}
-                        src={`${BASE_URL}/static/account_logo/default.png`}
-                        sx={{
-                          width: 150,
-                          height: 150,
-                          // fontSize: '1rem',
-                        }}
-                      />
-                    )}
+                      alt={player?.name}
+                      src={`${BASE_URL}/${player.image}`}
+                      sx={{
+                        width: 150,
+                        height: 150,
+                        fontSize: '5rem',
+                      }}
+                    />
                     <p className="name" style={{ color: 'white' }}>
-                      {data.name}
+                      {player?.name}
                     </p>
                     <span className="sold-text">UNSOLD</span>
                   </div>
@@ -153,11 +110,11 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
               </>
             )}
 
-            {status === 'round' && (
+            {player?.status === 'round' && (
               <>
                 <Row>
                   <Col>
-                    <div className="round-text">ROUND {data}</div>
+                    <div className="round-text">ROUND {player}</div>
                     <div className="round-text">FINISHED</div>
                   </Col>
                 </Row>
@@ -167,7 +124,7 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
           <Modal.Footer
             style={{ justifyContent: 'center', paddingBottom: '20px' }}
           >
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={onClose}>
               Close
             </Button>
           </Modal.Footer>
@@ -176,4 +133,4 @@ function Showmodal({ status, showpop = false, data, setauctionflag }) {
     </>
   )
 }
-export default Showmodal
+export default PopupModal

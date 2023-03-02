@@ -13,7 +13,10 @@ export default function Countdown() {
   const [currentTimestamp, setCurrentTimestamp] = useState(Date.now())
 
   // get total seconds between the times
-  var delta = (auctionStartTimestamp - currentTimestamp) / 1000
+  var delta =
+    auctionStartTimestamp >= currentTimestamp
+      ? (auctionStartTimestamp - currentTimestamp) / 1000
+      : 0
 
   // if auction started then redirect to auction page
   if (delta <= 0) {
