@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -15,6 +15,9 @@ import PostAddIcon from '@mui/icons-material/PostAdd'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
+import InputBase from '@mui/material/InputBase'
+import SearchIcon from '@mui/icons-material/Search'
+import { createDebounceFunction } from '../../utils/searchOptimization'
 
 export default function Entity({
   rows,
@@ -29,6 +32,22 @@ export default function Entity({
   onClickReset,
   additionalColums = [],
 }) {
+  const [filteredData, setFilteredData] = useState([])
+
+  useEffect(() => {
+    setFilteredData(rows)
+  }, [rows])
+
+  const filterDataHelper = createDebounceFunction((searchInput) => {
+    setFilteredData(
+      rows.filter((row) => {
+        let s = row.name
+        for (let col of additionalColums) s += row[col]
+        return s.toLowerCase().includes(searchInput.toLowerCase())
+      })
+    )
+  }, 500)
+
   return (
     <Paper
       sx={{
@@ -49,43 +68,79 @@ export default function Entity({
         },
       }}
     >
-      <Typography
-        sx={{ flex: '1 1 100%' }}
-        variant="h6"
-        id="tableTitle"
-        component="div"
-      >
-        {title}
-      </Typography>
+      <div style={{ display: 'flex' }}>
+        <div style={{ flexGrow: 1 }}>
+          {/* title */}
+          <Typography
+            sx={{ flex: '1 1 100%' }}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            {title}
+          </Typography>
 
-      {onClickAdd && (
-        <Tooltip title="Add">
-          <IconButton onClick={onClickAdd}>
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+          {/* controls */}
+          <div>
+            {onClickAdd && (
+              <Tooltip title="Add">
+                <IconButton onClick={onClickAdd}>
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
+            )}
 
-      {onClickImport && (
-        <Tooltip title="Import CSV">
-          <IconButton onClick={onClickImport}>
-            <PostAddIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+            {onClickImport && (
+              <Tooltip title="Import CSV">
+                <IconButton onClick={onClickImport}>
+                  <PostAddIcon />
+                </IconButton>
+              </Tooltip>
+            )}
 
-      {onClickExport && (
-        <Tooltip title="Export CSV">
-          <IconButton onClick={onClickExport}>
-            <FileDownloadIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+            {onClickExport && (
+              <Tooltip title="Export CSV">
+                <IconButton onClick={onClickExport}>
+                  <FileDownloadIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        </div>
+        <div style={{ margin: 'auto auto', marginRight: '2%' }}>
+          <Paper
+            component="form"
+            sx={{
+              p: '2px 4px',
+              display: 'flex',
+              alignItems: 'center',
+              width: 200,
+            }}
+            onSubmit={(e) => {
+              e.preventDefault()
+              console.log(e.target)
+              console.log('pulkit')
+            }}
+          >
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search"
+              inputProps={{ 'aria-label': 'filter' }}
+              onChange={(e) => {
+                filterDataHelper(e.target.value)
+              }}
+            />
+            <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Paper>
+        </div>
+      </div>
 
       <TableContainer>
         <Table aria-labelledby="tableTitle">
           <TableBody>
-            {rows.map((row, index) => {
+            {filteredData.map((row, index) => {
               const labelId = `enhanced-table-checkbox-${index}`
               return (
                 <TableRow
