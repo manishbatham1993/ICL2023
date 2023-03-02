@@ -6,6 +6,10 @@ import './overview.css'
 import './squaddetails.css'
 import Avatar from '@mui/material/Avatar'
 import Pagination from '@mui/material/Pagination'
+import Paper from '@mui/material/Paper'
+import IconButton from '@mui/material/IconButton'
+import InputBase from '@mui/material/InputBase'
+import SearchIcon from '@mui/icons-material/Search'
 
 // reactstrap components
 import {
@@ -66,8 +70,57 @@ const Allplayer = () => {
 
   return (
     <div className="content mainContent container-fluid">
+      <Row style={{ marginTop: '30px', marginLeft: 0, marginRight: 0 }}>
+        <Col sm="12" lg="10" md="10">
+          <h1
+            style={{
+              marginLeft: '20%',
+            }}
+          >
+            ICL PLAYERS
+          </h1>
+        </Col>
+
+        <Col sm="12" lg="2" md="2">
+          {/* <input
+            className="searchbox"
+            type="search"
+            onInput={(e) => {
+              searchPlayerHandler(e.target?.value)
+            }}
+            placeholder="Search..."
+          /> */}
+          <Paper
+            component="form"
+            sx={{
+              p: '2px 4px',
+              display: 'flex',
+              alignItems: 'center',
+              width: 200,
+            }}
+            onSubmit={(e) => {
+              e.preventDefault()
+              console.log(e.target)
+              console.log('pulkit')
+            }}
+          >
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search"
+              inputProps={{ 'aria-label': 'filter' }}
+              onChange={(e) => {
+                searchPlayerHandler(e.target.value)
+              }}
+            />
+            <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Paper>
+        </Col>
+      </Row>
       <Pagination
         sx={{
+          marginBottom: '2rem',
           display: 'flex',
           justifyContent: 'center',
           '& .MuiPaginationItem-root': {
@@ -88,27 +141,6 @@ const Allplayer = () => {
           setCurrentPage(pageNumber)
         }}
       />
-      <Row style={{ marginTop: '30px', marginLeft: 0, marginRight: 0 }}>
-        <Col sm="12" lg="10" md="10">
-          <h1
-            style={{
-              marginLeft: '20%',
-            }}
-          >
-            ICL PLAYERS
-          </h1>
-        </Col>
-        <Col sm="12" lg="2" md="2">
-          <input
-            className="searchbox"
-            type="search"
-            onInput={(e) => {
-              searchPlayerHandler(e.target?.value)
-            }}
-            placeholder="Search..."
-          />
-        </Col>
-      </Row>
       <div
         style={{
           display: 'flex',
