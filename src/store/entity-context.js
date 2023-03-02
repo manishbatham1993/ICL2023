@@ -16,13 +16,14 @@ export const EntityContextProvider = (props) => {
   const [players, setPlayers] = useState([])
   const [teams, setTeams] = useState([])
   const [locations, setLocations] = useState([])
-  const [currentLocation, setCurrentLocation] = useState('')
+  const [currentLocation, setCurrentLocation] = useState()
 
   const [configurations, setConfigurations] = useState({
     DEFAULT_BID_AMOUNT: 5000,
     BID_INCREASE: 500,
     PLAYERS_PER_TEAM: 10,
     YEAR: '2023',
+    COUNTDOWN: '2023-01-01T00:00',
     DEFAULT_LOCATION: '',
   })
 
@@ -80,10 +81,10 @@ export const EntityContextProvider = (props) => {
           YEAR: dbConfigurations.YEAR ? dbConfigurations.YEAR : prev.YEAR,
           COUNTDOWN: dbConfigurations.COUNTDOWN
             ? dbConfigurations.COUNTDOWN
-            : '2023-01-01T00:00',
+            : prev.COUNTDOWN,
           DEFAULT_LOCATION: dbConfigurations.DEFAULT_LOCATION
             ? dbConfigurations.DEFAULT_LOCATION
-            : '',
+            : prev.DEFAULT_LOCATION,
         }))
       }
     })
@@ -95,6 +96,7 @@ export const EntityContextProvider = (props) => {
   }, [])
 
   useEffect(() => {
+    if (currentLocation === undefined) return
     updateAccounts()
     updatePlayers()
     updateTeams()

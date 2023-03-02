@@ -27,18 +27,19 @@ const LocationList = () => {
   const entityCtx = useContext(EntityContext)
   const { locations, currentLocation, setCurrentLocation } = entityCtx
 
+  const defaultLocation = entityCtx?.configurations?.DEFAULT_LOCATION
+
   const handleChange = (event) => {
     setCurrentLocation(event.target.value)
   }
 
-  const defaultLocation = entityCtx?.configurations?.DEFAULT_LOCATION
   useEffect(() => {
     setCurrentLocation(defaultLocation)
   }, [defaultLocation])
 
   return (
     <Select
-      value={currentLocation}
+      value={currentLocation || ''}
       onChange={handleChange}
       sx={{ color: 'white', margin: '1rem' }}
       variant="standard"

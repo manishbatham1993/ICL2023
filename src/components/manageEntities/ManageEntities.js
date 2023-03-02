@@ -58,7 +58,6 @@ export default function ManageEntities() {
   }
 
   const refreshAccounts = useCallback(() => {
-    if (!currentLocation) return
     axios
       .get(BASE_URL + '/api/v1/account?location=' + currentLocation)
       .then((res) => {
@@ -69,7 +68,6 @@ export default function ManageEntities() {
   }, [currentLocation])
 
   const refreshTeams = useCallback(() => {
-    if (!currentLocation) return
     axios
       .get(BASE_URL + '/api/v1/team?location=' + currentLocation)
       .then((res) => {
@@ -96,7 +94,6 @@ export default function ManageEntities() {
   }, [currentLocation])
 
   const refreshPlayers = useCallback(() => {
-    if (!currentLocation) return
     axios
       .get(BASE_URL + '/api/v1/player?location=' + currentLocation)
       .then((res) => {
