@@ -1,4 +1,6 @@
 import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
+
 import EntityContext from '../store/entity-context'
 import '../index.css'
 import './overview.css'
@@ -86,9 +88,9 @@ const Overview = () => {
                 <CardText className="playerCount">
                   {account.participantsCount}
                 </CardText>
-                <a href={`/accountdetail/${account._id}`}>
+                <Link to={`/accountdetail/${account._id}`}>
                   <Button>Account Details</Button>
-                </a>
+                </Link>
               </CardBody>
             </Card>
           </Col>

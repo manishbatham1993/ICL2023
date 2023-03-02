@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import EntityContext from '../store/entity-context'
 import './overview.css'
 import './Auction/auction.css'
@@ -117,9 +117,9 @@ const TeamDetail = (props) => {
                     <div className="pointCircle">{team.allrounderCount}</div>
                   </div>
                 </div>
-                <a href={`/squaddetail/${team.id}`}>
+                <Link to={`/squaddetail/${team.id}`}>
                   <Button>Team Details</Button>
-                </a>
+                </Link>
               </CardBody>
             </Card>
           ))}

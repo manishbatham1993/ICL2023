@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import EntityContext from '../store/entity-context'
 import './overview.css'
 import Nav from 'react-bootstrap/Nav'
@@ -216,9 +216,9 @@ const Accountdetail = (props) => {
                                   </div>
                                 </div>
                               </div>
-                              <a href={`/squaddetail/${team.id}`}>
+                              <Link to={`/squaddetail/${team.id}`}>
                                 <Button>Team Details</Button>
-                              </a>
+                              </Link>
                             </CardBody>
                           </Card>
                         </Col>
