@@ -479,7 +479,7 @@ const Auction = () => {
                     <IncrementDecrement
                       defaultVal={mappedData?.bidAmount}
                       defaultChange={BID_INCREASE}
-                      maxVal={mappedData?.remBudget}
+                      maxVal={maxAllowableBid}
                       currentVal={nextBidAmount}
                       onChange={setNextBidAmount}
                     />
