@@ -1,5 +1,5 @@
 import './signin.css'
-import React, { useContext } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import AuthContext from '../store/auth-context'
@@ -13,6 +13,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
+import Alert from '@mui/material/Alert'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 
@@ -47,17 +48,40 @@ function SignIn() {
   const authCtx = useContext(AuthContext)
   const navigate = useNavigate()
 
+  const [error, setError] = useState(null)
+  const emailRef = useRef()
+  const passwordRef = useRef()
+
   const handleSubmit = (event) => {
     event.preventDefault()
+    const email = emailRef.current.value
+    const password = passwordRef.current.value
+
+    if (!email) {
+      setError('Email is required')
+      return
+    }
+    if (!password) {
+      setError('Password is required')
+      return
+    }
+
     const formBody = new FormData(event.currentTarget)
 
     const api = BASE_URL + '/api/v1/auth/login'
-    axios.post(api, formBody).then((res) => {
-      if (res.data.status === 'ok') {
-        authCtx.login(res.data.token)
-        navigate('/', { replace: true })
-      }
-    })
+    axios
+      .post(api, formBody)
+      .then((res) => {
+        if (res.data.status === 'ok') {
+          authCtx.login(res.data.token)
+          navigate('/', { replace: true })
+        } else {
+          setError(res?.data?.msg)
+        }
+      })
+      .catch((err) => {
+        setError(err?.response?.data?.msg)
+      })
   }
 
   return (
@@ -66,7 +90,15 @@ function SignIn() {
         <Col md={6}>
           <Image src={logo}></Image>
         </Col>
-        <Col md={6}>
+        <Col
+          md={6}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'end',
+          }}
+        >
+          {error && <Alert severity={'error'}>{error}</Alert>}
           <div className="login-section">
             <div className="login-form">
               <Box
@@ -84,6 +116,7 @@ function SignIn() {
                   name="email"
                   autoComplete="email"
                   autoFocus
+                  inputRef={emailRef}
                 />
                 <CssTextField
                   margin="normal"
@@ -94,6 +127,7 @@ function SignIn() {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  inputRef={passwordRef}
                 />
 
                 <Button
