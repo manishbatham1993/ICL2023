@@ -37,7 +37,7 @@ const TeamOwnerForm = (props) => {
     (playerId) => {
       if (!playerId) return ''
       const player = props.players.find((player) => player._id === playerId)
-      return player.email
+      return player?.email || ''
     },
     [props.players]
   )
