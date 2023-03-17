@@ -166,6 +166,14 @@ function ResponsiveAppBar() {
                   Auction
                 </Link>
               </MenuItem>
+              <MenuItem key="AuctionControls" onClick={handleCloseNavMenu}>
+                <Link
+                  to="/AuctionControls"
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Auction Controls
+                </Link>
+              </MenuItem>
               <MenuItem key="topbuys" onClick={handleCloseNavMenu}>
                 <Link
                   to="/topbuys"
@@ -265,6 +273,18 @@ function ResponsiveAppBar() {
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Auction
+              </Button>
+            </Link>
+            <Link
+              to="auctionControls"
+              style={{ color: 'white', textDecoration: 'none' }}
+            >
+              <Button
+                key="AuctionControls"
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Auction Controls
               </Button>
             </Link>
             <Link

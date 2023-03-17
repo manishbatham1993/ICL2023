@@ -1,17 +1,47 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import axios from 'axios'
-
 import Box from '@mui/material/Box'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
+import EntityContext from '../../store/entity-context'
+import Alert from '@mui/material/Alert'
 import { Button } from 'reactstrap'
 
 // constants
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
+const classes = {
+    auctionBars:{
+      display:'flex',
+    },
+    auctionButtons:{
+      flex:'1',
+      padding:'1.5rem',
+      marginBottom:'0.5rem',
+      marginLeft:'0.5rem'
+    }
+}
 
-const AuctionControls = ({ accounts, onClickConfigurations, setSnackbar }) => {
+export default function AuctionControls() {
+  const entityCtx = useContext(EntityContext)
+  const accounts = entityCtx?.accounts
+
   const [selectedAccount, setSelectedAccount] = useState('')
+  // snackbar
+  const [snackbar, setSnackbar] = useState({
+    isOpen: false,
+    type: null,
+    message: null,
+    timer: null,
+  })
 
+  const setSnackbarHandler = (type, message, duration = 10) => {
+    //duration in seconds
+    clearTimeout(snackbar.timer)
+    let timer = setTimeout(() => {
+      setSnackbar((prev) => ({ ...prev, isOpen: false }))
+    }, duration * 1000)
+    setSnackbar({ isOpen: true, type, message, timer })
+  }
   const startAuctionHandler = () => {
     if (!selectedAccount) {
       const msg = 'Select the account to auction'
@@ -31,11 +61,11 @@ const AuctionControls = ({ accounts, onClickConfigurations, setSnackbar }) => {
     axios
       .post(BASE_URL + '/api/v1/auction/initialize', { accountId }, config)
       .then((res) => {
-        setSnackbar('success', res?.data?.msg)
+        setSnackbarHandler('success', res?.data?.msg)
       })
       .catch((err) => {
         if (err.response && err.response.data && err.response.data.msg) {
-          setSnackbar('error', err?.response?.data?.msg)
+          setSnackbarHandler('error', err?.response?.data?.msg)
         }
       })
   }
@@ -49,11 +79,11 @@ const AuctionControls = ({ accounts, onClickConfigurations, setSnackbar }) => {
     axios
       .post(BASE_URL + '/api/v1/auction/start', {}, config)
       .then((res) => {
-        setSnackbar('success', res?.data?.msg)
+        setSnackbarHandler('success', res?.data?.msg)
       })
       .catch((err) => {
         if (err.response && err.response.data && err.response.data.msg) {
-          setSnackbar('error', err?.response?.data?.msg)
+          setSnackbarHandler('error', err?.response?.data?.msg)
         }
       })
   }
@@ -67,11 +97,11 @@ const AuctionControls = ({ accounts, onClickConfigurations, setSnackbar }) => {
     axios
       .post(BASE_URL + '/api/v1/auction/pause', {}, config)
       .then((res) => {
-        setSnackbar('success', res?.data?.msg)
+        setSnackbarHandler('success', res?.data?.msg)
       })
       .catch((err) => {
         if (err.response && err.response.data && err.response.data.msg) {
-          setSnackbar('error', err?.response?.data?.msg)
+          setSnackbarHandler('error', err?.response?.data?.msg)
         }
       })
   }
@@ -89,11 +119,11 @@ const AuctionControls = ({ accounts, onClickConfigurations, setSnackbar }) => {
       axios
         .post(BASE_URL + '/api/v1/auction/end', {}, config)
         .then((res) => {
-          setSnackbar('success', res?.data?.msg)
+          setSnackbarHandler('success', res?.data?.msg)
         })
         .catch((err) => {
           if (err.response && err.response.data && err.response.data.msg) {
-            setSnackbar('error', err?.response?.data?.msg)
+            setSnackbarHandler('error', err?.response?.data?.msg)
           }
         })
     }
@@ -112,36 +142,34 @@ const AuctionControls = ({ accounts, onClickConfigurations, setSnackbar }) => {
       axios
         .post(BASE_URL + '/api/v1/auction/clear', {}, config)
         .then((res) => {
-          setSnackbar('success', res?.data?.msg)
+          setSnackbarHandler('success', res?.data?.msg)
         })
         .catch((err) => {
           if (err.response && err.response.data && err.response.data.msg) {
-            setSnackbar('error', err?.response?.data?.msg)
+            setSnackbarHandler('error', err?.response?.data?.msg)
           }
         })
     }
   }
 
   return (
+    <React.Fragment>
+      {snackbar?.isOpen && (
+        <Alert variant="filled" severity={snackbar.type}>
+          {snackbar.message}
+        </Alert>
+      )}
     <Box
       sx={{
-        width: '100%',
         px: 1,
-        display: 'flex',
-        justifyContent: 'space-between',
+        py:5,
+        width:'50%',
+        margin:'0 auto'
       }}
     >
-      <div>
-        <Button
-          size="lg"
-          style={{ fontSize: 'small', padding: '1rem' }}
-          onClick={onClickConfigurations}
-        >
-          Set Configurations
-        </Button>
-      </div>
-      <div>
+      <div style={ classes.auctionBars }>
         <Select
+          style={ classes.auctionButtons }
           size="small"
           sx={{
             color: 'white',
@@ -178,43 +206,44 @@ const AuctionControls = ({ accounts, onClickConfigurations, setSnackbar }) => {
           ))}
         </Select>
         <Button
-          style={{ fontSize: 'small', padding: '1rem' }}
+          style={ classes.auctionButtons }
           onClick={startAuctionHandler}
+          className="btn-success"
         >
           Start Auction
         </Button>
       </div>
 
-      <div>
+      <div style={ classes.auctionBars }>
         <Button
-          style={{ fontSize: 'small', padding: '1rem' }}
+          style={ classes.auctionButtons }
           onClick={startTimer}
         >
           Start Timer
         </Button>
         <Button
-          style={{ fontSize: 'small', padding: '1rem' }}
+          style={ classes.auctionButtons }
           onClick={pauseAuction}
         >
           Pause/Resume
         </Button>
       </div>
-      <div>
+      <div style={ classes.auctionBars }>
         <Button
-          style={{ fontSize: 'small', padding: '1rem' }}
+          style={ classes.auctionButtons }
           onClick={endAuction}
         >
           End Auction
         </Button>
         <Button
-          style={{ fontSize: 'small', padding: '1rem' }}
+          style={ classes.auctionButtons }
           onClick={clearAuction}
         >
           Clear Auction
         </Button>
       </div>
     </Box>
+    </React.Fragment>
   )
 }
 
-export default AuctionControls

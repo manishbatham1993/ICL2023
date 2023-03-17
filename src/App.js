@@ -17,6 +17,7 @@ import Allplayer from './components/Allplayer'
 import TeamDetail from './components/teamdetail'
 import Rules from './components/manageEntities/Rules'
 import Fixtures from './components/Fixtures'
+import AuctionControls from './components/manageEntities/AuctionControls'
 
 const App = () => {
   const authCtx = useContext(AuthContext)
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/Signin" element={<SignIn />} />
           <Route path="/Teams" element={<TeamDetail />} />
           <Route path="/Auction" element={<Auction />} />
+          <Route path="/AuctionControls" element={<AuctionControls />} />
           <Route path="/topbuys" element={<TopBuys />} />
           <Route path="/rules" element={<Rules />} />
           <Route path="/fixtures" element={<Fixtures />} />

@@ -6,7 +6,6 @@ import axios from 'axios'
 import EntityContext from '../../store/entity-context'
 
 import Box from '@mui/material/Box'
-import Alert from '@mui/material/Alert'
 
 import Modal from '../../UI/Modal'
 import Entity from './Entity'
@@ -18,7 +17,7 @@ import PlayerForm from './PlayerForm'
 import ConfigForm from './ConfigForm'
 import ImportPlayersForm from './ImportPlayerForm'
 import ExportPlayerForm from './ExportPlayerForm'
-import AuctionControls from './AuctionControls'
+import { Button } from 'reactstrap'
 
 // constants
 const BASE_URL = process.env.REACT_APP_BASE_URL || ''
@@ -39,23 +38,6 @@ export default function ManageEntities() {
   const [data, setData] = useState(null)
   const [isEdit, setIsEdit] = useState(false)
   const [isView, setIsView] = useState(false)
-
-  // snackbar
-  const [snackbar, setSnackbar] = useState({
-    isOpen: false,
-    type: null,
-    message: null,
-    timer: null,
-  })
-
-  const setSnackbarHandler = (type, message, duration = 10) => {
-    //duration in seconds
-    clearTimeout(snackbar.timer)
-    let timer = setTimeout(() => {
-      setSnackbar((prev) => ({ ...prev, isOpen: false }))
-    }, duration * 1000)
-    setSnackbar({ isOpen: true, type, message, timer })
-  }
 
   const refreshAccounts = useCallback(() => {
     axios
@@ -329,20 +311,15 @@ export default function ManageEntities() {
         </Modal>
       )}
 
-      {/* SnackBar */}
-      {snackbar?.isOpen && (
-        <Alert variant="filled" severity={snackbar.type}>
-          {snackbar.message}
-        </Alert>
-      )}
-
-      {/* controls */}
-      <AuctionControls
-        accounts={accounts}
-        onClickConfigurations={openModalHandler.bind(null, 'config')}
-        setSnackbar={setSnackbarHandler}
-      />
-
+      <div>
+        <Button
+          size="lg"
+          style={{ fontSize: 'small', padding: '1rem', display:'flex' }}
+          onClick={openModalHandler.bind(null, 'config')}
+        >
+          Set Configurations
+        </Button>
+      </div>
       {/* entities */}
       <div style={{ display: 'flex' }}>
         <Box width="40%">
