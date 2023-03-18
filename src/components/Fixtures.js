@@ -9,6 +9,9 @@ import { Button, Row, Col, Card } from 'reactstrap'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
+import Alert from '@mui/material/Alert'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
 const classes = {
   form: {
@@ -61,6 +64,26 @@ const classes = {
     fontSize: '5rem',
     marginBottom: '1rem',
   },
+  formButton: {
+    textTransform: 'uppercase',
+    marginLeft: '1rem',
+  },
+  selectMenu: {
+    color: 'white',
+    '.MuiOutlinedInput-notchedOutline': {
+      borderColor: 'rgba(228, 219, 233, 0.25)',
+    },
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'rgba(228, 219, 233, 0.25)',
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'rgba(228, 219, 233, 0.25)',
+    },
+    '.MuiSvgIcon-root ': {
+      fill: 'white !important',
+    },
+  },
+  uploadForm: { display: 'flex', alignItems: 'center' },
 }
 
 const mobileClasses = {
@@ -130,54 +153,106 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const Fixtures = () => {
   const authCtx = useContext(AuthContext)
   const entityCtx = useContext(EntityContext)
+  const { currentLocation, locations } = entityCtx
 
   const fixtureDataRef = useRef()
+  const locationRef = useRef()
 
   const [fixtures, setFixtures] = useState([])
+  const roundMapping = new Map()
   fixtures.sort((a, b) => {
     return a.match - b.match
   })
-
-  const roundMapping = new Map()
   fixtures.forEach((fixture) => {
     const round = fixture.round
     if (!roundMapping.has(round)) roundMapping.set(round, [])
     roundMapping.get(round).push(fixture)
   })
-
   const keys = [...roundMapping.keys()]
-  useEffect(() => {
-    axios.get(BASE_URL + '/api/v1/fixture').then((res) => {
-      const fixtures = res?.data?.fixtures
-      if (fixtures) {
-        setFixtures(fixtures)
-      }
-    })
-  }, [])
+
+  // snackbar
+  const [snackbar, setSnackbar] = useState({
+    isOpen: false,
+    type: null,
+    message: null,
+    timer: null,
+  })
+  const setSnackbarHandler = (type, message, duration = 5) => {
+    //duration in seconds
+    clearTimeout(snackbar.timer)
+    let timer = setTimeout(() => {
+      setSnackbar((prev) => ({ ...prev, isOpen: false }))
+    }, duration * 1000)
+    setSnackbar({ isOpen: true, type, message, timer })
+  }
+
+  const fetchFixtures = () => {
+    axios
+      .get(BASE_URL + '/api/v1/fixture?location=' + entityCtx.currentLocation)
+      .then((res) => {
+        const fixtures = res?.data?.fixtures
+        if (fixtures) {
+          setFixtures(fixtures)
+        }
+      })
+      .catch((err) => {
+        setSnackbarHandler('error', err?.response?.data?.msg)
+      })
+  }
 
   const formSubmitHandler = (e) => {
     e.preventDefault()
+    const location = locationRef?.current?.value
+    const file =
+      fixtureDataRef?.current?.files?.length > 0
+        ? fixtureDataRef.current.files[0]
+        : null
+    if (!location || !file) {
+      setSnackbarHandler(
+        'info',
+        'Select csv file and location to upload fixtures'
+      )
+      return
+    }
 
+    // payload
     const formData = new FormData()
-    formData.append('csv', fixtureDataRef.current.files[0])
+    formData.append('csv', file)
+    formData.append('location', location)
 
+    // configurations
     const config = {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     }
 
+    // posting request
     axios
-      .post(BASE_URL + '/api/v1/fixture/upload', formData, config)
+      .post(BASE_URL + '/api/v1/admin/fixture/upload', formData, config)
       .then((res) => {
-        window.location.reload()
+        setSnackbarHandler('success', res?.data?.msg)
+        fetchFixtures()
+      })
+      .catch((err) => {
+        setSnackbarHandler('error', err?.response?.data?.msg)
       })
   }
+
+  useEffect(() => {
+    fetchFixtures()
+  }, [currentLocation])
+
   // for mobile
 
   if (window.innerWidth <= 768) {
     return (
       <React.Fragment>
+        {snackbar?.isOpen && (
+          <Alert variant="filled" severity={snackbar.type}>
+            {snackbar.message}
+          </Alert>
+        )}
         {authCtx.role === 'admin' && (
           <Box sx={mobileClasses.form}>
             <form onSubmit={formSubmitHandler}>
@@ -188,6 +263,25 @@ const Fixtures = () => {
                 ref={fixtureDataRef}
                 required
               />
+              <Select
+                size="small"
+                sx={classes.selectMenu}
+                label="location"
+                labelId="demo-simple-select-standard-label"
+                id="demo-simple-select-standard"
+                defaultValue={''}
+                displayEmpty
+                inputRef={locationRef}
+              >
+                <MenuItem value="">
+                  <em>--Select--</em>
+                </MenuItem>
+                {locations.map((location) => (
+                  <MenuItem value={location}>
+                    <em>{location}</em>
+                  </MenuItem>
+                ))}
+              </Select>
               <Button
                 variant="primary"
                 style={{
@@ -200,6 +294,7 @@ const Fixtures = () => {
               </Button>
             </form>
             <form method="GET" action={`${BASE_URL}/api/v1/fixture/csv`}>
+              <input type="hidden" name="location" value={currentLocation} />
               <Button
                 variant="primary"
                 style={{
@@ -333,9 +428,14 @@ const Fixtures = () => {
   }
   return (
     <React.Fragment>
+      {snackbar?.isOpen && (
+        <Alert variant="filled" severity={snackbar.type}>
+          {snackbar.message}
+        </Alert>
+      )}
       {authCtx.role === 'admin' && (
         <Box sx={classes.form}>
-          <form onSubmit={formSubmitHandler}>
+          <form style={classes.uploadForm} onSubmit={formSubmitHandler}>
             <input
               id="image"
               type="file"
@@ -343,18 +443,32 @@ const Fixtures = () => {
               ref={fixtureDataRef}
               required
             />
-            <Button variant="primary" style={classes.button}>
+            <Select
+              size="small"
+              sx={classes.selectMenu}
+              label="location"
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              defaultValue={''}
+              displayEmpty
+              inputRef={locationRef}
+            >
+              <MenuItem value="">
+                <em>--Select--</em>
+              </MenuItem>
+              {locations.map((location) => (
+                <MenuItem value={location}>
+                  <em>{location}</em>
+                </MenuItem>
+              ))}
+            </Select>
+            <Button variant="primary" style={classes.formButton}>
               Upload Fixtures
             </Button>
           </form>
           <form method="GET" action={`${BASE_URL}/api/v1/fixture/csv`}>
-            <Button
-              variant="primary"
-              style={{
-                textTransform: 'uppercase',
-                marginLeft: '1rem',
-              }}
-            >
+            <input type="hidden" name="location" value={currentLocation} />
+            <Button variant="primary" style={classes.formButton}>
               Download Fixtures
             </Button>
           </form>
