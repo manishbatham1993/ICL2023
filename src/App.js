@@ -1,5 +1,7 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Route, Routes, Navigate } from 'react-router'
+import axios from 'axios'
+
 import AuthContext from './store/auth-context'
 
 import './App.css'
@@ -18,9 +20,17 @@ import TeamDetail from './components/teamdetail'
 import Rules from './components/manageEntities/Rules'
 import Fixtures from './components/Fixtures'
 import AuctionControls from './components/manageEntities/AuctionControls'
+import DashboardAppPage from './components/Dashboard/Dashboard'
 
+const BASE_URL = process.env.REACT_APP_BASE_URL || ''
 const App = () => {
   const authCtx = useContext(AuthContext)
+
+  // updating analytics
+  useEffect(() => {
+    const api = BASE_URL + '/api/v1/analytic/set'
+    axios.get(api).then((data) => {})
+  }, [])
 
   return (
     <React.Fragment>
@@ -44,6 +54,9 @@ const App = () => {
           )}
           {authCtx?.role === 'admin' && (
             <Route path="/auctioncontrols" element={<AuctionControls />} />
+          )}
+          {authCtx?.role === 'admin' && (
+            <Route path="/analytics" element={<DashboardAppPage />} />
           )}
         </Routes>
       </div>

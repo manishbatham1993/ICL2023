@@ -147,7 +147,6 @@ function ResponsiveAppBar() {
                   Players
                 </Link>
               </MenuItem>
-              {/* {authCtx.isLoggedIn && ( */}
               <MenuItem key="Teams" onClick={handleCloseNavMenu}>
                 <Link
                   to="/Teams"
@@ -156,8 +155,6 @@ function ResponsiveAppBar() {
                   Teams
                 </Link>
               </MenuItem>
-              {/* )} */}
-              {/* {authCtx.isLoggedIn && ( */}
               <MenuItem key="Auction" onClick={handleCloseNavMenu}>
                 <Link
                   to="/Auction"
@@ -208,6 +205,16 @@ function ResponsiveAppBar() {
                     style={{ color: 'black', textDecoration: 'none' }}
                   >
                     Auction Controls
+                  </Link>
+                </MenuItem>
+              )}
+              {authCtx.role === 'admin' && (
+                <MenuItem key="analytics" onClick={handleCloseNavMenu}>
+                  <Link
+                    to="/analytics"
+                    style={{ color: 'black', textDecoration: 'none' }}
+                  >
+                    Analytics
                   </Link>
                 </MenuItem>
               )}
@@ -337,6 +344,20 @@ function ResponsiveAppBar() {
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
                   Auction Controls
+                </Button>
+              </Link>
+            )}
+            {authCtx.role === 'admin' && (
+              <Link
+                to="/analytics"
+                style={{ color: 'white', textDecoration: 'none' }}
+              >
+                <Button
+                  key="Analytics"
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  Analytics
                 </Button>
               </Link>
             )}
